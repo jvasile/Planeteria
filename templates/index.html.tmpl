@@ -1,0 +1,73 @@
+<TMPL_INCLUDE header.tmpl>
+<div id="left">
+
+<!-- BEGIN FEEDS -->
+<TMPL_LOOP Items>
+   <TMPL_IF new_date><div class="dateheader"><TMPL_VAR new_date></div></TMPL_IF>
+
+   <div class = "entry">
+      <div class="entrybody" id="<TMPL_VAR id>"<TMPL_IF channel_language> lang="<TMPL_VAR channel_language>"</TMPL_IF>>
+         <TMPL_IF channel_faceurl>
+            <img class="face" src="<TMPL_VAR channel_faceurl ESCAPE="HTML">" width="<TMPL_VAR channel_facewidth ESCAPE="HTML">" height="<TMPL_VAR channel_faceheight ESCAPE="HTML">" alt="">
+         </TMPL_IF>
+
+         <div class="entrytitle" <TMPL_IF title_language> lang="<TMPL_VAR title_language>"</TMPL_IF>>
+            <a href="<TMPL_VAR channel_link ESCAPE="HTML">" title="<TMPL_VAR channel_title_plain ESCAPE="HTML">"><TMPL_VAR channel_name></a>: 
+            <a href="<TMPL_VAR link ESCAPE="HTML">"><TMPL_VAR title></a>
+         </div>
+
+         <div class="content"<TMPL_IF content_language> lang="<TMPL_VAR content_language>"</TMPL_IF>>
+            <TMPL_VAR content>
+         </div>
+                        
+         <p align="right">
+            <a href="<TMPL_VAR link ESCAPE="HTML">">
+            <TMPL_IF author><TMPL_VAR author ESCAPE="HTML"> | </TMPL_IF>
+            <TMPL_VAR channel_title_plain ESCAPE="HTML"> | 
+            <TMPL_VAR date></a></a>
+         </p>
+      </div>
+   </div>
+</TMPL_LOOP>
+</div>	<!-- end left -->
+
+<div id="right">
+
+   <div class="entry">
+      <div class="entrytitle">Subscriptions</div>
+      <ul>
+         <TMPL_LOOP Feeds>
+            <li>
+               <a href="<TMPL_VAR url ESCAPE="HTML">" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"></a> <a <TMPL_IF link>href="<TMPL_VAR link ESCAPE="HTML">" </TMPL_IF><TMPL_IF message>class="message" title="<TMPL_VAR message ESCAPE="HTML">"</TMPL_IF><TMPL_UNLESS message>title="<TMPL_VAR title_plain ESCAPE="HTML">"</TMPL_UNLESS>><TMPL_VAR author></a>
+            </li>
+         </TMPL_LOOP>
+
+         <TMPL_LOOP Channels>
+            <li>
+               <a href="<TMPL_VAR url ESCAPE="HTML">" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"></a> <a <TMPL_IF link>href="<TMPL_VAR link ESCAPE="HTML">" </TMPL_IF><TMPL_IF message>class="message" title="<TMPL_VAR message ESCAPE="HTML">"</TMPL_IF><TMPL_UNLESS message>title="<TMPL_VAR title_plain ESCAPE="HTML">"</TMPL_UNLESS>><TMPL_VAR name></a>
+            </li>
+         </TMPL_LOOP>
+            <li> <a href="<TMPL_VAR feed_url>" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"> All feeds in one</a></li>
+            <li> <a href="<TMPL_VAR opml_url>" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"> All feeds as OPML</a></li>
+      </ul>
+   </div>
+
+
+   <TMPL_VAR sidebar>
+
+   <div class="entry">
+      <div class="entrytitle">Copying</div>
+      <p>Posts are copyright their respective authors. Click through to
+      see each site's terms for redistribution.</p>
+   </div>
+
+   <div class="entry">
+      <div class="entrytitle">Meta</div>
+        <ul>
+	  <li><TMPL_VAR date></li>
+	  <li><a href="admin.py">Admin interface</a></li>
+	</ul>
+   </div>
+</div>	
+
+<TMPL_INCLUDE footer.tmpl>

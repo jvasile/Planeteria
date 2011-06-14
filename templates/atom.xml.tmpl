@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml-stylesheet href="$atomfeed::css_url" type="text/css"?>
+
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:planet="<TMPL_VAR feed_page>" xmlns:indexing="urn:atom-extension:indexing" indexing:index="no"><access:restriction xmlns:access="http://www.bloglines.com/about/specs/fac-1.0" relationship="deny"/>
+
+  <title type="text/plain"><TMPL_VAR title></title>
+  <updated><TMPL_VAR updated></updated>
+  <generator uri="<TMPL_VAR generator_uri>"><TMPL_VAR generator></generator>
+  <author>
+    <name><TMPL_VAR user></name>
+    <email><TMPL_VAR email></email>
+  </author>
+  <id><TMPL_VAR feed_url></id>
+  <link href="<TMPL_VAR feed_url>" rel="self" type="application/atom+xml"/>
+  <link href="<TMPL_VAR feed_page>" rel="alternate"/>
+  <TMPL_LOOP Items>
+    <entry>
+      <id><TMPL_VAR id></id>
+      <title type="text/plain"><TMPL_VAR title ESCAPE="HTML"></title>
+      <summary><TMPL_VAR summary></summary>
+      <updated><TMPL_VAR updated></updated>
+      <link href="<TMPL_VAR link>" rel="alternate" type="text/html"/>
+      <author>
+	<name><TMPL_VAR author></name>
+      </author>
+      <source>
+	<id><TMPL_VAR feed_id></id>
+	<TMPL_LOOP links>
+	  <link href="<TMPL_VAR href ESCAPE=HTML>" rel="<TMPL_VAR rel>" type="<TMPL_VAR type>" />
+	</TMPL_LOOP>
+	<subtitle><TMPL_VAR subtitle ESCAPE="HTML"></subtitle>
+	<title><TMPL_VAR feed_name ESCAPE="HTML"></title>
+	<updated><TMPL_VAR updated></updated>
+      </source>
+
+      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><TMPL_VAR content></div></content>
+    </entry>
+  </TMPL_LOOP>
+</feed>

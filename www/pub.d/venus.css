@@ -1,0 +1,94 @@
+#logo-text {
+	font: bold 1em/1.5em san-serif;
+	color: #555;
+	margin: 10px 20px 7px 20px;	 
+        font-size: 3.7em; font-weight: normal; letter-spacing: -2px; }
+
+#right ul { padding-left: 1em;
+              margin-left: 0px;
+              list-style-type: none;
+            }
+#right ul li:hover {	color: grey; }
+#right ul li a { text-decoration: none; }
+#right ul li a:hover { text-decoration: underline; }
+#right ul li a img { border: 0; }
+
+.dateheader  { font-size: 16px; font-weight: bold; }
+
+#right .entry {
+    border: 1px solid #F0F0F0;
+    background:#f8f8f8;
+    padding:1em;
+}
+
+.entry {
+    color:#000;
+    margin-bottom:1.5em;
+    text-align:left;
+}
+
+.entrytitle {
+   font-weight:bold;
+   font-size: 16px;
+}
+
+#footer-bottom {text-align:center}
+
+#left h1, h2, h3, h4 {
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 1.5em;
+    letter-spacing: 0em;
+    border-bottom: none;
+}
+
+h2.entrybody {color:red;}
+
+blockquote {
+	margin: 10px 20px;
+ 	padding: 10px 10px 10px 32px;  
+        border: 1px solid #F0F0F0;
+	background: #f8f8f8;
+	font-weight: normal;
+	font-size: 12px;
+	line-height: 1.5em;
+	font-family: Georgia, 'Times New Roman', Times, Serif;	
+	color: #555;	
+}
+
+.channelname {
+   font-weight:bold;
+   font-size: 16px;
+}
+
+.channelname a {
+        text-decoration: none;
+}
+
+img.face {
+        float: left;
+	padding-right: 1em;
+	padding-bottom: 1em;
+}
+
+tr.face0 td {
+        background-color: #FAFAFA;
+        text-align: center;
+}
+tr.face1 td {
+        background-color: #E4E4E4;
+        text-align: center;
+}
+
+#error {
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    color: red;
+}
+
+.feedbtn {
+    background: #FAFAFA;
+    border: 0px;
+    padding: 0px;
+}
