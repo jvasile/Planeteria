@@ -1,6 +1,8 @@
 import os
 
-BASE_DIR = "/home/vasile/src/planeteria2"
+BASE_HREF = "file:///home/vasile/src/planeteria2/www/"
+BASE_HREF = "http://test.planeteria.org/"
+BASE_DIR = os.path.dirname(os.path.abspath( __file__ ))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 OUTPUT_DIR = os.path.join(BASE_DIR, "www")
 TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
@@ -9,7 +11,6 @@ VERSION = "2.1.0"
 DATA_FORMAT_VERSION = "0.1.0"
 CHECK_INTERVAL = 3600  # dload feed once per hour
 MAX_ENTRIES = 100
-BASE_HREF = "file:///home/vasile/src/planeteria2/www/"
 
 opt={'base_href':BASE_HREF,
      'website_name':"Planeteria",
@@ -18,4 +19,3 @@ opt={'base_href':BASE_HREF,
      'force_check': False,
      'template_dir':TEMPLATE_DIR
      }
-
