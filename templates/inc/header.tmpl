@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <base href="<TMPL_VAR base_href>" />
+   <TMPL_IF owner_name>
+     <meta name="author" content="<TMPL_VAR owner_name>" />
+   <TMPL_ELSE>
+     <meta name="author" content="James Vasile" />   
+   </TMPL_IF>
+   <TMPL_IF admin>
+     <meta name="description" content="Admin interface for a planet blog aggregator" />
+   </TMPL_IF>
+   <meta name="license" content="Various.  See source blogs for individual posts." />
+   <meta name="generator" content="<TMPL_VAR generator>">
+   <meta name="keywords" content="Planet, admin, metaplanet, hackervisions, blog, aggregator" />
+   <meta name="robots" content="index, follow, noarchive" />
+   <meta name="googlebot" content="noarchive" />
+
+   <TMPL_IF Items>
+   <link rel="alternate" type="application/rss+xml" href="atom.xml" title="All these posts as one feed" />
+   </TMPL_IF>
+
+   <title><TMPL_VAR title></title>
+   <link rel="stylesheet" href="pub.d/form.css" type="text/css" />
+   <link rel="stylesheet" href="pub.d/screen.css" type="text/css" />
+   <link rel="stylesheet" href="pub.d/venus.css" type="text/css" />
+
+   <TMPL_IF admin>
+     <script src="pub.d/admin.js" type="text/javascript"></script>
+     <script type="text/javascript">
+        <TMPL_VAR push_feeds>
+     </script>
+   </TMPL_IF>
+</head>
+<body>
+
+<div id="wrap">
+   <div id="header">
+      <TMPL_IF name>
+         <h1 id="logo-text"><a href="<TMPL_VAR feed_page>" accesskey="1" title=""><TMPL_VAR name></a></h1>
+      <TMPL_ELSE>
+         <h1 id="logo-text"><a href="" accesskey="1" title=""><TMPL_VAR website_name></a></h1>
+      </TMPL_IF>
+      <p id="slogan">Blog aggregation.  By your community, for your community.</p>
+      <a href="<TMPL_VAR base_href>"><div id="header-image"><img src="pub.d/images/planeteria_200.png" /></div></a>
+   </div>
+
+   <!-- content -->
+   <div id="content-outer" class="clear"><div id="content-wrap">
+      <div id="content">
