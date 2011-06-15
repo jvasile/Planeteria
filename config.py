@@ -13,7 +13,7 @@ DATA_FORMAT_VERSION = "0.1.0"
 CHECK_INTERVAL = 3600  # dload feed once per hour
 MAX_ENTRIES = 100
 
-opt={'domain':'http://test/planeteria.org',
+opt={'domain':'test.planeteria.org',
      'base_href':BASE_HREF,
      'website_name':"Planeteria",
      'generator':"Planeteria %s" % VERSION,
