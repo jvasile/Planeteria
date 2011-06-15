@@ -5,19 +5,6 @@ Copyright 2011 James Vasile <james@hackervisions.org>
 Released under AGPL, version 3 or later <http://www.fsf.org/licensing/licenses/agpl-3.0.html>
 Version 0.2
 
-
-Test run this using this script, which can be run from www:
-
-import CGIHTTPServer
-	 
-server_address = ('', 8000)
-handler = CGIHTTPServer.CGIHTTPRequestHandler
-handler.cgi_directories = ['/cgi-bin', '/freedombox']
-server = CGIHTTPServer.BaseHTTPServer.HTTPServer(server_address, handler)
-try:
-    server.serve_forever()
-except KeyboardInterrupt:
-    server.socket.close()
 """
 
 __authors__ = [ "James Vasile <james@hackervisions.org>"]
@@ -79,13 +66,13 @@ def render_push_feed(planet):
     "Return javascript for pushing feeds into array"
     ret = ''
 
-    for feed in planet.feeds:
+    for url, feed in planet.feeds.items():
         ret = (ret + "      new_feed('%s', '%s', '%s', '%s', '%s', '%s', '%s');\n" 
-               % (feed.url,
-                  feed.url,
-                  feed.name,
+               % (url,
+                  url,
+                  feed['name'],
                   '',
-                  feed.image[planet.direc],
+                  feed['image'],
                   '',
                   ''
                   ))
@@ -250,7 +237,6 @@ def main():
 
     ## Handle form input
     if Form.has_key('PlanetName'):
-        print "!"
         orig_pass = config.planet_options()['password']
         config = update_config(config);
 
