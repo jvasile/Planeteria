@@ -12,11 +12,12 @@ __license__ = "AGPLv3"
 
 import os,sys,re
 
-import util
+#import util
 from util import interpolate
 from util import write_file
 from config import *
-err=util.Msg()
+from util import Msg
+err=Msg()
 template_fname = os.path.join(opt['template_dir'], 'new.tmpl')
 
 def template_vars(subdir="", email=""):
@@ -82,7 +83,9 @@ def main():
     subdir = Form.getvalue("subdirectory", '').lower()
     #email = Form.getvalue("owner_email", '')
 
-    if validate_input(subdir):
+    if Form.getvalue("turing",'').lower() != "yes":
+        err.add("I can't believe you failed the Turing test.  Maybe you're a sociopath?")
+    elif validate_input(subdir):
         if make_planet(subdir):
             print "Location: http://%s/%s/admin.py\n\n" % (opt['domain'], subdir)
             return
