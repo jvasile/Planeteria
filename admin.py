@@ -100,15 +100,15 @@ def template_vars(planet, config):
 
     doc['Feeds']=[]
     count = 0
-    for feed in planet.feeds:
+    for url, feed in planet.feeds.items():
         f={} 
         f['idx']=count
         f['row_class'] = "face%d" % (count % 2)
-        f['faceurl'] = feed.image[planet.direc]
-        f['feedurl'] = feed.url
+        f['faceurl'] = feed['image']
+        f['feedurl'] = url
         #f['facewidth'] = f['faceheight'] = ''
-        f['section'] = feed.url
-        f['name'] = feed.name
+        f['section'] = url
+        f['name'] = feed['name']
         doc['Feeds'].append(f)
         count += 1;
     return doc
