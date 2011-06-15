@@ -152,7 +152,7 @@ def update_config(planet):
             for field in form_field:
                 planet.__dict__[field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
         feed_count += 1;
-    return config
+    return planet
 
 def write_ini(config):
     "Writes config.ini for this planet"
@@ -224,7 +224,7 @@ def main():
     ## Handle form input
     if Form.has_key('PlanetName'):
         orig_pass = planet.password
-        config = update_config(planet)
+        planet = update_config(planet)
 
         if Form.getvalue('Timestamp') != str(os.path.getmtime(config_fname)):
             err("Admin page has expired!  Perhaps somebody else is " +
@@ -235,7 +235,7 @@ def main():
         elif Form.getvalue('Pass') != orig_pass:
             err("Invalid password")
         else:
-            save(config)
+            planet.save()
             #add_feed_url(config)
     else:
          pass
