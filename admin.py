@@ -19,19 +19,18 @@ sys.path.insert(0,"..")
 from config import *
 
 if __name__ == "__main__":
-
-    try:
-        planet_dir = os.sep.join(os.environ['SCRIPT_FILENAME'].split(os.sep)[:-1])
-    except KeyError:
-        try:
-            planet_dir = os.sep.join((os.getcwd() + os.environ['SCRIPT_NAME']).split(os.sep)[:-1])
-        except:
-            planet_dir = os.getcwd()
-    global debug
-    debug = True
-    opt['planet_subdir'] = planet_dir.split(os.sep)[-1]
-    opt['template_fname'] = os.path.join(opt['template_dir'], 'admin.tmpl')
-    output_dir = planet_dir
+   try:
+      planet_dir = os.sep.join(os.environ['SCRIPT_FILENAME'].split(os.sep)[:-1])
+   except KeyError:
+      try:
+         planet_dir = os.sep.join((os.getcwd() + os.environ['SCRIPT_NAME']).split(os.sep)[:-1])
+      except:
+         planet_dir = os.getcwd()
+   global debug
+   debug = True
+   opt['planet_subdir'] = planet_dir.split(os.sep)[-1]
+   opt['template_fname'] = os.path.join(opt['template_dir'], 'admin.tmpl')
+   output_dir = planet_dir
 
 #######################
 ##
@@ -42,10 +41,10 @@ from util import merge_dict, dict_val, write_file, interpolate
 
 error=''
 def err(msg):
-    """Add msg to the error string, which can be displayed via template.
-    TODO: log the error w/ planet's logger"""
-    global error
-    error = error + "<p>%s</p>\n" % msg
+   """Add msg to the error string, which can be displayed via template.
+   TODO: log the error w/ planet's logger"""
+   global error
+   error = error + "<p>%s</p>\n" % msg
 
 #########################
  ##
@@ -53,31 +52,24 @@ def err(msg):
  ##
 ##########################
 def render_text_input (id, label, default="", size = 25):
-    "Return html for a text input field"
-    return ('<label for="%s">%s:</label>' % (id, label)
-            + '<input type="text" size="%d" name="%s" id="%s" value="%s">' % (size, id, id, default)
-            + "\n")
+   "Return html for a text input field"
+   return ('<label for="%s">%s:</label>' % (id, label)
+          + '<input type="text" size="%d" name="%s" id="%s" value="%s">' % (size, id, id, default)
+          + "\n")
 def render_pass_input (id, label, default="", size = 25):
-    "Return html for a password input field"
-    return ('<label for="%s">%s:</label>' % (id, label)
-            + '<input type="password" size="%d" name="%s" id="%s" value="%s">' % (size, id, id, default)
-            + "\n")
+   "Return html for a password input field"
+   return ('<label for="%s">%s:</label>' % (id, label)
+           + '<input type="password" size="%d" name="%s" id="%s" value="%s">' % (size, id, id, default)
+           + "\n")
 
 def render_push_feed(planet):
-    "Return javascript for pushing feeds into array"
-    ret = ''
+   "Return javascript for pushing feeds into array"
+   ret = ''
 
-    for url, feed in planet.feeds.items():
-        ret = (ret + "      new_feed('%s', '%s', '%s', '%s', '%s', '%s', '%s');\n" 
-               % (url,
-                  url,
-                  feed['name'],
-                  '',
-                  feed['image'],
-                  '',
-                  ''
-                  ))
-    return ret
+   for url, feed in planet.feeds.items():
+      ret = (ret + "      new_feed('%s', '%s', '%s', '%s', '%s', '%s', '%s');\n" 
+             % (url, url, feed['name'], '', feed['image'], '', ''))
+   return ret
          
 def template_vars(planet, config):
     "Returns a dict with the template vars in it"
@@ -113,7 +105,22 @@ def template_vars(planet, config):
         count += 1;
     return doc
 
-    
+def import_opml(file, planet):
+   from xml.etree import ElementTree
+
+   with open('opml.xml', 'rt') as f:
+      tree = ElementTree.parse(f)
+
+   for node in tree.getiterator('outline'):
+      name = node.attrib.get('text')
+      url = node.attrib.get('xmlUrl')
+      if url:
+         if not url in planet.feeds:
+            planet.feeds[url]={'url':url, 'name':name, 'image':''}
+         else:
+            planet.feeds[url]['url'] = url
+            if name: planet.feeds[url]['name'] = name
+   planet.save()
 
 ############################
  ##
