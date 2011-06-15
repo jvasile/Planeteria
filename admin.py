@@ -27,7 +27,8 @@ if __name__ == "__main__":
             planet_dir = os.sep.join((os.getcwd() + os.environ['SCRIPT_NAME']).split(os.sep)[:-1])
         except:
             planet_dir = os.getcwd()
-    
+    globals debug
+    debug = True
     opt['planet_subdir'] = planet_dir.split(os.sep)[-1]
     opt['template_fname'] = os.path.join(opt['template_dir'], 'admin.tmpl')
     output_dir = planet_dir
@@ -97,7 +98,6 @@ def template_vars(planet, config):
     doc['push_feeds'] = render_push_feed(planet)
 
     doc['timestamp'] = planet.last_config_change
-
     doc['Feeds']=[]
     count = 0
     for url, feed in planet.feeds.items():
@@ -233,6 +233,7 @@ def main():
             err("Admin page has expired!  Perhaps somebody else is " +
                 "editing this planet at the same time as you?  Please " +
                 "reload this page and try again.")
+            if debug: err("%d != %d" % (Form.getvalue('Timestamp'), planet.last_config_change))
         elif Form.getvalue('Pass','') == '':
             err("Please enter your password at the bottom of the page.")
         elif Form.getvalue('Pass') != orig_pass:
