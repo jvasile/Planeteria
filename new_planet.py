@@ -97,5 +97,4 @@ def static():
     return interpolate(template_fname, template_vars())
 
 if __name__ == "__main__":
-    make_planet('test')
-#    main()
+    main()
