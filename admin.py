@@ -180,26 +180,17 @@ def write_ini(config):
     else:
         err("Updated configuration.  The planet page will reflect your changes shortly.")
 
-def update_planet_page():
-    # Do planet.py -n and update index.html, atom.xml and opml.xml
-    os.chdir(planet_dir);
-    err("!"+planet_dir)
-    bin = "../planeteria.d/vendor/venus/planet.py"
-    opt = "-n -v"
-    os.system("%s %s" % (bin, opt))
-
-    #pid = os.spawnlp(os.P_NOWAIT, "%s/planet.py" % bin_path, "planet.py", "-n -v")
+def update_planet(planet):
+    p = Planet(direc=planet)
+    p.update()
+    p.generate()
 
 def save(config):
     "Save changes to config.ini"
     err( config )
     #write_ini(config)
-    #update_planet_page()
+    update_planet(opt['planet_subdir'])
 
-def add_feed_url(config):
-    """set feedurl to the url of the feed for each subscription"""
-    for sub in config.subscriptions():
-        config.parser.set(sub, 'feedurl', sub)
 
 def remove_feed_url(config):
     """Remove any feedurls set in the subscriptions"""
@@ -217,11 +208,6 @@ import shutil, planet
 VERSION = "0.2";
 Form=''
 
-def update_planet(planet):
-    p = Planet(planet)
-    p.update()
-    p.generate()
-
 
 def main():
     import cgi
@@ -231,6 +217,8 @@ def main():
     global Form
     Form = cgi.FieldStorage()
 
+    from planet import Planet
+    planet = Planet(direc=opt['planet_subdir'])
 
     #print "Content-type: text/html\n\n" 
     #from planet import config
@@ -238,8 +226,8 @@ def main():
 
     ## Handle form input
     if Form.has_key('PlanetName'):
-        orig_pass = config.planet_options()['password']
-        config = update_config(config);
+        orig_pass = planet.password
+        config = update_config(config)
 
         if Form.getvalue('Timestamp') != str(os.path.getmtime(config_fname)):
             err("Admin page has expired!  Perhaps somebody else is " +
@@ -256,8 +244,6 @@ def main():
          pass
          #add_feed_url(config)
 
-    from planet import Planet
-    planet = Planet(direc=opt['planet_subdir'])
 
     ## Template
     print interpolate(opt['template_fname'], template_vars(planet, Form))
