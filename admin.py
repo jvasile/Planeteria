@@ -96,7 +96,7 @@ def template_vars(planet, config):
     doc['pass_input'] = render_pass_input("Pass", "Password", Form.getvalue('Pass', ''))
     doc['push_feeds'] = render_push_feed(planet)
 
-    doc['timestamp'] = planet.last_config_change
+    doc['timestamp'] = planet.last_config_change or 0
 
     doc['Feeds']=[]
     count = 0
@@ -229,7 +229,7 @@ def main():
         orig_pass = planet.password
         planet = update_config(planet)
 
-        if Form.getvalue('Timestamp') != planet.last_config_change:
+        if Form.getvalue('Timestamp') != (planet.last_config_change or 0):
             err("Admin page has expired!  Perhaps somebody else is " +
                 "editing this planet at the same time as you?  Please " +
                 "reload this page and try again.")
