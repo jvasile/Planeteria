@@ -120,15 +120,15 @@ def template_vars(planet, config):
 ##  Config.ini Stuff
  ##
 ############################
-def update_config(config):
+def update_config(planet):
     """Grab new values from the form and stick them in config.
     Modifies config in place.  Does not save to file."""
-    for k,v in {'PlanetName':'name', 'OwnerName':'owner_name', 'OwnerEmail':'owner_email',
+    for k,v in {'PlanetName':'name', 'OwnerName':'user', 'OwnerEmail':'email',
                 'Pass':'password', 'Sidebar':'sidebar'}.items():
-        config.parser.set('Planet', v.strip(), Form.getvalue(k,''))
+        planet.__dict__[v] = Form.getvalue(k,'')
 
     if Form.getvalue('ChangePass','') != '':
-        config.parser.set('Planet', 'password', Form.getvalue('ChangePass',''))
+        planet.password = Form.getvalue('ChangePass','')
 
     feed_count = 0;
     form_field = ['feedurl', 'name', 'faceurl'] #, 'facewidth', 'faceheight']
@@ -137,23 +137,20 @@ def update_config(config):
         if Form.getvalue('delete%d' % feed_count) == '1':
             #err('delete%d' % feed_count)
             section = Form.getvalue('section%d' % feed_count)
-            if config.parser.has_section(section):
-                config.parser.remove_section(section)
+            #if config.parser.has_section(section):
+            #    config.parser.remove_section(section)
         else:
-            f = config.feed_options(Form.getvalue('feedurl%d' % feed_count))
-            section = Form.getvalue('section%d' % feed_count)
+            f = planet.feeds[Form.getvalue('feedurl%d' % feed_count)]
+            #section = Form.getvalue('section%d' % feed_count)
 
             # If it's a new section, use the feedurl as the name of the section
-            if section == 'section%d' % feed_count:
-                section = Form.getvalue('feedurl%d' % feed_count)
-                config.parser.add_section(section)
+            #if section == 'section%d' % feed_count:
+            #    section = Form.getvalue('feedurl%d' % feed_count)
+            #    config.parser.add_section(section)
 
             # Copy the values from the form into config
             for field in form_field:
-                if not config.parser.has_section(section):
-                    config.parser.add_section(section)
-                config.parser.set(section, field, 
-                                  Form.getvalue('%s%d' % (field, feed_count),'').strip())
+                planet.__dict__[field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
         feed_count += 1;
     return config
 
@@ -227,7 +224,7 @@ def main():
     ## Handle form input
     if Form.has_key('PlanetName'):
         orig_pass = planet.password
-        config = update_config(config)
+        config = update_config(planet)
 
         if Form.getvalue('Timestamp') != str(os.path.getmtime(config_fname)):
             err("Admin page has expired!  Perhaps somebody else is " +
