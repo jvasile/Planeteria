@@ -147,46 +147,6 @@ def update_config(planet):
         feed_count += 1;
     return planet
 
-def write_ini(config):
-    "Writes config.ini for this planet"
-    try:
-        shutil.copy(config_fname, config_fname+".bak")
-    except (IOError, os.error), why:
-        err("Could not backup config file %s: %s" % (config_fname, str(why)))
-
-    for sub in config.subscriptions():
-        if config.feed_options(sub)['feedurl'] != sub:
-            config.parser.add_section(config.feed_options(sub)['feedurl'])
-            for k,v in config.feed_options(sub, False).items():
-                config.parser.set(config.feed_options(sub)['feedurl'], k, v.strip())
-            config.parser.remove_section(sub)
-    remove_feed_url(config)
-
-    try:
-        f = open(config_fname, 'wb')
-        config.parser.write(f)
-    except (IOError, os.error), why:
-        err("Could not write config file %s: %s" % (config_fname, str(why)))
-    else:
-        err("Updated configuration.  The planet page will reflect your changes shortly.")
-
-def update_planet(planet):
-    p = Planet(direc=planet)
-    p.update()
-    p.generate()
-
-def save(config):
-    "Save changes to config.ini"
-    err( config )
-    #write_ini(config)
-    update_planet(opt['planet_subdir'])
-
-
-def remove_feed_url(config):
-    """Remove any feedurls set in the subscriptions"""
-    for sub in config.subscriptions():
-        config.parser.remove_option(sub, 'feedurl')
-
 ############################
  ##
 ##  Setup and Prep
@@ -230,11 +190,6 @@ def main():
             err("Invalid password")
         else:
             planet.save(update_config_timestamp=True)
-            #add_feed_url(config)
-    else:
-         pass
-         #add_feed_url(config)
-
 
     ## Template
     print interpolate(opt['template_fname'], template_vars(planet, Form))
