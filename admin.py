@@ -27,7 +27,7 @@ if __name__ == "__main__":
             planet_dir = os.sep.join((os.getcwd() + os.environ['SCRIPT_NAME']).split(os.sep)[:-1])
         except:
             planet_dir = os.getcwd()
-    globals debug
+    global debug
     debug = True
     opt['planet_subdir'] = planet_dir.split(os.sep)[-1]
     opt['template_fname'] = os.path.join(opt['template_dir'], 'admin.tmpl')
