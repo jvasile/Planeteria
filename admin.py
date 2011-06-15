@@ -134,22 +134,12 @@ def update_config(planet):
     form_field = ['feedurl', 'name', 'faceurl'] #, 'facewidth', 'faceheight']
 
     while (Form.has_key('section%d' % feed_count)):
+        url = Form.getvalue('feedurl%d' % feed_count)
         if Form.getvalue('delete%d' % feed_count) == '1':
-            #err('delete%d' % feed_count)
-            section = Form.getvalue('section%d' % feed_count)
-            #if config.parser.has_section(section):
-            #    config.parser.remove_section(section)
+            del planet.feeds[url]
         else:
-            url = Form.getvalue('feedurl%d' % feed_count)
             if not url in planet.feeds:
                 planet.feeds[url]={'url':url, 'name':Form.getvalue('name%d' % feed_count), 'image':Form.getvalue('faceurl%d' % feed_count)}
-            #f = planet.feeds[url]
-            #section = Form.getvalue('section%d' % feed_count)
-
-            # If it's a new section, use the feedurl as the name of the section
-            #if section == 'section%d' % feed_count:
-            #    section = Form.getvalue('feedurl%d' % feed_count)
-            #    config.parser.add_section(section)
 
             # Copy the values from the form into config
             for field in form_field:
