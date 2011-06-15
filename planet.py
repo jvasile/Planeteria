@@ -35,6 +35,11 @@ class Planet():
          self.sidebar = h['sidebar']
       else:
          self.sidebar = ''
+
+      try:
+         self.last_config_change = h['last_config_change']
+      except KeyError:
+         self.last_config_change = 0
          
       #self.feeds = [Feed(url=f) for f in h['feeds']]
       #print self.feeds[0].dump()
@@ -48,6 +53,7 @@ class Planet():
       self.load_dict(json.loads(j))
 
    def save(self):
+      self.last_config_change = time.time()
       with berkeley_db('planets') as db:
          db[self.direc] = self.json()
  
@@ -60,6 +66,7 @@ class Planet():
               'feeds':self.feeds,
               'last_downloaded': self.last_downloaded,
               'sidebar':self.sidebar,
+              'last_config_change':self.last_config_change,
               'version':DATA_FORMAT_VERSION}
    def json(self):
       return json.dumps(self.serializable(), sort_keys=True, indent=3)

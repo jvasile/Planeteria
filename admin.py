@@ -96,7 +96,7 @@ def template_vars(planet, config):
     doc['pass_input'] = render_pass_input("Pass", "Password", Form.getvalue('Pass', ''))
     doc['push_feeds'] = render_push_feed(planet)
 
-    #doc['timestamp'] = os.path.getmtime(config_fname)
+    doc['timestamp'] = planet.last_config_change
 
     doc['Feeds']=[]
     count = 0
