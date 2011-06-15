@@ -153,7 +153,7 @@ def update_config(planet):
 
             # Copy the values from the form into config
             for field in form_field:
-                planet.__dict__[field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
+                planet.feeds[field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
         feed_count += 1;
     return planet
 
