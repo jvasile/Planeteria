@@ -229,7 +229,7 @@ def main():
         orig_pass = planet.password
         planet = update_config(planet)
 
-        if Form.getvalue('Timestamp') != planet.last_config_change:
+        if Form.getvalue('Timestamp') != str(planet.last_config_change):
             err("Admin page has expired!  Perhaps somebody else is " +
                 "editing this planet at the same time as you?  Please " +
                 "reload this page and try again.")
