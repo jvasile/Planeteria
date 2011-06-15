@@ -28,7 +28,7 @@ class Planet():
       self.email = h['email']
       self.password = h['password']
       if 'last_downloaded' in h:
-         self.last_downloaded = h['last_downloaded'] or 0
+         self.last_downloaded = h['last_downloaded'] or 1
       else:
          self.last_downloaded = 0
       if 'sidebar' in h:
@@ -39,7 +39,7 @@ class Planet():
       try:
          self.last_config_change = h['last_config_change']
       except KeyError:
-         self.last_config_change = 0
+         self.last_config_change = 1
          
       #self.feeds = [Feed(url=f) for f in h['feeds']]
       #print self.feeds[0].dump()
