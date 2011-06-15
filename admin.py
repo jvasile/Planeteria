@@ -192,7 +192,8 @@ def update_planet_page():
 
 def save(config):
     "Save changes to config.ini"
-    write_ini(config)
+    err( config )
+    #write_ini(config)
     #update_planet_page()
 
 def add_feed_url(config):
