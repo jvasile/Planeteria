@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os, sys, dbm, time, tidy, feedparser, htmltmpl, shutil, re, cgi, cgitb
+import os, sys, dbm, time, feedparser, htmltmpl, shutil, re, cgi, cgitb
 
 from optparse import OptionParser
 import simplejson as json
@@ -133,12 +133,13 @@ def interpolate(template, vals):
    return tp.process(template)
 
 def tidy2xhtml(instr):
-   options = dict(output_xhtml=1,
-                  add_xml_decl=0,
-                  indent=1
-                  )
-   tidied = tidy.parseString(instr, **options)
-   return tidied
+   pass
+   #options = dict(output_xhtml=1,
+   #               add_xml_decl=0,
+   #               indent=1
+   #               )
+   #tidied = tidy.parseString(instr, **options)
+   #return tidied
 
 
 def make_static(output_dir, output_fname, template_fname, template_vars):
@@ -324,7 +325,7 @@ class Planet():
          
       for e in sorted_entries[:50]:
          e['content_encoded'] = e['content'][0]['value']
-         e['content'] = html2xml(just_body(tidy2xhtml(e['content'][0]['value'])))
+         #e['content'] = html2xml(just_body(tidy2xhtml(e['content'][0]['value'])))
          try:
             u = time.strptime(e['updated'], "%a, %d %b %Y %H:%M:%S +0000")
          except ValueError:
