@@ -17,5 +17,9 @@ opt={'base_href':BASE_HREF,
      'generator':"Planeteria %s" % VERSION,
      'generator_uri':"http://planeteria.org/copyright.html",
      'force_check': False,
-     'template_dir':TEMPLATE_DIR
+     'template_dir':TEMPLATE_DIR,
+     'new_planet_dir':os.path.join(TEMPLATE_DIR, "new_planet"),
      }
+
+opt.update(locals())
+

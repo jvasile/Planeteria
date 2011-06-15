@@ -124,3 +124,29 @@ def make_static(output_dir, output_fname, template_fname, template_vars):
 def make_page(name):
    "Make a standard page in the httproot"
    make_static(OUTPUT_DIR, "%s.html" % name, "%s.tmpl" % name, opt)
+class Msg:
+   """Rudimentary class to store a message object that can save
+   messages and then return them as html or text."""
+   txt=[]
+   web = False
+   def __init__(self, web=web):
+      self.txt = []
+      self.web = web
+   def add(self, text):
+      self.txt.append(text)
+      if not self.web:
+         print text
+   def out(self):
+      if web:
+         self.html()
+      else:
+         self.text()
+   def html(self):
+      return "<br />\n".join(self.txt)
+   def text(self):
+      return "\n".join(self.txt)
+   def para(status="start"):
+      if para == "start":
+         self.add("<p>")
+      else:
+         self.add("</p>")
