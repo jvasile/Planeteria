@@ -140,7 +140,10 @@ def update_config(planet):
             #if config.parser.has_section(section):
             #    config.parser.remove_section(section)
         else:
-            f = planet.feeds[Form.getvalue('feedurl%d' % feed_count)]
+            url = Form.getvalue('feedurl%d' % feed_count)
+            if not url in planet.feeds:
+                planet.feeds[url]={'url':url, 'name':Form.getvalue('name%d' % feed_count), 'image':Form.getvalue('faceurl%d' % feed_count)}
+            #f = planet.feeds[url]
             #section = Form.getvalue('section%d' % feed_count)
 
             # If it's a new section, use the feedurl as the name of the section
@@ -226,7 +229,7 @@ def main():
         orig_pass = planet.password
         planet = update_config(planet)
 
-        if Form.getvalue('Timestamp') != str(os.path.getmtime(config_fname)):
+        if Form.getvalue('Timestamp') != planet.last_config_update:
             err("Admin page has expired!  Perhaps somebody else is " +
                 "editing this planet at the same time as you?  Please " +
                 "reload this page and try again.")
@@ -235,7 +238,7 @@ def main():
         elif Form.getvalue('Pass') != orig_pass:
             err("Invalid password")
         else:
-            planet.save()
+            planet.save(update_config_timestamp=True)
             #add_feed_url(config)
     else:
          pass
