@@ -9,7 +9,7 @@ Utility functions
 
 import os, sys, dbm, time
 import htmltmpl # Debian package python-htmltmpl
-import tidy
+#import tidy
 from config import *
 
 generated=[]
@@ -105,12 +105,13 @@ def interpolate(template, vals):
    return tp.process(template)
 
 def tidy2xhtml(instr):
+   pass
    options = dict(output_xhtml=1,
                   add_xml_decl=0,
                   indent=1
                   )
-   tidied = tidy.parseString(instr, **options)
-   return tidied
+   #tidied = tidy.parseString(instr, **options)
+   #return tidied
 
 
 def make_static(output_dir, output_fname, template_fname, template_vars):
