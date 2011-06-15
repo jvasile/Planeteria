@@ -52,8 +52,10 @@ class Planet():
    def load_json(self, j):
       self.load_dict(json.loads(j))
 
-   def save(self):
-      self.last_config_change = time.time()
+
+   def save(self, update_config_timestamp=False):
+      if update_config_timestamp:
+         self.last_config_change = time.time()
       with berkeley_db('planets') as db:
          db[self.direc] = self.json()
  
