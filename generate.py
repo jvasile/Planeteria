@@ -16,7 +16,6 @@ Front End
 
 import os, sys
 from optparse import OptionParser
-from util import make_static, make_page
 import config
 from config import *
 from galaxy import Galaxy
@@ -151,13 +150,21 @@ if __name__ == "__main__":
 
    parse_options()
 
-   for p in ['copyright', 'contact', 'thanks', 'tos']:
-      make_page(p)
-   make_static(config.OUTPUT_DIR, "index.html", "new.tmpl", config.opt)
+   import templates
+   for p,t in {'copyright':'Code and Copyright',
+               'contact':'Contact Us',
+               'thanks':'Thanks!',
+               'tos':'Terms of Service',
+               'index':'Welcome to Planeteria',
+               }.items():
+      opt['title'] = t
+      eval('templates.%s(opt).write(OUTPUT_DIR, "%s.html")' % (p.capitalize(), p))
+   opt['title']='Planeteria'
 
    galaxy = Galaxy(planets)
    galaxy.load()
    #galaxy.dump()
-   galaxy.update()
-   #galaxy.save()
+   #galaxy.update()
+   galaxy.save()
    galaxy.generate()
+

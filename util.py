@@ -9,8 +9,9 @@ Utility functions
 
 import os, sys, dbm, time
 import htmltmpl # Debian package python-htmltmpl
-#import tidy
+import tidy
 from config import *
+import dateutil.parser
 
 generated=[]
 
@@ -21,12 +22,11 @@ def html2xml(ins):
 
 
 def parse_updated_time(entry):
-   try:
-      return time.mktime(time.strptime(entry['updated'], "%a, %d %b %Y %H:%M:%S +0000"))
-   except ValueError:
-      return 0
-
+   return str(dateutil.parser.parse(entry['updated']))
+   
 def just_body(xhtml):
+   #print xhtml
+   #sys.exit()
    return str(xhtml).split(' <body>')[1].split(' </body>')[0]
 
 class berkeley_db:
@@ -105,26 +105,15 @@ def interpolate(template, vals):
    return tp.process(template)
 
 def tidy2xhtml(instr):
-   pass
+   #print instr
+   #return instr
    options = dict(output_xhtml=1,
                   add_xml_decl=0,
                   indent=1
                   )
-   #tidied = tidy.parseString(instr, **options)
-   #return tidied
+   tidied = tidy.parseString(instr, **options)
+   return tidied
 
-
-def make_static(output_dir, output_fname, template_fname, template_vars):
-   template_fname = os.path.join(TEMPLATE_DIR, template_fname)
-   try:
-      os.unlink(template_fname + "c")
-   except:
-      pass
-   write_add(output_dir, output_fname, interpolate(template_fname, template_vars))
-
-def make_page(name):
-   "Make a standard page in the httproot"
-   make_static(OUTPUT_DIR, "%s.html" % name, "%s.tmpl" % name, opt)
 class Msg:
    """Rudimentary class to store a message object that can save
    messages and then return them as html or text."""

@@ -67,8 +67,8 @@ def make_planet(subdir):
     p.save()
     mopt = dict(opt.items()+p.__dict__.items())
 
-    from util import make_static
-    make_static(path, "index.html", "welcome.tmpl", mopt)
+    import template
+    template.Welcome(mopt).write(path, 'index.html')
     return True
 
 import cgi, shutil

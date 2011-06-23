@@ -20,17 +20,17 @@ from config import *
 
 if __name__ == "__main__":
    try:
-      planet_dir = os.sep.join(os.environ['SCRIPT_FILENAME'].split(os.sep)[:-1])
+      opt['planet_dir'] = os.sep.join(os.environ['SCRIPT_FILENAME'].split(os.sep)[:-1])
    except KeyError:
       try:
-         planet_dir = os.sep.join((os.getcwd() + os.environ['SCRIPT_NAME']).split(os.sep)[:-1])
+         opt['planet_dir'] = os.sep.join((os.getcwd() + os.environ['SCRIPT_NAME']).split(os.sep)[:-1])
       except:
-         planet_dir = os.getcwd()
+         opt['planet_dir'] = os.getcwd()
    global debug
    debug = True
-   opt['planet_subdir'] = planet_dir.split(os.sep)[-1]
+   opt['planet_subdir'] = opt['planet_dir'].split(os.sep)[-1]
    opt['template_fname'] = os.path.join(opt['template_dir'], 'admin.tmpl')
-   output_dir = planet_dir
+   output_dir = opt['planet_dir']
 
 #######################
 ##
@@ -114,13 +114,15 @@ def import_opml(file, planet):
    for node in tree.getiterator('outline'):
       name = node.attrib.get('text')
       url = node.attrib.get('xmlUrl')
+      print name, url
+
       if url:
          if not url in planet.feeds:
             planet.feeds[url]={'url':url, 'name':name, 'image':''}
          else:
             planet.feeds[url]['url'] = url
             if name: planet.feeds[url]['name'] = name
-   planet.save()
+   planet.dump()
 
 ############################
  ##
@@ -167,39 +169,39 @@ Form=''
 
 
 def main():
-    import cgi
-    import cgitb
-    cgitb.enable()
+   import cgi
+   import cgitb
+   cgitb.enable()
 
-    global Form
-    Form = cgi.FieldStorage()
+   global Form
+   Form = cgi.FieldStorage()
 
-    from planet import Planet
-    planet = Planet(direc=opt['planet_subdir'])
+   from planet import Planet
+   planet = Planet(direc=opt['planet_subdir'])
 
-    #print "Content-type: text/html\n\n" 
-    #from planet import config
-    #config.load(config_fname)
+   import_opml('../../opml.xml', planet)
+   sys.exit()
 
-    ## Handle form input
-    if Form.has_key('PlanetName'):
-        orig_pass = planet.password
-        planet = update_config(planet)
 
-        if Form.getvalue('Timestamp') != str(planet.last_config_change):
-            err("Admin page has expired!  Perhaps somebody else is " +
-                "editing this planet at the same time as you?  Please " +
-                "reload this page and try again.")
-            if debug: err("%s != %s" % (Form.getvalue('Timestamp'), planet.last_config_change))
-        elif Form.getvalue('Pass','') == '':
-            err("Please enter your password at the bottom of the page.")
-        elif Form.getvalue('Pass') != orig_pass:
-            err("Invalid password")
-        else:
-            planet.save(update_config_timestamp=True)
+   ## Handle form input
+   if Form.has_key('PlanetName'):
+      orig_pass = planet.password
+      planet = update_config(planet)
 
-    ## Template
-    print interpolate(opt['template_fname'], template_vars(planet, Form))
+      if Form.getvalue('Timestamp') != str(planet.last_config_change):
+         err("Admin page has expired!  Perhaps somebody else is " +
+             "editing this planet at the same time as you?  Please " +
+             "reload this page and try again.")
+         if debug: err("%s != %s" % (Form.getvalue('Timestamp'), planet.last_config_change))
+      elif Form.getvalue('Pass','') == '':
+         err("Please enter your password at the bottom of the page.")
+      elif Form.getvalue('Pass') != orig_pass:
+         err("Invalid password")
+      else:
+         planet.save(update_config_timestamp=True)
+
+   ## Template
+   print interpolate(opt['template_fname'], template_vars(planet, Form))
 
 if __name__ == "__main__":
-    main()
+   main()

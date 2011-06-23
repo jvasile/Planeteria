@@ -3,7 +3,9 @@ from config import *
 import feedparser
 import simplejson as json
 from urllib import urlopen
-from util import smart_str, parse_updated_time, html2xml, just_body, tidy2xhtml, make_static, berkeley_db
+from util import smart_str, parse_updated_time, html2xml, just_body, tidy2xhtml, berkeley_db, write_file
+import templates
+import dateutil.parser
 
 class Planet():
    def __init__(self, *args, **kwargs):
@@ -138,7 +140,7 @@ class Planet():
             e['channel_faceurl'] = f['image']
             e['channel_name'] = e['feed_name']
             e['subtitle'] = parsed['feed']['subtitle']
-            e['feed_id'] = parsed['feed']['link']
+            e['channel_link'] = e['feed_id'] = parsed['feed']['link']
             entries[e['id']] = e
 
          ## OPML template stuff and sidebar stuff
@@ -148,38 +150,28 @@ class Planet():
                feed_data['url'] = l['href']
             elif l['rel']=="alternate":
                feed_data['link'] = l['href']
-
          feed_data['author'] = f['name']
          feed_data['title'] = smart_str(parsed['feed']['title'], encoding='ascii', errors='ignore')
+         feed_data['image'] = f['image']
          lopt['Feeds'].append(feed_data)
 
       sorted_entries = sorted(entries.values(), reverse=True, 
                               key=parse_updated_time)
-
          
       for e in sorted_entries[:50]:
          e['content_encoded'] = e['content'][0]['value']
-         e['content'] = html2xml(just_body(tidy2xhtml(e['content'][0]['value'])))
-         try:
-            u = time.strptime(e['updated'], "%a, %d %b %Y %H:%M:%S +0000")
-         except ValueError:
-            u = [0,0,0,0,0,0,0,0,0]
-         try:
-            e['date'] =  time.strftime("%Y-%m-%dT%H:%M:%SZ", u)
-         except ValueError:
-            e['date'] =  "1900-01-01T00:00:00Z"
-         try:
-            e['updated'] =  time.strftime("%Y-%m-%dT%H:%M:%SZ", u)
-         except ValueError:
-            e['updated'] =  "1900-01-01T00:00:00Z"
-         
+         e['content'] = e['content'][0]['value'] #html2xml(just_body(tidy2xhtml(e['content'][0]['value'])))
+
+         e['date'] = dateutil.parser.parse(e['updated'])
+         e['updated'] = e['date']
+
       lopt['Items'] = sorted_entries[:50]
       mopt = dict(lopt.items()+opt.items() + self.__dict__.items())
 
-      # generate page
-      make_static(output_dir, "index.html", "index.html.tmpl", mopt)
-      make_static(output_dir, "atom.xml", "atom.xml.tmpl", mopt)
-      make_static(output_dir, "opml.xml", "opml.xml.tmpl", mopt)
+      # generate pages
+      templates.OPML(mopt).write(output_dir, "opml.xml")
+      templates.Atom(mopt).write(output_dir, "atom.xml")
+      templates.Planet_Page(mopt).write(output_dir, "index.html")
 
    def del_feed(self, url):
       d = None
