@@ -128,7 +128,7 @@ class Planet():
          with berkeley_db('cache') as db:
             cache = db[url]
 
-         parsed = feedparser.parse(cache)
+         parsed = feedparser.parse(cache)         
          if (len(parsed.entries) == 0 and parsed.bozo and 
              str(parsed.bozo_exception).startswith("'ascii' codec can't encode character")):
             parsed = feedparser.parse(smart_str(self.data, encoding='ascii', errors='ignore'))
@@ -164,6 +164,7 @@ class Planet():
 
          e['date'] = dateutil.parser.parse(e['updated'])
          e['updated'] = e['date']
+         print e['summary']
 
       lopt['Items'] = sorted_entries[:50]
       mopt = dict(lopt.items()+opt.items() + self.__dict__.items())

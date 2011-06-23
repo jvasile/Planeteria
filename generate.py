@@ -164,7 +164,7 @@ if __name__ == "__main__":
    galaxy = Galaxy(planets)
    galaxy.load()
    #galaxy.dump()
-   #galaxy.update()
+   galaxy.update()
    galaxy.save()
    galaxy.generate()
 
