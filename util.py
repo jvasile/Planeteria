@@ -9,26 +9,28 @@ Utility functions
 
 import os, sys, dbm, time
 import htmltmpl # Debian package python-htmltmpl
-import tidy
+#import tidy
 from config import *
 import dateutil.parser
 
 generated=[]
 
+"""
 def html2xml(ins):
-   """replace all the html entities with xml equivs"""
+   'replace all the html entities with xml equivs'
    ins = ins.replace("&nbsp;", "&#160;")
    return ins
-
+"""
 
 def parse_updated_time(entry):
    return str(dateutil.parser.parse(entry['updated']))
    
+"""
 def just_body(xhtml):
    #print xhtml
    #sys.exit()
    return str(xhtml).split(' <body>')[1].split(' </body>')[0]
-
+"""
 class berkeley_db:
    def __init__(self, fname):
       self.fname = fname
@@ -104,6 +106,7 @@ def interpolate(template, vals):
          pass
    return tp.process(template)
 
+"""
 def tidy2xhtml(instr):
    #print instr
    #return instr
@@ -113,6 +116,7 @@ def tidy2xhtml(instr):
                   )
    tidied = tidy.parseString(instr, **options)
    return tidied
+"""
 
 class Msg:
    """Rudimentary class to store a message object that can save

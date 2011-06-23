@@ -3,7 +3,7 @@ from config import *
 import feedparser
 import simplejson as json
 from urllib import urlopen
-from util import smart_str, parse_updated_time, html2xml, just_body, tidy2xhtml, berkeley_db, write_file
+from util import smart_str, parse_updated_time, berkeley_db, write_file
 import templates
 import dateutil.parser
 
