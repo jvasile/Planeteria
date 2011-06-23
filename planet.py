@@ -164,7 +164,8 @@ class Planet():
 
          e['date'] = dateutil.parser.parse(e['updated'])
          e['updated'] = e['date']
-         print e.keys()
+         if not 'summary' in e:
+            print e.keys()
          #print e['summary']
 
       lopt['Items'] = sorted_entries[:50]
