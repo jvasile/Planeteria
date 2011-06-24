@@ -43,14 +43,14 @@ class OPML(XML_Template):
 class Atom(XML_Template):
    def render(self):
       o = self.interpolate
-      for k in ['title']:
+      for k in ['title', 'name']:
          o['e'+k] = self.escape(o[k])
 
       o['rendered_items'] = self.items()
 
       return """<?xml version="1.0"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xmlns:planet="%(feed_page)s" xmlns:indexing="urn:atom-extension:indexing" indexing:index="no"><access:restriction xmlns:access="http://www.bloglines.com/about/specs/fac-1.0" relationship="deny"/>
-  <title type="text/plain">%(etitle)s</title>
+  <title type="text/plain">%(ename)s</title>
   <updated>%(updated)s</updated>
   <generator uri="%(generator_uri)s">%(generator)s</generator>
   <author>
