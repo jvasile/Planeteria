@@ -94,7 +94,7 @@ class Atom(XML_Template):
 	<updated>%(updated)s</updated>
       </source>
 
-      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">%(econtent)s</div></content>
+      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">econtent</div></content>
  </entry>
  """ % i
       return s
