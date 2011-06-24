@@ -126,7 +126,7 @@ class Planet():
       lopt['Feeds']=[]
       for url, f in self.feeds.items():
          with berkeley_db('cache') as db:
-            if not 'url' in db:
+            if not url in db:
                continue
             cache = db[url]
 
