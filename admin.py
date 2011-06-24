@@ -179,8 +179,8 @@ def main():
    from planet import Planet
    planet = Planet(direc=opt['planet_subdir'])
 
-   import_opml('../../opml.xml', planet)
-   sys.exit()
+   #import_opml('../../opml.xml', planet)
+   #sys.exit()
 
 
    ## Handle form input
