@@ -73,7 +73,7 @@ class Atom(XML_Template):
          s += """<entry>
       <id>%(id)s</id>
       <title type="text/plain">%(etitle)s</title>
-      <summary>%(summary)s</summary>
+      <summary>summary</summary>
       <updated>%(updated)s</updated>
       <link href="%(link)s" rel="alternate" type="text/html"/>""" % i
          if 'author' in i:
