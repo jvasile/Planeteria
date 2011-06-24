@@ -166,10 +166,6 @@ class Planet():
          e['updated'] = e['date']
          if not 'summary' in e:
             e['summary'] = e['content']
-            #print e.keys()
-            #print e['title']
-            
-         #print e['summary']
 
       lopt['Items'] = sorted_entries[:50]
       mopt = dict(lopt.items()+opt.items() + self.__dict__.items())
