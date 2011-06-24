@@ -155,6 +155,7 @@ class Planet():
          feed_data['author'] = f['name']
          feed_data['title'] = smart_str(parsed['feed']['title'], encoding='ascii', errors='ignore')
          feed_data['image'] = f['image']
+         feed_data['url'] = f['url']
          lopt['Feeds'].append(feed_data)
 
       sorted_entries = sorted(entries.values(), reverse=True, 
