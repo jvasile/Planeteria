@@ -162,9 +162,11 @@ class Planet():
          
       for e in sorted_entries[:50]:
          if not 'content' in e:
-            print e.keys()
-         e['content_encoded'] = e['content'][0]['value']
-         e['content'] = e['content'][0]['value'] #html2xml(just_body(tidy2xhtml(e['content'][0]['value'])))
+            e['content'] = e['summary']
+            e['content_encoded'] = e['summary']
+         else:
+            e['content_encoded'] = e['content'][0]['value']
+            e['content'] = e['content'][0]['value'] #html2xml(just_body(tidy2xhtml(e['content'][0]['value'])))
 
          e['date'] = dateutil.parser.parse(e['updated'])
          e['updated'] = e['date']
