@@ -78,9 +78,7 @@ class Atom(XML_Template):
       <link href="%(link)s" rel="alternate" type="text/html"/>""" % i
          if 'author' in i:
             s+="""
-      <author>
-	<name>%(author)s</name>
-      </author>""" % i
+      <author><name>%(author)s</name></author>""" % i
 
          s += """ 
       <source>
