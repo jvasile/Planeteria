@@ -21,7 +21,7 @@ def html2xml(ins):
    return ins
 
 def parse_updated_time(entry):
-   return str(dateutil.parser.parse(entry['updated']))
+   return str(entry['updated'])
    
 def just_body(xhtml):
    #print xhtml

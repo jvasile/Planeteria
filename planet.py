@@ -143,6 +143,8 @@ class Planet():
             e['channel_name'] = e['feed_name']
             e['subtitle'] = parsed['feed']['subtitle']
             e['channel_link'] = e['feed_id'] = parsed['feed']['link']
+            e['date'] = dateutil.parser.parse(e['updated'])
+            e['updated'] = e['date']
             entries[e['id']] = e
 
          ## OPML template stuff and sidebar stuff
@@ -169,8 +171,7 @@ class Planet():
             e['content_encoded'] = e['content'][0]['value']
             e['content'] = html2xml(just_body(tidy2xhtml(e['content'][0]['value'])))
 
-         e['date'] = dateutil.parser.parse(e['updated'])
-         e['updated'] = e['date']
+         print e['updated']
          if not 'summary' in e:
             e['summary'] = ''#e['content']
 
