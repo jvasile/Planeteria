@@ -606,6 +606,77 @@ class Admin(HTML_Template):
       o = self.interpolate
       o['sidebar'] = self.sidebar()
       return self.header() + """
+<div id="left">
+
+  <div id="error">%(error)s</div>
+
+  <form method="post" class="cmxform">
+    <input type=hidden name="Timestamp" value="%(timestamp)s" />
+    <div> <!-- need this div b/c form needs to be enclosed in a block element per http://objectmix.com/javascript/23328-dynamic-form-fields-added-appendchild-innerhtml-do-not-post-submit-firefox.html -->
+
+      <div class = "entry">
+        <div class="entrytitle">Planet Config</div>
+        <ol>
+          <li>%(planet_name_input)s</li>
+          <li>%(owner_name_input)s</li>
+          <li>%(owner_email_input ESCAPE=NONE)s</li>
+        </ol>
+      </div> <!-- end entry -->
+
+      <div class = "entry" id="FeedsBody">
+        <div class="entrytitle">Feeds <a href="javascript:add_feed()"><img src="pub.d/images/add-feed.png" width="14" height="14" border="0" alt="Add new feed button" name="AddFeedBtn" class="feedbtn"></a></div>
+	<p>Use the <a href="javascript:add_feed()"><img src="pub.d/images/add-feed.png" width="14" height="14" border="0" alt="Add new feed button" name="AddFeedBtn" class="feedbtn"></a> and <img src="pub.d/images/rm-feed.png" width="14" height="14" border="0" alt="Remove feed sample" class="feedbtn"> buttons to add and remove feeds.</p>
+        <div id="feeds">
+	  <table id="feed_table"><tbody id="feeds_tbody">
+	      <TMPL_LOOP Feeds>
+		<tr class="%(row_class)s" id="feed_row%(idx)s">
+                  <td style="vertical-align:middle">
+                    <TMPL_IF faceurl>
+                      <img src="<TMPL_VAR faceurl ESCAPE="HTML">" width="<TMPL_VAR facewidth ESCAPE="HTML">" height="<TMPL_VAR faceheight ESCAPE="HTML">" alt="">
+		      <TMPL_ELSE />
+		      <img src="pub.d/images/silhouette2.png">
+                    </TMPL_IF>
+                  </td>
+		  <td style="text-align:left">
+		    <input type="hidden" name="section%(idx)s" id="section%(idx)s" value="%(section)s" />
+		    <input type="hidden" name="delete%(idx)s" id="delete%(idx)s" value="0" />
+		    <a href="javascript:rm_feed(%(idx)s)"<img class="feedbtn" src="pub.d/images/rm-feed.png"></a> <label for="name%(idx)s">Feed Name:</label><br />
+		       <input type="text" size=40 name="name%(idx)s" id="name%(idx)s" value="%(name)s"><br />
+		       <label for="feedurl%(idx)s">Feed URL:</label><br />
+		       <input type="text" size=40 name="feedurl%(idx)s" id="feedurl%(idx)s" value="%(feedurl)s"><br />
+		       <label for="faceurl%(idx)s">Image URL:</label><br />
+		       <input type="text" size=40 name="faceurl%(idx)s" id="faceurl%(idx)s" value="%(faceurl)s"><br />		    
+                  </td></tr>
+              </TMPL_LOOP>
+          </tbody></table>
+        </div><!-- end feeds -->
+      </div> <!-- end entry -->
+<!--
+      <div class = "entry" id="SidebarBody">
+        <div class="entrytitle">Sidebar</div>
+        <textarea rows="10" cols="75" name="Sidebar" wrap="physical"><TMPL_VAR sidebar></textarea>
+      </div> 
+-->
+      <div class = "entry" id="ChangeAuth">
+        <div class="entrytitle">Change Password</div>
+        If you want to change your password, enter a new one here.<br />
+	%(change_pass_input)s
+      </div> <!-- end entry -->
+
+      <div class = "entry" id="AuthGo">
+        <div class="entrytitle">Save Changes</div>
+	%(pass_input)s
+        <input type="submit" value="Save Changes"><br />
+	<TMPL_IF passme>
+
+	If you don't know the password, try the default password:
+	passme.  You are encouraged to change this password.
+
+	</TMPL_IF>
+      </div> <!-- end entry -->
+
+   </div></form>
+</div>	<!-- end left -->
 <div id="right">
   %(sidebar)s
 </div>	<!-- end right -->
