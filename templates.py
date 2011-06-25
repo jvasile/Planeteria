@@ -158,9 +158,9 @@ class HTML_Template(Template):
 """  % self.interpolate
 
       if 'name' in self.interpolate:
-         s += '         <h1 id="logo-text"><a href="%(base_href)s%(direc)s" accesskey="1" title="">%(name)s</a></h1>\n'  % self.interpolate
+         s += '         <h1 id="logo-text"><a href="%(base_href)s%(direc)s" accesskey="1" title="%(name)s">%(name)s</a></h1>\n'  % self.interpolate
       else: 
-         s += '         <h1 id="logo-text"><a href="" accesskey="1" title="">%(website_name)s</a></h1>\n'  % self.interpolate
+         s += '         <h1 id="logo-text"><a href="" accesskey="1" title="site:%(website_name)s">%(website_name)s</a></h1>\n'  % self.interpolate
 
       s += """      <p id="slogan">Blog aggregation.  By your community, for your community.</p>
       <a href="%(base_href)s"><div id="header-image"><img src="pub.d/images/planeteria_200.png" /></div></a>
@@ -606,7 +606,6 @@ class Admin(HTML_Template):
       o = self.interpolate
       o['sidebar'] = self.sidebar()
       return self.header() + """
-
 <div id="right">
   %(sidebar)s
 </div>	<!-- end right -->
