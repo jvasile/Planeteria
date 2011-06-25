@@ -200,7 +200,7 @@ def main():
 
    ## Template
    from templates import Admin
-   print "Content-type: text/html\n\n" + Admin(template_vars(planet, Form)).render().encode('latin-1', errors)
+   print "Content-type: text/html\n\n" + Admin(template_vars(planet, Form)).render().encode('latin-1', 'ignore')
 
 if __name__ == "__main__":
    main()
