@@ -10,7 +10,7 @@ Version 0.2
 __authors__ = [ "James Vasile <james@hackervisions.org>"]
 __license__ = "AGPLv3"
 
-
+from util import merge_dict
 import os, sys
 sys.path.insert(0,"..")
 
@@ -77,7 +77,7 @@ def template_vars(planet, config):
     doc['error'] = error
     doc['name'] = planet.name
     doc['title'] = planet.name
-    doc = dict(doc.items() + planet.__dict__.items() + config.__dict__.items())
+    doc = dict(doc.items() + planet.__dict__.items() + [(c, config[c]) for c in config])
     if doc['password'] == 'passme':
         doc['passme'] = 1
     doc['planet_name_input'] = render_text_input("PlanetName", "Planet name", doc['name'], 40)
@@ -176,7 +176,6 @@ def main():
 
    from planet import Planet
    planet = Planet(direc=opt['planet_subdir'])
-
    #import_opml('../../opml.xml', planet)
    #sys.exit()
 
@@ -200,7 +199,10 @@ def main():
 
    ## Template
    from templates import Admin
-   print "Content-type: text/html\n\n" + Admin(template_vars(planet, Form)).render().encode('latin-1', 'ignore')
+   doc = template_vars(planet, Form)
+   print doc['name']
+   sys.exit()
+   print "Content-type: text/html\n\n" + Admin(doc).render().encode('latin-1', 'ignore')
 
 if __name__ == "__main__":
    main()
