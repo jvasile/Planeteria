@@ -200,9 +200,7 @@ def main():
 
    ## Template
    from templates import Admin
-   print "Content-type: text/html\n\n" + Admin(template_vars(planet, Form)).render()
-
-   #print interpolate(opt['template_fname'], template_vars(planet, Form))
+   print "Content-type: text/html\n\n" + Admin(template_vars(planet, Form)).render().encode('latin-1', errors)
 
 if __name__ == "__main__":
    main()
