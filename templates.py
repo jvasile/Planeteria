@@ -1,5 +1,4 @@
 import os, cgi
-from util import html2xml
 
 class Template(object):
    errors = 'ignore'
@@ -70,7 +69,7 @@ class Atom(XML_Template):
       for i in items:
          for k in ['title', 'subtitle']:
             i['e'+k] = cgi.escape(i[k])
-         i['econtent'] = html2xml(i['content'].decode('latin-1', 'ignore'))
+         i['econtent'] = i['content'].decode('latin-1', 'ignore')
          s += """<entry>
       <id>%(id)s</id>
       <title type="text/plain">%(etitle)s</title>
