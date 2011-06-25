@@ -37,8 +37,6 @@ if __name__ == "__main__":
 ## Utility Functions
 ##
 ########################
-from util import interpolate
-
 error=''
 def err(msg):
    """Add msg to the error string, which can be displayed via template.
