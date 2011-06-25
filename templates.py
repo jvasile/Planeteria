@@ -602,9 +602,34 @@ class Welcome(HTML_Template):
 """ % self.sidebar() + self.footer()
 
 class Admin(HTML_Template):
+   def render_feeds(self):
+      s = ''
+      for o in self.interpolate['Feeds']:
+         if 'faceurl' in o:
+            o['rendered_faceurl'] = '<img src="%(faceurl)s" width="%(facewidth)s" height="%(faceheight)s" alt="">\n'
+         else:
+            o['rendered_faceurl'] = '<img src="pub.d/images/silhouette2.png">\n'
+         s += """
+		<tr class="%(row_class)s" id="feed_row%(idx)s">
+                  <td style="vertical-align:middle">
+                      %(rendered_faceurl)s
+                  </td>
+		  <td style="text-align:left">
+		    <input type="hidden" name="section%(idx)s" id="section%(idx)s" value="%(section)s" />
+		    <input type="hidden" name="delete%(idx)s" id="delete%(idx)s" value="0" />
+		    <a href="javascript:rm_feed(%(idx)s)"<img class="feedbtn" src="pub.d/images/rm-feed.png"></a> <label for="name%(idx)s">Feed Name:</label><br />
+		       <input type="text" size=40 name="name%(idx)s" id="name%(idx)s" value="%(name)s"><br />
+		       <label for="feedurl%(idx)s">Feed URL:</label><br />
+		       <input type="text" size=40 name="feedurl%(idx)s" id="feedurl%(idx)s" value="%(feedurl)s"><br />
+		       <label for="faceurl%(idx)s">Image URL:</label><br />
+		       <input type="text" size=40 name="faceurl%(idx)s" id="faceurl%(idx)s" value="%(faceurl)s"><br />		    
+                  </td></tr>
+""" % o
+      return s
    def render(self):
       o = self.interpolate
       o['sidebar'] = self.sidebar()
+      o['rendered_feeds'] = self.render_feeds()
       return self.header() + """
 <div id="left">
 
@@ -619,7 +644,7 @@ class Admin(HTML_Template):
         <ol>
           <li>%(planet_name_input)s</li>
           <li>%(owner_name_input)s</li>
-          <li>%(owner_email_input ESCAPE=NONE)s</li>
+          <li>%(owner_email_input)s</li>
         </ol>
       </div> <!-- end entry -->
 
@@ -628,29 +653,11 @@ class Admin(HTML_Template):
 	<p>Use the <a href="javascript:add_feed()"><img src="pub.d/images/add-feed.png" width="14" height="14" border="0" alt="Add new feed button" name="AddFeedBtn" class="feedbtn"></a> and <img src="pub.d/images/rm-feed.png" width="14" height="14" border="0" alt="Remove feed sample" class="feedbtn"> buttons to add and remove feeds.</p>
         <div id="feeds">
 	  <table id="feed_table"><tbody id="feeds_tbody">
-	      <TMPL_LOOP Feeds>
-		<tr class="%(row_class)s" id="feed_row%(idx)s">
-                  <td style="vertical-align:middle">
-                    <TMPL_IF faceurl>
-                      <img src="<TMPL_VAR faceurl ESCAPE="HTML">" width="<TMPL_VAR facewidth ESCAPE="HTML">" height="<TMPL_VAR faceheight ESCAPE="HTML">" alt="">
-		      <TMPL_ELSE />
-		      <img src="pub.d/images/silhouette2.png">
-                    </TMPL_IF>
-                  </td>
-		  <td style="text-align:left">
-		    <input type="hidden" name="section%(idx)s" id="section%(idx)s" value="%(section)s" />
-		    <input type="hidden" name="delete%(idx)s" id="delete%(idx)s" value="0" />
-		    <a href="javascript:rm_feed(%(idx)s)"<img class="feedbtn" src="pub.d/images/rm-feed.png"></a> <label for="name%(idx)s">Feed Name:</label><br />
-		       <input type="text" size=40 name="name%(idx)s" id="name%(idx)s" value="%(name)s"><br />
-		       <label for="feedurl%(idx)s">Feed URL:</label><br />
-		       <input type="text" size=40 name="feedurl%(idx)s" id="feedurl%(idx)s" value="%(feedurl)s"><br />
-		       <label for="faceurl%(idx)s">Image URL:</label><br />
-		       <input type="text" size=40 name="faceurl%(idx)s" id="faceurl%(idx)s" value="%(faceurl)s"><br />		    
-                  </td></tr>
-              </TMPL_LOOP>
+          %(rendered_feeds)s
           </tbody></table>
         </div><!-- end feeds -->
       </div> <!-- end entry -->
+
 <!--
       <div class = "entry" id="SidebarBody">
         <div class="entrytitle">Sidebar</div>

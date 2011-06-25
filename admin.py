@@ -92,13 +92,14 @@ def template_vars(planet, config):
     count = 0
     for url, feed in planet.feeds.items():
         f={} 
-        f['idx']=count
+        f['idx'] = count
         f['row_class'] = "face%d" % (count % 2)
         f['faceurl'] = feed['image']
         f['feedurl'] = url
-        #f['facewidth'] = f['faceheight'] = ''
+        #f['facewidth'] = f['faceheight'] = '' 
         f['section'] = url
         f['name'] = feed['name']
+
         doc['Feeds'].append(f)
         count += 1;
     return doc
