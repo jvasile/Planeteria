@@ -199,10 +199,7 @@ def main():
 
    ## Template
    from templates import Admin
-   doc = template_vars(planet, Form)
-   print doc['name']
-   sys.exit()
-   print "Content-type: text/html\n\n" + Admin(doc).render().encode('latin-1', 'ignore')
+   print "Content-type: text/html\n\n" + Admin(template_vars(planet, Form)).render().encode('latin-1', 'ignore')
 
 if __name__ == "__main__":
    main()
