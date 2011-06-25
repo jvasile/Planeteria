@@ -500,77 +500,83 @@ class Tos(HTML_Template):
 
 class Index(HTML_Template):
    def render(self):
+      for field in ['error', 'direc']:
+         if not field in self.interpolate:
+            self.interpolate[field] = ''
       return self.header() + """
+
 <div id="left">
 
-<!-- BEGIN FEEDS -->
-<TMPL_LOOP Items>
-   <TMPL_IF new_date><div class="dateheader"><TMPL_VAR new_date></div></TMPL_IF>
+  <div id="error">%(error)s</div>
 
-   <div class = "entry">
-      <div class="entrybody" id="<TMPL_VAR id>"<TMPL_IF channel_language> lang="<TMPL_VAR channel_language>"</TMPL_IF>>
-         <TMPL_IF channel_faceurl>
-            <img class="face" src="<TMPL_VAR channel_faceurl ESCAPE="HTML">" width="<TMPL_VAR channel_facewidth ESCAPE="HTML">" height="<TMPL_VAR channel_faceheight ESCAPE="HTML">" alt="">
-         </TMPL_IF>
+  <div class = "entry">
+    <div class="entrytitle">Get Your Own Planet</div>
+    <p>You can have a planet of your very own!  Pull together all the
+      blogs around your project or community.  Just fill out this form:</p>
 
-         <div class="entrytitle" <TMPL_IF title_language> lang="<TMPL_VAR title_language>"</TMPL_IF>>
-            <a href="<TMPL_VAR channel_link ESCAPE="HTML">" title="<TMPL_VAR channel_title_plain ESCAPE="HTML">"><TMPL_VAR channel_name></a>: 
-            <a href="<TMPL_VAR link ESCAPE="HTML">"><TMPL_VAR title></a>
-         </div>
+    <form method="post" action="new_planet.py" class="cmxform"> 
 
-         <div class="content"<TMPL_IF content_language> lang="<TMPL_VAR content_language>"</TMPL_IF>>
-            <TMPL_VAR content>
-         </div>
-                        
-         <p align="right">
-            <a href="<TMPL_VAR link ESCAPE="HTML">">
-            <TMPL_IF author><TMPL_VAR author ESCAPE="HTML"> | </TMPL_IF>
-            <TMPL_VAR channel_title_plain ESCAPE="HTML"> | 
-            <TMPL_VAR date></a></a>
-         </p>
-      </div>
-   </div>
-</TMPL_LOOP>
-</div>	<!-- end left -->
+      <label for="subdirectory">Subdirectory:</label>
+      <input type="text" size=40 id="subdirectory" name="subdirectory" value="%(direc)s" /><br />
+      Your planet URL will be http://%(domain)s/subdirectory,
+      and the subdirectory may only consist of letters and numbers.<br/>
+
+      <br /><br />
+
+      <label for="turing">Turing Test:</label>
+      <input type="test" size="40" name="turing" /><br />
+      Please prove you are human by answering this question: Do you love?<br />
+
+      <div align="center"><input type="submit" name="submit" value="Create Planet" /></div>
+
+    </form>
+
+    <p>Please note this site is just getting off the ground, so things
+    might be bumpy.  <a href="contact.html">Email me</a> with bugs and
+    ideas for making the experience smoother.</p>
+
+  </div> <!-- end entry -->
+
+  <div class = "entry">
+    <div class="entrytitle">Planets for Everybody!</div>
+    <p>A planet is a collection of posts from many different blogs,
+      all somewhat related to one topic.  It's a great way to keep
+      tabs on a subject, a community, a technology, a team, a project
+      or anything else that attracts a diverse range of bloggers.</p>
+
+    <p><b>Community.</b> Planets are a great way to focus and foster
+      community.  It's easy to get everybody in the community talking
+      with each other when you're all reading each other's blogs!</p>
+
+    <p><b>Curation.</b> One stop curation allows a planet to become
+      the definitive collection of news about a topic.  Each planet is
+      a feed that can be imported into an RSS reader.  Planets allow
+      you to pull together the best blogs about a topic so others
+      don't have to do the leg work.  And you can get your entire
+      audience reading the newest blogs simply by updating the
+      planet.</p>
+
+    <p><b>Early News.</b> Many planets collect the personal blogs of
+      the people who work on a project.  Often the interesting
+      developments that will eventually become front-page news on a
+      project start as small personal milestones.  If you want to know
+      where a project is going, watch its planet.  That's where all
+      the early action is.</p>
+
+  </div> <!-- end entry -->
+
+</div> <!-- end left -->
 
 <div id="right">
-
-   <div class="entry">
-      <div class="entrytitle">Subscriptions</div>
-      <ul>
-         <TMPL_LOOP Feeds>
-            <li>
-               <a href="<TMPL_VAR url ESCAPE="HTML">" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"></a> <a <TMPL_IF link>href="<TMPL_VAR link ESCAPE="HTML">" </TMPL_IF><TMPL_IF message>class="message" title="<TMPL_VAR message ESCAPE="HTML">"</TMPL_IF><TMPL_UNLESS message>title="<TMPL_VAR title_plain ESCAPE="HTML">"</TMPL_UNLESS>><TMPL_VAR author></a>
-            </li>
-         </TMPL_LOOP>
-
-         <TMPL_LOOP Channels>
-            <li>
-               <a href="<TMPL_VAR url ESCAPE="HTML">" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"></a> <a <TMPL_IF link>href="<TMPL_VAR link ESCAPE="HTML">" </TMPL_IF><TMPL_IF message>class="message" title="<TMPL_VAR message ESCAPE="HTML">"</TMPL_IF><TMPL_UNLESS message>title="<TMPL_VAR title_plain ESCAPE="HTML">"</TMPL_UNLESS>><TMPL_VAR name></a>
-            </li>
-         </TMPL_LOOP>
-            <li> <a href="<TMPL_VAR feed_url>" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"> All feeds in one</a></li>
-            <li> <a href="<TMPL_VAR opml_url>" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"> All feeds as OPML</a></li>
-      </ul>
-   </div>
-
-
-   <TMPL_VAR sidebar>
-
-   <div class="entry">
-      <div class="entrytitle">Copying</div>
-      <p>Posts are copyright their respective authors. Click through to
-      see each site's terms for redistribution.</p>
-   </div>
-
-   <div class="entry">
-      <div class="entrytitle">Meta</div>
-        <ul>
-	  <li><TMPL_VAR date></li>
-	  <li><a href="admin.py">Admin interface</a></li>
-	</ul>
-   </div>
-</div>	
+  <div class = "entry">
+    <div class="entrytitle">Some Awesome Planets</div>
+    <ul>
+      <li><a href="freedombox">FreedomBox</a></li>
+      <li><a href="planetnyc">Freedom To Share in NYC</a></li>
+      <li><a href="wfs">Women in Free Software</a></li>
+    </ul>
+  </div> <!-- end entry -->
+</div>	<!-- end right -->
 """ % self.interpolate + self.footer()
 
 
