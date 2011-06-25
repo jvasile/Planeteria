@@ -3,7 +3,7 @@ from config import *
 import feedparser
 import simplejson as json
 from urllib import urlopen
-from util import smart_str, parse_updated_time, berkeley_db, write_file
+from util import smart_str, parse_updated_time, berkeley_db, write_file, html2xml, just_body, tidy2xhtml
 import templates
 import dateutil.parser
 
@@ -167,7 +167,7 @@ class Planet():
             e['content_encoded'] = e['summary']
          else:
             e['content_encoded'] = e['content'][0]['value']
-            e['content'] = e['content'][0]['value'] #html2xml(just_body(tidy2xhtml(e['content'][0]['value'])))
+            e['content'] = html2xml(just_body(tidy2xhtml(e['content'][0]['value'])))
 
          e['date'] = dateutil.parser.parse(e['updated'])
          e['updated'] = e['date']
