@@ -37,7 +37,7 @@ if __name__ == "__main__":
 ## Utility Functions
 ##
 ########################
-from util import merge_dict, dict_val, write_file, interpolate
+from util import interpolate
 
 error=''
 def err(msg):
@@ -78,8 +78,8 @@ def template_vars(planet, config):
     doc['admin']=1
     doc['error'] = error
     doc['name'] = planet.name
-    merge_dict(doc, planet.__dict__)
-    merge_dict(doc, config)
+    doc['title'] = planet.name
+    doc = dict(doc.items() + planet.__dict__.items() + config.__dict__.items())
     if doc['password'] == 'passme':
         doc['passme'] = 1
     doc['planet_name_input'] = render_text_input("PlanetName", "Planet name", doc['name'], 40)
@@ -201,7 +201,10 @@ def main():
          planet.save(update_config_timestamp=True)
 
    ## Template
-   print interpolate(opt['template_fname'], template_vars(planet, Form))
+   from templates import Admin
+   print Admin(template_vars(planet, Form)).render()
+
+   #print interpolate(opt['template_fname'], template_vars(planet, Form))
 
 if __name__ == "__main__":
    main()

@@ -600,3 +600,14 @@ class Welcome(HTML_Template):
   %s
 </div>	<!-- end right -->
 """ % self.sidebar() + self.footer()
+
+class Admin(HTML_Template):
+   def render(self):
+      o = self.interpolate
+      o['sidebar'] = self.sidebar()
+      return self.header() + """
+
+<div id="right">
+  %(sidebar)s
+</div>	<!-- end right -->
+""" % o + self.footer()
