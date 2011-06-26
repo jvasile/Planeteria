@@ -211,7 +211,6 @@ def main():
       elif Form.getvalue('Pass') != orig_pass:
          err("Invalid password")
       else:
-         log.debug(planet.json())
          planet.save(update_config_timestamp=True)
 
    ## Template

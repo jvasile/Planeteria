@@ -57,6 +57,8 @@ class Planet():
 
 
    def save(self, update_config_timestamp=False):
+      log.debug(self.json())
+
       if update_config_timestamp:
          self.last_config_change = time.time()
       with berkeley_db('planets') as db:
