@@ -606,9 +606,9 @@ class Admin(HTML_Template):
       s = ''
       for o in self.interpolate['Feeds']:
          if 'faceurl' in o:
-            o['rendered_faceurl'] = '<img src="%(faceurl)s" width="%(facewidth)s" height="%(faceheight)s" alt="">\n'
+            o['rendered_faceurl'] = '<img src="%(faceurl)s" width="%(facewidth)s" height="%(faceheight)s" alt="" />\n' % o
          else:
-            o['rendered_faceurl'] = '<img src="pub.d/images/silhouette2.png">\n'
+            o['rendered_faceurl'] = '<img src="images/silhouette2.png" />\n'
          s += """
 		<tr class="%(row_class)s" id="feed_row%(idx)s">
                   <td style="vertical-align:middle">
