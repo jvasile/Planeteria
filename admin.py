@@ -200,7 +200,6 @@ def main():
    if Form.has_key('PlanetName'):
       orig_pass = planet.password
       planet = update_config(planet)
-      log.debug(planet.json())
 
       if Form.getvalue('Timestamp') != str(planet.last_config_change):
          err("Admin page has expired!  Perhaps somebody else is " +
@@ -212,6 +211,7 @@ def main():
       elif Form.getvalue('Pass') != orig_pass:
          err("Invalid password")
       else:
+         log.debug(planet.json())
          planet.save(update_config_timestamp=True)
 
    ## Template
