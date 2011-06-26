@@ -169,7 +169,6 @@ def update_config(planet):
        del planet.feeds[url]
        log.debug("%s has changed.  Deleting old feed record." % url)
 
-    log.debug("%s" % planet.feeds['http://hackervisions.org/?feed=rss2&tag=freedombox']['faceurl'])
     return planet
 
 ############################
@@ -201,6 +200,8 @@ def main():
    if Form.has_key('PlanetName'):
       orig_pass = planet.password
       planet = update_config(planet)
+      log.debug(planet.dump())
+
       if Form.getvalue('Timestamp') != str(planet.last_config_change):
          err("Admin page has expired!  Perhaps somebody else is " +
              "editing this planet at the same time as you?  Please " +
