@@ -688,3 +688,24 @@ class Admin(HTML_Template):
   %(sidebar)s
 </div>	<!-- end right -->
 """ % o + self.footer()
+
+class New_Planet(HTML_Template):
+   def render(self):
+      return self.header() + """
+<div id="left">
+
+  <div class = "entry">
+    <div class="entrytitle">Your New Planet</div>
+
+    <p>Your planet has been created, but you need to set it up via <a
+    href="<TMPL_VAR base_href><TMPL_VAR direc>/admin.py">the admin interface</a> before it is
+    functional.</p>
+
+  </div> <!-- end entry -->
+
+</div> <!-- end left -->
+
+<div id="right">
+  %s
+</div>	<!-- end right -->
+""" % self.sidebar() + self.footer()
