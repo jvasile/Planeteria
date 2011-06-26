@@ -145,6 +145,7 @@ def update_config(planet):
     form_field = ['feedurl', 'name', 'faceurl'] #, 'facewidth', 'faceheight']
 
     urls_seen = []
+    log.debug("Faceurl6: %s" % Form.getvalue('faceurl6'))
     while (Form.has_key('section%d' % feed_count)):
         url = Form.getvalue('feedurl%d' % feed_count)
         urls_seen.append(url)
@@ -154,7 +155,7 @@ def update_config(planet):
             if not url in planet.feeds:
                 planet.feeds[url]={'url':url, 'name':Form.getvalue('name%d' % feed_count), 'image':Form.getvalue('faceurl%d' % feed_count)}
 
-            # Copy the values from the form into config
+            # Copy the values from the form into planet
             for field in form_field:
                 planet.feeds[url][field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
         feed_count += 1;
