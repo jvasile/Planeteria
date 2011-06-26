@@ -57,12 +57,12 @@ class Planet():
 
 
    def save(self, update_config_timestamp=False):
-      log.debug(self.json())
-
       if update_config_timestamp:
          self.last_config_change = time.time()
       with berkeley_db('planets') as db:
          db[self.direc] = self.json()
+
+      log.debug(self.json())
 
    def serializable(self):
       return {'direc':self.direc,
