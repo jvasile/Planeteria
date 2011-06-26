@@ -17,6 +17,7 @@ sys.path.insert(0,"..")
 #os.chdir('..')
 
 from config import *
+log = logging.getLogger('planeteria')
 
 if __name__ == "__main__":
    try:
@@ -39,10 +40,10 @@ if __name__ == "__main__":
 ########################
 error=''
 def err(msg):
-   """Add msg to the error string, which can be displayed via template.
-   TODO: log the error w/ planet's logger"""
+   """Add msg to the error string, which can be displayed via template."""
    global error
    error = error + "<p>%s</p>\n" % msg
+   log.debug(msg)
 
 #########################
  ##
@@ -143,8 +144,10 @@ def update_config(planet):
     feed_count = 0;
     form_field = ['feedurl', 'name', 'faceurl'] #, 'facewidth', 'faceheight']
 
+    urls_seen = []
     while (Form.has_key('section%d' % feed_count)):
         url = Form.getvalue('feedurl%d' % feed_count)
+        urls_seen.append(url)
         if Form.getvalue('delete%d' % feed_count) == '1':
             del planet.feeds[url]
         else:
@@ -155,6 +158,12 @@ def update_config(planet):
             for field in form_field:
                 planet.feeds[url][field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
         feed_count += 1;
+
+    # handle edited url
+    for url in planet.feeds:
+       if not url in urls_seen:
+          del planet.feeds[url]
+
     return planet
 
 ############################
@@ -182,12 +191,10 @@ def main():
    #import_opml('../../opml.xml', planet)
    #sys.exit()
 
-   err('test0')
    ## Handle form input
    if Form.has_key('PlanetName'):
       orig_pass = planet.password
       planet = update_config(planet)
-      err('test1')
       if Form.getvalue('Timestamp') != str(planet.last_config_change):
          err("Admin page has expired!  Perhaps somebody else is " +
              "editing this planet at the same time as you?  Please " +
@@ -198,7 +205,6 @@ def main():
       elif Form.getvalue('Pass') != orig_pass:
          err("Invalid password")
       else:
-         err("test")
          planet.save(update_config_timestamp=True)
 
    ## Template
