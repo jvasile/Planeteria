@@ -96,7 +96,8 @@ def template_vars(planet, config):
         f['row_class'] = "face%d" % (count % 2)
         f['faceurl'] = feed['image']
         f['feedurl'] = url
-        #f['facewidth'] = f['faceheight'] = '' 
+        f['facewidth'] = ''
+        f['faceheight'] = '' 
         f['section'] = url
         f['name'] = feed['name']
 
