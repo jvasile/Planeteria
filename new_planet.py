@@ -13,63 +13,61 @@ __license__ = "AGPLv3"
 import os,sys,re
 
 #import util
-from util import interpolate
-from util import write_file
 from config import *
+log = logging.getLogger('planeteria')
 from util import Msg
 err=Msg()
-template_fname = os.path.join(opt['template_dir'], 'new.tmpl')
 
-def template_vars(subdir="", email=""):
-    "Returns a dict with the template vars in it"
-    doc=opt.copy()
+def template_vars(subdir=""):
+   "Returns a dict with the template vars in it"
+   doc=opt.copy()
     
-    doc['subdirectory'] = subdir
-    doc['owner_email'] = email
-    doc['error'] = err.html()
-    return doc
+   doc['subdirectory'] = subdir
+   #doc['owner_email'] = email
+   doc['error'] = err.html()
+   return doc
 
 def validate_input(subdir):
 
-    if subdir == "":
-        return False
+   if subdir == "":
+      return False
 
-    valid = True
+   valid = True
 
-    if re.search('\\W', subdir):
-        err.add("Subdirectory can only contain letters, numbers and underscores.")
-        valie = False
+   if re.search('\\W', subdir):
+      err.add("Subdirectory can only contain letters, numbers and underscores.")
+      valie = False
 
-    return valid
+   return valid
 
 def make_planet(subdir):
 
-    path = os.path.join(opt['OUTPUT_DIR'], subdir)
+   path = os.path.join(opt['OUTPUT_DIR'], subdir)
 
-    try:
-        shutil.copytree(opt['new_planet_dir'], path, symlinks=True)
-    except(OSError), errstr:
-        if os.path.exists(path):
-            err.add("%s already exists. Please choose another subdirectory name." % subdir)
-            return False
-        err.add("Couldn't create planet: %s" % errstr)
-        return False
+   try:
+      shutil.copytree(opt['new_planet_dir'], path, symlinks=True)
+   except(OSError), errstr:
+      if os.path.exists(path):
+         err.add("%s already exists. Please choose another subdirectory name." % subdir)
+         return False
+      err.add("Couldn't create planet: %s" % errstr)
+      return False
 
-    from planet import Planet
-    p = Planet({'direc':subdir,
-                'name':'Planet %s' % subdir,
-                'user':'',
-                'email':'',
-                'password':'passme',
-                'feeds':{'http://hackervisions.org/?feed=rss2':{'image':'http://www.softwarefreedom.org/img/staff/vasile.jpg','name':'James Vasile', 'url':'http://hackervisions.org/?feed=rss2'}}
-                })
+   from planet import Planet
+   p = Planet({'direc':subdir,
+               'name':'Planet %s' % subdir,
+               'user':'',
+               'email':'',
+               'password':'passme',
+               'feeds':{'http://hackervisions.org/?feed=rss2':{'image':'http://www.softwarefreedom.org/img/staff/vasile.jpg','name':'James Vasile', 'url':'http://hackervisions.org/?feed=rss2'}}
+               })
     
-    p.save()
-    mopt = dict(opt.items()+p.__dict__.items())
+   p.save()
+   mopt = dict(opt.items()+p.__dict__.items())
 
-    import template
-    template.Welcome(mopt).write(path, 'index.html')
-    return True
+   import template
+   template.Welcome(mopt).write(path, 'index.html')
+   return True
 
 import cgi, shutil
     
@@ -77,27 +75,21 @@ import cgi, shutil
 VERSION = "0.1";
 
 def main():
-    global Form
-    Form = cgi.FieldStorage()
+   global Form
+   Form = cgi.FieldStorage()
 
-    subdir = Form.getvalue("subdirectory", '').lower()
-    #email = Form.getvalue("owner_email", '')
+   subdir = Form.getvalue("subdirectory", '').lower()
+   #email = Form.getvalue("owner_email", '')
 
-    if Form.getvalue("turing",'').lower() != "yes":
-        err.add("I can't believe you failed the Turing test.  Maybe you're a sociopath?")
-    elif validate_input(subdir):
-        if make_planet(subdir):
-            print "Location: http://%s/%s/admin.py\n\n" % (opt['domain'], subdir)
-            return
-    print "Content-type: text/html\n\n" 
-    print interpolate(template_fname, template_vars(subdir))
+   if Form.getvalue("turing",'').lower() != "yes":
+      err.add("I can't believe you failed the Turing test.  Maybe you're a sociopath?")
+   elif validate_input(subdir):
+      if make_planet(subdir):
+         print "Location: http://%s/%s/admin.py\n\n" % (opt['domain'], subdir)
+         return
 
-
-def static():
-    "Return a static version of this page suitable for caching"
-    global Form
-    Form = cgi.FieldStorage()
-    return interpolate(template_fname, template_vars())
+   from templates import New_Planet
+   print "Content-type: text/html\n\n" + New_Planet(template_vars(subdir)).render().encode('latin-1', 'ignore')
 
 if __name__ == "__main__":
-    main()
+   main()

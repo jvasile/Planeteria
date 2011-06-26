@@ -16,6 +16,7 @@ MAX_ENTRIES = 100
 opt={'domain':'test.planeteria.org',
      'base_href':BASE_HREF,
      'website_name':"Planeteria",
+     'title':"Planeteria",
      'generator':"Planeteria %s" % VERSION,
      'generator_uri':"http://planeteria.org/copyright.html",
      'force_check': False,
