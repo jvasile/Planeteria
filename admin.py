@@ -157,7 +157,7 @@ def update_config(planet):
             # Copy the values from the form into planet
             for field in form_field:
                 planet.feeds[url][field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
-                if feedcount == 6:
+                if feed_count == 6:
                    log.debug("Faceurl6: %s, %s" % Form.getvalue('faceurl6'), planet.feeds[url][field])
 
         feed_count += 1;
