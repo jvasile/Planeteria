@@ -157,8 +157,6 @@ def update_config(planet):
             # Copy the values from the form into planet
             for field in form_field:
                 planet.feeds[url][field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
-                if feed_count == 6:
-                   log.debug("Faceurl6: %s, %s" % (Form.getvalue('faceurl6'), planet.feeds[url][field]))
 
         feed_count += 1;
 
@@ -171,6 +169,7 @@ def update_config(planet):
        del planet.feeds[url]
        log.debug("%s has changed.  Deleting old feed record." % url)
 
+    log.debug("%s" % planet.feeds['http://hackervisions.org/?feed=rss2&tag=freedombox']['faceurl'])
     return planet
 
 ############################
