@@ -198,7 +198,7 @@ def main():
       elif Form.getvalue('Pass') != orig_pass:
          err("Invalid password")
       else:
-         err("%s" % planet.dump().encode("latin-1", 'ignore))
+         err("%s" % planet.dump().encode("latin-1", 'ignore'))
          planet.save(update_config_timestamp=True)
 
    ## Template
