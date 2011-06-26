@@ -163,6 +163,7 @@ def update_config(planet):
     for url in planet.feeds:
        if not url in urls_seen:
           del planet.feeds[url]
+          log.debug("%s has changed.  Deleting old feed record." % url)
 
     return planet
 
