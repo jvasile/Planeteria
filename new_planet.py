@@ -88,8 +88,8 @@ def main():
             print "Location: http://%s/%s/admin.py\n\n" % (opt['domain'], subdir)
             return
    
-   from templates import New_Planet
-   print "Content-type: text/html\n\n" + New_Planet(template_vars(subdir)).render().encode('latin-1', 'ignore')
+   from templates import Index
+   print "Content-type: text/html\n\n" + Index(template_vars(subdir)).render().encode('latin-1', 'ignore')
 
 if __name__ == "__main__":
    main()
