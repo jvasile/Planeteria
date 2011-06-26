@@ -21,7 +21,6 @@ err=Msg()
 def template_vars(subdir=""):
    "Returns a dict with the template vars in it"
    doc=opt.copy()
-    
    doc['subdirectory'] = subdir
    #doc['owner_email'] = email
    doc['error'] = err.html()
@@ -81,13 +80,14 @@ def main():
    subdir = Form.getvalue("subdirectory", '').lower()
    #email = Form.getvalue("owner_email", '')
 
-   if Form.getvalue("turing",'').lower() != "yes":
-      err.add("I can't believe you failed the Turing test.  Maybe you're a sociopath?")
-   elif validate_input(subdir):
-      if make_planet(subdir):
-         print "Location: http://%s/%s/admin.py\n\n" % (opt['domain'], subdir)
-         return
-
+   if 'turing' in Form:
+      if Form.getvalue("turing",'').lower() != "yes":
+         err.add("I can't believe you failed the Turing test.  Maybe you're a sociopath?")
+      elif validate_input(subdir):
+         if make_planet(subdir):
+            print "Location: http://%s/%s/admin.py\n\n" % (opt['domain'], subdir)
+            return
+   
    from templates import New_Planet
    print "Content-type: text/html\n\n" + New_Planet(template_vars(subdir)).render().encode('latin-1', 'ignore')
 
