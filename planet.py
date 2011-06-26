@@ -62,7 +62,7 @@ class Planet():
       with berkeley_db('planets') as db:
          db[self.direc] = self.json()
 
-      log.debug(self.json())
+      log.debug(db[self.direc])
 
    def serializable(self):
       return {'direc':self.direc,
