@@ -182,12 +182,12 @@ def main():
    #import_opml('../../opml.xml', planet)
    #sys.exit()
 
-
+   err('test0')
    ## Handle form input
    if Form.has_key('PlanetName'):
       orig_pass = planet.password
       planet = update_config(planet)
-
+      err('test1')
       if Form.getvalue('Timestamp') != str(planet.last_config_change):
          err("Admin page has expired!  Perhaps somebody else is " +
              "editing this planet at the same time as you?  Please " +
@@ -198,6 +198,7 @@ def main():
       elif Form.getvalue('Pass') != orig_pass:
          err("Invalid password")
       else:
+         err("test")
          planet.save(update_config_timestamp=True)
 
    ## Template
