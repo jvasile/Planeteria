@@ -141,7 +141,7 @@ class Planet():
             e['links'] = parsed['feed']['links']
             e['feed_name'] = smart_str(parsed['feed']['title'], encoding='ascii', errors='ignore')
             e['channel_title_plain'] = e['feed_name']
-            e['channel_faceurl'] = f['image']
+            e['channel_image'] = f['image']
             e['channel_name'] = e['feed_name']
             e['subtitle'] = parsed['feed']['subtitle']
             e['channel_link'] = e['feed_id'] = parsed['feed']['link']

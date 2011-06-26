@@ -96,7 +96,7 @@ def template_vars(planet, config):
         f={} 
         f['idx'] = count
         f['row_class'] = "face%d" % (count % 2)
-        f['faceurl'] = feed['image']
+        f['image'] = feed['image']
         f['feedurl'] = url
         f['facewidth'] = ''
         f['faceheight'] = '' 
@@ -142,7 +142,7 @@ def update_config(planet):
         planet.password = Form.getvalue('ChangePass','')
 
     feed_count = 0;
-    form_field = ['feedurl', 'name', 'faceurl'] #, 'facewidth', 'faceheight']
+    form_field = ['feedurl', 'name', 'image'] #, 'facewidth', 'faceheight']
 
     urls_seen = []
     while (Form.has_key('section%d' % feed_count)):
@@ -152,7 +152,7 @@ def update_config(planet):
             del planet.feeds[url]
         else:
             if not url in planet.feeds:
-                planet.feeds[url]={'url':url, 'name':Form.getvalue('name%d' % feed_count), 'image':Form.getvalue('faceurl%d' % feed_count)}
+                planet.feeds[url]={'url':url, 'name':Form.getvalue('name%d' % feed_count), 'image':Form.getvalue('image%d' % feed_count)}
 
             # Copy the values from the form into planet
             for field in form_field:

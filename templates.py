@@ -214,7 +214,7 @@ class Planet_Page(HTML_Template):
    def items(self):
       s = ''
       for o in self.interpolate['Items']:
-         for e in ['channel_link', 'channel_title_plain', 'channel_faceheight', 'channel_faceurl', 'channel_facewidth', 'link', 'author']:
+         for e in ['channel_link', 'channel_title_plain', 'channel_faceheight', 'channel_image', 'channel_facewidth', 'link', 'author']:
             try:
                o['escaped_'+e] = self.escape(o[e])
             except KeyError:
@@ -223,7 +223,7 @@ class Planet_Page(HTML_Template):
          o['rendered_channel_language'] = self.ensure('channel_language', ' lang="%(channel_language)s"', o)
          o['rendered_title_language'] = self.ensure('title_language', ' lang="%(title_language)s"', o)
          o['rendered_content_language'] = self.ensure('content_language', ' lang="%(content_language)s"', o)
-         o['rendered_faceurl'] = self.ensure('channel_faceurl', '            <img class="face" src="%(escaped_channel_faceurl)s" width="%(escaped_channel_facewidth)s" height="%(escaped_channel_faceheight)s" alt="">\n', o)
+         o['rendered_image'] = self.ensure('channel_image', '            <img class="face" src="%(escaped_channel_image)s" width="%(escaped_channel_facewidth)s" height="%(escaped_channel_faceheight)s" alt="">\n', o)
 
 
          o['rendered_content'] = o['content'].decode('latin-1', 'ignore')
@@ -239,7 +239,7 @@ class Planet_Page(HTML_Template):
             s += '   <div class="dateheader">%(new_date)s</div>\n'
          s += """   <div class = "entry">
       <div class="entrybody" id="%(id)s"%(rendered_channel_language)s>
-         %(rendered_faceurl)s
+         %(rendered_image)s
 
          <div class="entrytitle" %(rendered_title_language)s>
             <a href="%(escaped_channel_link)s" title="%(escaped_channel_title_plain)s">%(channel_name)s</a>: 
@@ -605,14 +605,14 @@ class Admin(HTML_Template):
    def render_feeds(self):
       s = ''
       for o in self.interpolate['Feeds']:
-         if 'faceurl' in o:
-            o['rendered_faceurl'] = '<img src="%(faceurl)s" width="%(facewidth)s" height="%(faceheight)s" alt="" />\n' % o
+         if 'image' in o:
+            o['rendered_image'] = '<img src="%(image)s" width="%(facewidth)s" height="%(faceheight)s" alt="" />\n' % o
          else:
-            o['rendered_faceurl'] = '<img src="images/silhouette2.png" />\n'
+            o['rendered_image'] = '<img src="images/silhouette2.png" />\n'
          s += """
 		<tr class="%(row_class)s" id="feed_row%(idx)s">
                   <td style="vertical-align:middle">
-                      %(rendered_faceurl)s
+                      %(rendered_image)s
                   </td>
 		  <td style="text-align:left">
 		    <input type="hidden" name="section%(idx)s" id="section%(idx)s" value="%(section)s" />
@@ -621,8 +621,8 @@ class Admin(HTML_Template):
 		       <input type="text" size=40 name="name%(idx)s" id="name%(idx)s" value="%(name)s"><br />
 		       <label for="feedurl%(idx)s">Feed URL:</label><br />
 		       <input type="text" size=40 name="feedurl%(idx)s" id="feedurl%(idx)s" value="%(feedurl)s"><br />
-		       <label for="faceurl%(idx)s">Image URL:</label><br />
-		       <input type="text" size=40 name="faceurl%(idx)s" id="faceurl%(idx)s" value="%(faceurl)s"><br />		    
+		       <label for="image%(idx)s">Image URL:</label><br />
+		       <input type="text" size=40 name="image%(idx)s" id="image%(idx)s" value="%(image)s"><br />		    
                   </td></tr>
 """ % o
       return s
