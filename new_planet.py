@@ -92,7 +92,8 @@ def main():
             return
    
    from templates import Index
-   print "Content-type: text/html\n\n" + Index(template_vars(subdir)).render().encode('latin-1', 'ignore')
+   print "Content-type: text/html\n\n"
+   print Index(template_vars(subdir)).render().encode('latin-1', 'ignore')
 
 if __name__ == "__main__":
    main()
