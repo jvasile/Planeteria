@@ -84,7 +84,7 @@ def main():
    subdir = Form.getvalue("subdirectory", '').lower()
    #email = Form.getvalue("owner_email", '')
 
-   log.debug("Form keys and vals: %s" % (dict([(k,Form[k]) for k in Form.keys()])))
+   log.debug("Form keys and vals: %s" % (dict([(k,Form.getvalue(k,'')) for k in Form.keys()])))
    #log.debug("Keys: %s" % Form.keys())
    if 'submit' in Form.keys():
       if Form.getvalue("turing",'').lower() != "yes":
@@ -98,7 +98,7 @@ def main():
    from templates import Index
    log.debug("Loaded template for %s" % subdir)
    sys.stdout.write("Content-type: text/html\n\n")
-   doc = template_vars(subdir, dict([(k,Form[k]) for k in Form.keys()]))
+   doc = template_vars(subdir, dict([(k,Form.getvalue(k,'')) for k in Form.keys()]))
    log.debug("doc: %s" % doc)
    print Index(doc).render().encode('latin-1', 'ignore')
 
