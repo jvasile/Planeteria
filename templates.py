@@ -523,7 +523,7 @@ class Index(HTML_Template):
       <br /><br />
 
       <label for="turing">Turing Test:</label>
-      <input type="test" size="40" name="turing" /><br />
+      <input type="test" size="40" name="turing" value="%(turing)s"/><br />
       Please prove you are human by answering this question: Do you love?<br />
 
       <div align="center"><input type="submit" name="submit" value="Create Planet" /></div>
