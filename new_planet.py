@@ -92,6 +92,7 @@ def main():
             return
    
    from templates import Index
+   log.debug("Loaded template for %s" % subdir)
    print "Content-type: text/html\n\n"
    print Index(template_vars(subdir)).render().encode('latin-1', 'ignore')
 
