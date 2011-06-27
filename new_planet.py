@@ -15,7 +15,6 @@ import cgi, shutil
 import cgitb
 cgitb.enable()
 
-#import util
 from config import *
 log = logging.getLogger('planeteria')
 from util import Msg
@@ -27,7 +26,6 @@ def template_vars(subdir="", form_vals={}):
    if not 'turing' in doc:
       doc['turing']=''
    doc['subdirectory'] = subdir
-   #doc['owner_email'] = email
    doc['error'] = err.html()
    return doc
 
@@ -82,10 +80,8 @@ def main():
    Form = cgi.FieldStorage()
 
    subdir = Form.getvalue("subdirectory", '').lower()
-   #email = Form.getvalue("owner_email", '')
 
    log.debug("Form keys and vals: %s" % (dict([(k,Form.getvalue(k,'')) for k in Form.keys()])))
-   #log.debug("Keys: %s" % Form.keys())
    if 'submit' in Form.keys():
       if Form.getvalue("turing",'').lower() != "yes":
          err.add("I can't believe you failed the Turing test.  Maybe you're a sociopath?")
