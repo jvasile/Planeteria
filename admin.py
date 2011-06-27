@@ -107,25 +107,6 @@ def template_vars(planet, config):
         count += 1;
     return doc
 
-def import_opml(file, planet):
-   from xml.etree import ElementTree
-
-   with open('opml.xml', 'rt') as f:
-      tree = ElementTree.parse(f)
-
-   for node in tree.getiterator('outline'):
-      name = node.attrib.get('text')
-      url = node.attrib.get('xmlUrl')
-      print name, url
-
-      if url:
-         if not url in planet.feeds:
-            planet.feeds[url]={'url':url, 'name':name, 'image':''}
-         else:
-            planet.feeds[url]['url'] = url
-            if name: planet.feeds[url]['name'] = name
-   planet.dump()
-
 ############################
  ##
 ##  Config.ini Stuff
@@ -152,11 +133,13 @@ def update_config(planet):
             del planet.feeds[url]
         else:
             if not url in planet.feeds:
-                planet.feeds[url]={'url':url, 'name':Form.getvalue('name%d' % feed_count), 'image':Form.getvalue('image%d' % feed_count)}
-
-            # Copy the values from the form into planet
-            for field in form_field:
-                planet.feeds[url][field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
+                planet.feeds[url]={'url':url, 
+                                   'name':Form.getvalue('name%d' % feed_count), 
+                                   'image':Form.getvalue('image%d' % feed_count)}
+            else:
+               # Copy the values from the form into planet
+               for field in form_field:
+                  planet.feeds[url][field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
 
         feed_count += 1;
 
