@@ -48,10 +48,6 @@ class Planet():
       #print self.feeds[0].dump()
       self.feeds = h['feeds']
 
-   def add_feed(self, feed):
-      self.last_updated = 0
-      self.feeds.append(feed)
-
    def load_json(self, j):
       self.load_dict(json.loads(j))
 
@@ -207,6 +203,43 @@ class Planet():
       else:
          sys.stderr.write("Couldn't find feed %s\n" % url)
 
+   def import_opml(self, filespec):
+      log.info("Importing %s into %s" % (filespec, self.direc))
+      from xml.etree import ElementTree
+
+      with open(filespec, 'rt') as f:
+         tree = ElementTree.parse(f)
+
+      for node in tree.getiterator('outline'):
+         name = node.attrib.get('text')
+         url = node.attrib.get('xmlUrl')
+
+         if url:
+            if url in self.feeds:
+               self.feeds[url]['url'] = url
+               if name: self.feeds[url]['name'] = name
+            else:
+               self.feeds[url]={'url':url, 'name':name, 'image':''}
+
    def dump(self):
       print self.json()
+
+planets = []
+def parse_options():
+   from optparse import OptionParser
+   parser = OptionParser()
+   parser.add_option("-i", "--import", dest="import_opml", help="import opml FILE", metavar="FILE")
+   (options, args) = parser.parse_args()
+
+   if len(args) >= 1:
+      global planets
+      planets.extend(args)
+
+   if options.import_opml:
+      for p in planets:
+         curr = Planet(direc=p)
+         curr.import_opml(options.import_opml)
+
+if __name__ == "__main__":
+   parse_options()
 
