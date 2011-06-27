@@ -83,10 +83,9 @@ def main():
    log.debug("Form keys and vals: %s" % (dict([(k,Form[k]) for k in Form.keys()])))
    #log.debug("Keys: %s" % Form.keys())
    if 'submit' in Form.keys():
-      log.info("Turing: %s" % Form.getvalue("turing",'').lower())
       if Form.getvalue("turing",'').lower() != "yes":
-         log.debug("Turing test failed for %s" % subdir)
          err.add("I can't believe you failed the Turing test.  Maybe you're a sociopath?")
+         log.debug("Turing test failed for %s" % subdir)
       elif validate_input(subdir):
          if make_planet(subdir):
             print "Location: http://%s/%s/admin.py\n\n" % (opt['domain'], subdir)
