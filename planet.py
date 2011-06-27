@@ -173,7 +173,6 @@ class Planet():
             e['content_encoded'] = e['content'][0]['value']
             e['content'] = html2xml(just_body(tidy2xhtml(e['content'][0]['value'])))
 
-         print e['updated']
          if not 'summary' in e:
             e['summary'] = ''#e['content']
 
