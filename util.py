@@ -15,7 +15,7 @@ import dateutil.parser
 try:
    import tidy
 except KeyError:
-   if not 'PATH' in os.environ['PATH']:
+   if not 'PATH' in os.environ:
       os.environ['PATH'] = ''
       import tidy
 
