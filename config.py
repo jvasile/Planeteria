@@ -14,7 +14,6 @@ CHECK_INTERVAL = 3600  # dload feed once per hour
 MAX_ENTRIES = 100
 
 opt={'domain':'test.planeteria.org',
-     'base_href':BASE_HREF,
      'website_name':"Planeteria",
      'title':"Planeteria",
      'generator':"Planeteria %s" % VERSION,
@@ -22,9 +21,19 @@ opt={'domain':'test.planeteria.org',
      'force_check': False,
      'template_dir':TEMPLATE_DIR,
      'new_planet_dir':os.path.join(TEMPLATE_DIR, "new_planet"),
+     'base_dir':BASE_DIR,
+     'base_href':BASE_HREF,
+     'data_dir':DATA_DIR,
+     'output_dir':OUTPUT_DIR,
+     'template_dir':TEMPLATE_DIR,
+     'check_interval':CHECK_INTERVAL,
+     'version':VERSION,
+     'data_format_version':DATA_FORMAT_VERSION,
+     'check_interval':CHECK_INTERVAL,
+     'max_entries':MAX_ENTRIES
      }
 
-opt.update(locals())
+#opt.update(locals())
 
 import logging
 logger = logging.getLogger('planeteria')
