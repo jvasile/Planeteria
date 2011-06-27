@@ -9,9 +9,15 @@ Utility functions
 
 import os, sys, dbm, time
 import htmltmpl # Debian package python-htmltmpl
-import tidy
 from config import *
 import dateutil.parser
+
+try:
+   import tidy
+except KeyError:
+   if not 'PATH' in os.environ['PATH']:
+      os.environ['PATH'] = ''
+      import tidy
 
 generated=[]
 
