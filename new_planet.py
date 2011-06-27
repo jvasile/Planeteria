@@ -74,6 +74,7 @@ import cgi, shutil
 VERSION = "0.1";
 
 def main():
+   log.info("New planet run" % subdir)
    global Form
    Form = cgi.FieldStorage()
 
