@@ -14,6 +14,7 @@ import os,sys,re
 import cgi, shutil
 import cgitb
 cgitb.enable()
+sys.stdout.write("Content-type: text/html\n\n")
 
 #import util
 from config import *
@@ -95,7 +96,7 @@ def main():
    
    from templates import Index
    log.debug("Loaded template for %s" % subdir)
-   sys.stdout.write("Content-type: text/html\n\n")
+   #sys.stdout.write("Content-type: text/html\n\n")
    doc = template_vars(subdir)
    log.debug("doc: %s" % doc)
    print Index(doc).render().encode('latin-1', 'ignore')
