@@ -79,8 +79,9 @@ def main():
 
    subdir = Form.getvalue("subdirectory", '').lower()
    #email = Form.getvalue("owner_email", '')
-   log.debug(Form.keys())
-   if 'turing' in Form.keys():
+
+   log.debug(dict([(k,form[k]) for k in Form.keys()]))
+   if 'submit' in Form.keys():
       log.info("Turing: %s" % Form.getvalue("turing",'').lower())
       if Form.getvalue("turing",'').lower() != "yes":
          log.debug("Turing test failed for %s" % subdir)
