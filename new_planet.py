@@ -74,7 +74,6 @@ import cgi, shutil
 VERSION = "0.1";
 
 def main():
-   log.info("New planet run")
    global Form
    Form = cgi.FieldStorage()
 
@@ -82,6 +81,7 @@ def main():
    #email = Form.getvalue("owner_email", '')
 
    if 'turing' in Form:
+      log.info("Turing: %s" % Form.getvalue("turing",'').lower())
       if Form.getvalue("turing",'').lower() != "yes":
          log.debug("Turing test failed for %s" % subdir)
          err.add("I can't believe you failed the Turing test.  Maybe you're a sociopath?")
