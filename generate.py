@@ -165,6 +165,5 @@ if __name__ == "__main__":
    galaxy.load()
    #galaxy.dump()
    galaxy.update()
-   galaxy.save()
    galaxy.generate()
 

@@ -57,6 +57,11 @@ class Planet():
 
 
    def save(self, update_config_timestamp=False):
+      output_dir = os.path.join(OUTPUT_DIR, self.direc)
+      if not os.path.exists(output_dir):
+         log.info("Can't find %s directory.  Skipping save." % output_dir)
+         return
+
       log.debug("Saving %s" %  self.direc)
       if update_config_timestamp:
          self.last_config_change = time.time()
@@ -103,6 +108,10 @@ class Planet():
    def update(self):
       if not opt['force_check'] and time.time() < self.last_downloaded + CHECK_INTERVAL:
          return
+      output_dir = os.path.join(OUTPUT_DIR, self.direc)
+      if not os.path.exists(output_dir):
+         log.info("Can't find %s directory.  Skipping update." % output_dir)
+         return
       print "Updating %s." % self.direc
       for f in self.feeds:
          self.update_feed(f)
@@ -111,6 +120,9 @@ class Planet():
 
    def generate(self):
       output_dir = os.path.join(OUTPUT_DIR, self.direc)
+      if not os.path.exists(output_dir):
+         log.info("Can't find %s directory.  Skipping generate." % output_dir)
+         return
       print "Generating %s" % output_dir
 
       lopt = {'owner_name':self.user,
