@@ -44,7 +44,7 @@ def validate_input(subdir):
 
 def make_planet(subdir):
 
-   path = os.path.join(opt['OUTPUT_DIR'], subdir)
+   path = os.path.join(opt['output_dir'], subdir)
 
    try:
       shutil.copytree(opt['new_planet_dir'], path, symlinks=True)
