@@ -82,6 +82,7 @@ def main():
 
    if 'turing' in Form:
       if Form.getvalue("turing",'').lower() != "yes":
+         log.debug("Turing test failed for %s" % subdir)
          err.add("I can't believe you failed the Turing test.  Maybe you're a sociopath?")
       elif validate_input(subdir):
          if make_planet(subdir):
