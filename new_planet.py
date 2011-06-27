@@ -21,9 +21,9 @@ log = logging.getLogger('planeteria')
 from util import Msg
 err=Msg(web=True)
 
-def template_vars(subdir="", form_vals):
+def template_vars(subdir="", form_vals={}):
    "Returns a dict with the template vars in it"
-   doc=dict(form_vals.items + opt.items())
+   doc=dict(form_vals.items() + opt.items())
    doc['subdirectory'] = subdir
    #doc['owner_email'] = email
    doc['error'] = err.html()
@@ -96,7 +96,7 @@ def main():
    from templates import Index
    log.debug("Loaded template for %s" % subdir)
    sys.stdout.write("Content-type: text/html\n\n")
-   doc = template_vars(subdir, dict([(k,Form[k]) for k in Form.keys()])))
+   doc = template_vars(subdir, dict([(k,Form[k]) for k in Form.keys()]))
    log.debug("doc: %s" % doc)
    print Index(doc).render().encode('latin-1', 'ignore')
 
