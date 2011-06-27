@@ -24,6 +24,8 @@ err=Msg(web=True)
 def template_vars(subdir="", form_vals={}):
    "Returns a dict with the template vars in it"
    doc=dict(form_vals.items() + opt.items())
+   if not 'turing' in doc:
+      doc['turing']=''
    doc['subdirectory'] = subdir
    #doc['owner_email'] = email
    doc['error'] = err.html()
