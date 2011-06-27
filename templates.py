@@ -499,7 +499,7 @@ class Tos(HTML_Template):
 
 class Index(HTML_Template):
    def render(self):
-      for field in ['error', 'direc']:
+      for field in ['error', 'direc', 'subdirectory', 'turing']:
          if not field in self.interpolate:
             self.interpolate[field] = ''
       return self.header() + """

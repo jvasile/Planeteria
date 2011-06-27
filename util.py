@@ -9,7 +9,7 @@ Utility functions
 
 import os, sys, dbm, time
 import htmltmpl # Debian package python-htmltmpl
-#import tidy
+import tidy
 from config import *
 import dateutil.parser
 
