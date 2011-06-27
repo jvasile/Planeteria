@@ -67,7 +67,7 @@ def make_planet(subdir):
    p.save()
    mopt = dict(opt.items()+p.__dict__.items())
 
-   import template
+   import templates
    template.Welcome(mopt).write(path, 'index.html')
    return True
 
