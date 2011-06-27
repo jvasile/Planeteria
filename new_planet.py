@@ -11,6 +11,9 @@ __license__ = "AGPLv3"
 
 
 import os,sys,re
+import cgi, shutil
+import cgitb
+cgitb.enable()
 
 #import util
 from config import *
@@ -68,7 +71,6 @@ def make_planet(subdir):
    template.Welcome(mopt).write(path, 'index.html')
    return True
 
-import cgi, shutil
     
 ## Setup and globals
 VERSION = "0.1";
