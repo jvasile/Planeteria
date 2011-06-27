@@ -80,7 +80,7 @@ def main():
    subdir = Form.getvalue("subdirectory", '').lower()
    #email = Form.getvalue("owner_email", '')
 
-   log.debug(str(dict([(k,form[k]) for k in Form.keys()])))
+   log.debug("Form keys and vals: %s" % (dict([(k,form[k]) for k in Form.keys()])))
    if 'submit' in Form.keys():
       log.info("Turing: %s" % Form.getvalue("turing",'').lower())
       if Form.getvalue("turing",'').lower() != "yes":
