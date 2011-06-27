@@ -20,6 +20,8 @@ log = logging.getLogger('planeteria')
 from util import Msg
 err=Msg(web=True)
 
+import templates
+
 def template_vars(subdir="", form_vals={}):
    "Returns a dict with the template vars in it"
    doc=dict(form_vals.items() + opt.items())
@@ -67,8 +69,7 @@ def make_planet(subdir):
    p.save()
    mopt = dict(opt.items()+p.__dict__.items())
 
-   import templates
-   template.Welcome(mopt).write(path, 'index.html')
+   templates.Welcome(mopt).write(path, 'index.html')
    return True
 
     
@@ -91,12 +92,10 @@ def main():
             print "Location: http://%s/%s/admin.py\n\n" % (opt['domain'], subdir)
             return
    
-   from templates import Index
-   log.debug("Loaded template for %s" % subdir)
    sys.stdout.write("Content-type: text/html\n\n")
    doc = template_vars(subdir, dict([(k,Form.getvalue(k,'')) for k in Form.keys()]))
    log.debug("doc: %s" % doc)
-   print Index(doc).render().encode('latin-1', 'ignore')
+   print templates.Index(doc).render().encode('latin-1', 'ignore')
 
 if __name__ == "__main__":
    main()
