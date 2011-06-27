@@ -516,7 +516,7 @@ class Index(HTML_Template):
     <form method="post" action="new_planet.py" class="cmxform"> 
 
       <label for="subdirectory">Subdirectory:</label>
-      <input type="text" size=40 id="subdirectory" name="subdirectory" value="%(direc)s" /><br />
+      <input type="text" size=40 id="subdirectory" name="subdirectory" value="%(subdirectory)s" /><br />
       Your planet URL will be http://%(domain)s/subdirectory,
       and the subdirectory may only consist of letters and numbers.<br/>
 
