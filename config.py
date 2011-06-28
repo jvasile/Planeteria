@@ -51,9 +51,9 @@ logger.addHandler(fh)
 
 
 # create console handler with a higher log level
-ch = logging.StreamHandler()
+ch = logging.StreamHandler(encoding = "UTF-8"))
 ch.setLevel(logging.DEBUG)
 ch_formatter = logging.Formatter('%(levelname)s - %(message)s')
 ch.setFormatter(ch_formatter)
-#logger.addHandler(ch)
+logger.addHandler(ch)
 
