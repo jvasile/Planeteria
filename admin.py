@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 """
 Planeteria admin interface
 Copyright 2011 James Vasile <james@hackervisions.org>
