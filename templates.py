@@ -92,7 +92,7 @@ class Atom(XML_Template):
          #i['etitle'] = smart_str(i['etitle'], encoding='ascii', errors='ignore')
          s += u'<entry>\n      <id>%(id)s</id>\n' % i
          s += u'      <title type="text/plain">%(etitle)s</title>\n' % i
-         s += u'      <summary>%(esummary)s</summary>\n'% i
+         #s += u'      <summary>%(esummary)s</summary>\n'% i
          s += u'      <updated>%(updated)s</updated>\n' % i
          s += u'      <link href="%(link)s" rel="alternate" type="text/html"/>\n' % i
          if 'author' in i:
