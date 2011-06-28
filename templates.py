@@ -78,36 +78,37 @@ class Atom(XML_Template):
       for i in items:
          for k in ['title', 'subtitle', 'content', 'summary', 'content_encoded']:
             i['e'+k] = cgi.escape(i[k])
+         #import chardet
+         #print chardet.detect(i['content'])
+         #print unicode(i['content'].decode('utf-8'))
          #import unicodedata
-         #i['econtent'] = unicodedata.normalize('NKFD', i['content'])
+         #i['econtent'] = unicodedata.normalize('NFKD', unicode(i['content'].decode('utf-8')))
+         #print i['econtent']
          #u = unicode(i['content'].encode('utf-8'))
          #print type(u), type(i['content'])#, repr(i['content'])
          #i['econtent'] = i['content'].encode('utf-8', 'ignore')
-         i['econtent'] = smart_str(i['content'], encoding='ascii', errors='ignore')
+         i['econtent'] = smart_str(i['content'], encoding='utf-8', errors='ignore')
          #i['esummary'] = i['summary'].decode('latin-1', 'ignore')
          #i['etitle'] = smart_str(i['etitle'], encoding='ascii', errors='ignore')
-         s += '<entry>\n      <id>%(id)s</id>\n' % i
-         s += '      <title type="text/plain">%(etitle)s</title>\n' % i
-         s += '      <summary>%(esummary)s</summary>\n'% i
-         s += '      <updated>%(updated)s</updated>\n' % i
-         s += '      <link href="%(link)s" rel="alternate" type="text/html"/>\n' % i
+         s += u'<entry>\n      <id>%(id)s</id>\n' % i
+         s += u'      <title type="text/plain">%(etitle)s</title>\n' % i
+         s += u'      <summary>%(esummary)s</summary>\n'% i
+         s += u'      <updated>%(updated)s</updated>\n' % i
+         s += u'      <link href="%(link)s" rel="alternate" type="text/html"/>\n' % i
          if 'author' in i:
-            s+='\n      <author><name>%(author)s</name></author>\n' % i
-         s += '\n      <source>n\      <id>%(feed_id)s</id>\n' % i
+            s+=u'\n      <author><name>%(author)s</name></author>\n' % i
+         s += u'\n      <source>n\      <id>%(feed_id)s</id>\n' % i
 
          for l in i['links']:
             if 'href' in l:
                l['ehref'] = cgi.escape(l['href'])
-               s += '        <link href="%(ehref)s" rel="%(rel)s" type="%(type)s" />\n' % l
+               s += u'        <link href="%(ehref)s" rel="%(rel)s" type="%(type)s" />\n' % l
 
-         s += """	<subtitle>%(esubtitle)s</subtitle>
+         s += u"""	<subtitle>%(esubtitle)s</subtitle>
 	<title>%(feed_name)s</title>
 	<updated>%(updated)s</updated>
       </source>""" % i
-         s += """
-      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">%(econtent)s</div></content>
- </entry>
- """ % i
+         s += u'\n      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">' + i['content'].decode('utf-8') + u'</div></content>\n </entry>\n' % i
       return s
 
 
