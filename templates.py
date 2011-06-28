@@ -1,5 +1,5 @@
 import os, cgi, codecs
-from util import smart_str
+from util import smart_str, encode_for_xml
 
 class Template(object):
    errors = 'ignore'
@@ -14,7 +14,8 @@ class Template(object):
          FILE.write(self.render().encode('utf-8', 'ignore'))
    def render(self):
       return ''
-
+   def render_xml(self):
+      return encode_for_xml(self.render())
 class XML_Template(Template):
    errors = 'xmlcharrefreplace'
 
