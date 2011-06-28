@@ -204,7 +204,7 @@ def main():
    from templates import Admin
    print "Content-type: text/html\n\n"
    from util import encode_for_xml
-   print Admin(template_vars(planet, Form)).render().encode_for_xml()
+   print encode_for_xml(Admin(template_vars(planet, Form)).render())
 
 if __name__ == "__main__":
    main()
