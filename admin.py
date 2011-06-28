@@ -97,8 +97,9 @@ def template_vars(planet, config):
         f['idx'] = count
         f['row_class'] = "face%d" % (count % 2)
         f['image'] = feed['image']
-        if not f['image']:
+        if not f['image'] and 'faceurl' in feed:
            f['image'] = feed['faceurl']
+           log.debug("Pulled url from feed['faceurl'].")
         f['feedurl'] = url
         f['facewidth'] = ''
         f['faceheight'] = '' 
