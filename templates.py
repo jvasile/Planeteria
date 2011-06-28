@@ -76,7 +76,7 @@ class Atom(XML_Template):
       items = self.interpolate['Items']
       s = ''
       for i in items:
-         for k in ['title', 'subtitle', 'content']:
+         for k in ['title', 'subtitle', 'content', 'summary']:
             i['e'+k] = cgi.escape(i[k])
          #i['econtent'] = i['content'].decode('ascii', 'ignore')
          #i['esummary'] = i['summary'].decode('latin-1', 'ignore')
