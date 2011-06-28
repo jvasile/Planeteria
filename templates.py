@@ -12,10 +12,13 @@ class Template(object):
          errors = self.errors
       with codecs.open(os.path.join(output_dir, fname), "w", "utf-8") as FILE:
          FILE.write(self.render().encode('utf-8', 'ignore'))
-   def render(self):
+   def _render(self):
       return ''
-   def render_xml(self):
-      return encode_for_xml(self.render())
+   def render(self):
+      a = self._render()
+      if isinstance(a, unicode):
+         a = a.encode('utf-8')
+      return a
 class XML_Template(Template):
    errors = 'xmlcharrefreplace'
 
@@ -26,7 +29,7 @@ class OPML(XML_Template):
          s += """    <outline type="rss" text="%s" title="%s" xmlUrl="%s" image="%s"/>\n""" % (f['author'], f['title'], self.escape(f['url']), self.escape(f['image']))
       return s
 
-   def render(self):
+   def _render(self):
       self.interpolate['rendered_feeds'] = self.feeds()
       return """<?xml version="1.0"?>
 <opml version="1.1">
@@ -43,7 +46,7 @@ class OPML(XML_Template):
 """ % self.interpolate
 
 class Atom(XML_Template):
-   def render(self):
+   def _render(self):
       o = self.interpolate
       for k in ['title', 'name']:
          o['e'+k] = self.escape(o[k])
@@ -285,7 +288,7 @@ class Planet_Page(HTML_Template):
 """
       return s
 
-   def render(self):
+   def _render(self):
       o = self.interpolate
       o['rendered_sidebar'] = self.ensure('sidebar')
       o['rendered_items'] = self.items()
@@ -329,7 +332,7 @@ class Planet_Page(HTML_Template):
       return self.header() + s + self.footer()
 
 class Copyright(HTML_Template):
-   def render(self):
+   def _render(self):
       return self.header() + """
 <div id="left">
 
@@ -377,7 +380,7 @@ class Copyright(HTML_Template):
 """ % self.sidebar() + self.footer()
 
 class Contact(HTML_Template):
-   def render(self):
+   def _render(self):
       return self.header() + """
 <div id="left">
 
@@ -397,7 +400,7 @@ class Contact(HTML_Template):
 """ % self.sidebar() + self.footer()
 
 class Thanks(HTML_Template):
-   def render(self):
+   def _render(self):
       return self.header() + """
 <div id="left">
 
@@ -458,7 +461,7 @@ class Thanks(HTML_Template):
 """ % self.sidebar() + self.footer()
 
 class Tos(HTML_Template):
-   def render(self):
+   def _render(self):
       return self.header() + """
 <div id="left">
 
@@ -496,7 +499,7 @@ class Tos(HTML_Template):
 """ % self.sidebar() + self.footer()
 
 class Index(HTML_Template):
-   def render(self):
+   def _render(self):
       for field in ['error', 'direc', 'subdirectory', 'turing']:
          if not field in self.interpolate:
             self.interpolate[field] = ''
@@ -578,7 +581,7 @@ class Index(HTML_Template):
 
 
 class Welcome(HTML_Template):
-   def render(self):
+   def _render(self):
       return self.header() + """
 <div id="left">
 
@@ -623,7 +626,7 @@ class Admin(HTML_Template):
                   </td></tr>
 """ % o
       return s
-   def render(self):
+   def _render(self):
       o = self.interpolate
       o['sidebar'] = self.sidebar()
       o['rendered_feeds'] = self.render_feeds()
