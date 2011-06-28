@@ -121,11 +121,10 @@ def update_config(planet):
     Modifies config in place.  Does not save to file."""
     for k,v in {'PlanetName':'name', 'OwnerName':'user', 'OwnerEmail':'email',
                 'Pass':'password', 'Sidebar':'sidebar'}.items():
-        pass
-    #planet.__dict__[v] = Form.getvalue(k,'')
+       planet.__dict__[v] = Form.getvalue(k,'')
 
-    if Form.getvalue('ChangePass','') != '':
-        planet.password = Form.getvalue('ChangePass','')
+    #if Form.getvalue('ChangePass','') != '':
+    #    planet.password = Form.getvalue('ChangePass','')
 
     feed_count = 0;
     form_field = ['feedurl', 'name', 'image'] #, 'facewidth', 'faceheight']
