@@ -140,9 +140,13 @@ def update_config(planet):
          #   a = u"Duffy: %s -=> %s" % (planet.feeds[url]['name'], Form.getvalue('name%d' % feed_count, '').decode('utf-8', 'ignore'))
          #   log.debug(a.decode('utf-8'))
          if not url in planet.feeds:
-            planet.feeds[url]={'url':url, 
-                                 'name':Form.getvalue('name%d' % feed_count, ''), 
-                                 'image':Form.getvalue('image%d' % feed_count, '')}
+            t = {'url':url, 
+                 'name':Form.getvalue('name%d' % feed_count, ''), 
+                 'image':Form.getvalue('image%d' % feed_count, '')}
+            import chardet
+            log.debug(chardet.detect(t['name']))
+            
+            planet.feeds[url] = t
          else:
             # Copy the values from the form into planet
             for field in form_field:
@@ -209,7 +213,7 @@ def main():
    from util import encode_for_xml
    a = Admin(template_vars(planet, Form))
    a = a.render()
-   #a = a.encode('utf-8')
+   a = a.encode('utf-8')
    sys.stdout.write(a)
 
 if __name__ == "__main__":
