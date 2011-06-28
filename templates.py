@@ -92,7 +92,7 @@ class Atom(XML_Template):
          #i['etitle'] = smart_str(i['etitle'], encoding='ascii', errors='ignore')
          s += u'<entry>\n      <id>%(id)s</id>\n' % i
          s += u'      <title type="text/plain">%(etitle)s</title>\n' % i
-         #s += u'      <summary>%(esummary)s</summary>\n'% i
+         s += u'      <summary>%(esummary)s</summary>\n'% i
          s += u'      <updated>%(updated)s</updated>\n' % i
          s += u'      <link href="%(link)s" rel="alternate" type="text/html"/>\n' % i
          if 'author' in i:
@@ -108,7 +108,8 @@ class Atom(XML_Template):
 	<title>%(feed_name)s</title>
 	<updated>%(updated)s</updated>
       </source>""" % i
-         s += u'\n      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">' + i['content'].decode('utf-8') + u'</div></content>\n </entry>\n' % i
+         s += u'\n      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">' + i['content'].decode('utf-8') + u'</div></content>\n'
+         s +=" </entry>\n' % i
       return s
 
 
