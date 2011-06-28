@@ -191,9 +191,6 @@ class Planet():
             elif l['rel']=="alternate":
                if 'href' in l:
                   feed_data['link'] = l['href']
-               else:
-                  print parsed['feed']['links']
-                  print l
          feed_data['author'] = f['name']
          feed_data['title'] = smart_str(parsed['feed']['title'], encoding='ascii', errors='ignore')
          feed_data['image'] = f['image']
