@@ -149,7 +149,7 @@ def update_config(planet):
             # Copy the values from the form into planet
             for field in form_field:
                c = chardet.detect(Form.getvalue('%s%d' % (field, feed_count),''))
-               log.debug(c)
+               log.debug(str(c))
                planet.feeds[url][field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
 
       feed_count += 1;
