@@ -1,0 +1,9 @@
+\#*
+.#*
+*.pyc
+*.tmplc
+*~
+data/*.db
+www/*.html
+templates/*.html
+*.log
