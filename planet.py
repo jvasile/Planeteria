@@ -96,7 +96,7 @@ class Planet():
             cache = json.loads(db[url])
          except KeyError:
             log.info("Can't find %s in cache.  Making default." % url)
-            cache = {'data':'', 'last_downloaded':0, 'bozo':False, 'dload_fail':False}
+            cache = {'data':'', 'last_downloaded':0, 'dload_fail':False}
 
       """Download feed if it's out of date"""
       if not opt['force_check'] and time.time() < cache['last_downloaded'] + CHECK_INTERVAL:
