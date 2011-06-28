@@ -83,8 +83,9 @@ class Atom(XML_Template):
          s += '\n      <source>n\      <id>%(feed_id)s</id>\n' % i
 
          for l in i['links']:
-            l['ehref'] = cgi.escape(l['href'])
-            s += '        <link href="%(ehref)s" rel="%(rel)s" type="%(type)s" />\n' % l
+            if 'href' in l:
+               l['ehref'] = cgi.escape(l['href'])
+               s += '        <link href="%(ehref)s" rel="%(rel)s" type="%(type)s" />\n' % l
 
          s += """	<subtitle>%(esubtitle)s</subtitle>
 	<title>%(feed_name)s</title>
