@@ -210,8 +210,8 @@ def main():
    print "Content-type: text/html\n\n"
    from util import encode_for_xml
    a = Admin(template_vars(planet, Form)).render()
-   if isinstance(a, unicode):
-      a = a.encode('utf-8')
+#   if isinstance(a, unicode):
+#      a = a.encode('utf-8')
 #   log.debug(str(type(a)))
    sys.stdout.write(a)
 
