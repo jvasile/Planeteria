@@ -78,7 +78,12 @@ class Atom(XML_Template):
       for i in items:
          for k in ['title', 'subtitle', 'content', 'summary', 'content_encoded']:
             i['e'+k] = cgi.escape(i[k])
-         #i['econtent'] = i['content'].decode('ascii', 'ignore')
+         #import unicodedata
+         #i['econtent'] = unicodedata.normalize('NKFD', i['content'])
+         #u = unicode(i['content'].encode('utf-8'))
+         #print type(u), type(i['content'])#, repr(i['content'])
+         #i['econtent'] = i['content'].encode('utf-8', 'ignore')
+         i['econtent'] = smart_str(i['content'], encoding='ascii', errors='ignore')
          #i['esummary'] = i['summary'].decode('latin-1', 'ignore')
          #i['etitle'] = smart_str(i['etitle'], encoding='ascii', errors='ignore')
          s += '<entry>\n      <id>%(id)s</id>\n' % i
@@ -100,7 +105,7 @@ class Atom(XML_Template):
 	<updated>%(updated)s</updated>
       </source>""" % i
          s += """
-      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">%(econtent_encoded)s</div></content>
+      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">%(econtent)s</div></content>
  </entry>
  """ % i
       return s
