@@ -108,7 +108,7 @@ class Atom(XML_Template):
 	<title>%(feed_name)s</title>
 	<updated>%(updated)s</updated>
       </source>""" % i
-         #s += u'\n      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">' + i['content'].decode('utf-8') + u'</div></content>\n' % i
+         s += u'\n      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">' + i['content'].decode('utf-8') + u'</div></content>\n' % i
          s +=' </entry>\n'
       return s
 
