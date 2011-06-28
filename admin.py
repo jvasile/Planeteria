@@ -121,7 +121,8 @@ def update_config(planet):
     Modifies config in place.  Does not save to file."""
     for k,v in {'PlanetName':'name', 'OwnerName':'user', 'OwnerEmail':'email',
                 'Pass':'password', 'Sidebar':'sidebar'}.items():
-        planet.__dict__[v] = Form.getvalue(k,'')
+        pass
+    #planet.__dict__[v] = Form.getvalue(k,'')
 
     if Form.getvalue('ChangePass','') != '':
         planet.password = Form.getvalue('ChangePass','')
@@ -186,7 +187,7 @@ def main():
    ## Handle form input
    if Form.has_key('PlanetName'):
       orig_pass = planet.password
-      #planet = update_config(planet)
+      planet = update_config(planet)
 
       if Form.getvalue('Timestamp') != str(planet.last_config_change):
          err("Admin page has expired!  Perhaps somebody else is " +
