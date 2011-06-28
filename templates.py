@@ -10,8 +10,9 @@ class Template(object):
    def write(self, output_dir, fname, errors=None):
       if not errors:
          errors = self.errors
+      r = self._render()
       with codecs.open(os.path.join(output_dir, fname), "w", "utf-8") as FILE:
-         FILE.write(self.render()) #.encode('utf-8', 'ignore'))
+         FILE.write(r)
    def _render(self):
       return ''
    def render(self):
