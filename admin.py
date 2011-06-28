@@ -138,8 +138,8 @@ def update_config(planet):
         else:
             if not url in planet.feeds:
                 planet.feeds[url]={'url':url, 
-                                   'name':Form.getvalue('name%d' % feed_count), 
-                                   'image':Form.getvalue('image%d' % feed_count)}
+                                   'name':Form.getvalue('name%d' % feed_count, ''), 
+                                   'image':Form.getvalue('image%d' % feed_count, '')}
             else:
                # Copy the values from the form into planet
                for field in form_field:
