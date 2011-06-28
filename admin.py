@@ -53,7 +53,7 @@ def err(msg):
 ##########################
 def render_text_input (id, label, default="", size = 25):
    "Return html for a text input field"
-   default = default.encode('latin-1', 'ignore')
+   default = default.encode('utf-8', 'ignore')
    return ('<label for="%s">%s:</label>' % (id, label)
           + '<input type="text" size="%d" name="%s" id="%s" value="%s">' % (size, id, id, default)
           + "\n")

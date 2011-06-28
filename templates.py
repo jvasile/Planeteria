@@ -11,7 +11,7 @@ class Template(object):
       if not errors:
          errors = self.errors
       with codecs.open(os.path.join(output_dir, fname), "w", "utf-8") as FILE:
-         FILE.write(self.render())
+         FILE.write(self.render().encode('utf-8', 'ignore'))
    def render(self):
       return ''
 
