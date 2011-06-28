@@ -138,7 +138,7 @@ def update_config(planet):
       else:
          if 'Duffy' in Form.getvalue('name%d' % feed_count, ''):
             a = u"Duffy: %s -=> %s" % (planet.feeds[url]['name'], planet.feeds[url]['name'])
-            b = u"Duffy: %s" % Form.getvalue('name%d' % feed_count, '').encode('utf-b', 'ignore')
+            b = u"Duffy: %s" % Form.getvalue('name%d' % feed_count, '').encode('utf-8', 'ignore')
             log.debug(a)
          if not url in planet.feeds:
             planet.feeds[url]={'url':url, 
