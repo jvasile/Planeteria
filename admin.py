@@ -136,8 +136,8 @@ def update_config(planet):
       if Form.getvalue('delete%d' % feed_count) == '1':
          del planet.feeds[url]
       else:
-         if 'Duffy' in Form.getvalue('name%d' % feed_count, ''):
-            log.debug("Duffy: %s -=> %s" % (planet.feeds[url]['name'], Form.getvalue('name%d' % feed_count, '')))
+         #if 'Duffy' in Form.getvalue('name%d' % feed_count, ''):
+         #   log.debug("Duffy: %s -=> %s" % (planet.feeds[url]['name'], Form.getvalue('name%d' % feed_count, '')))
          if not url in planet.feeds:
             planet.feeds[url]={'url':url, 
                                  'name':Form.getvalue('name%d' % feed_count, ''), 
