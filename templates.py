@@ -1,4 +1,5 @@
-import os, cgi
+import os, cgi, codecs
+from util import smart_str
 
 class Template(object):
    errors = 'ignore'
@@ -9,8 +10,8 @@ class Template(object):
    def write(self, output_dir, fname, errors=None):
       if not errors:
          errors = self.errors
-      with open(os.path.join(output_dir, fname), "w") as FILE:
-         FILE.write(self.render().encode('latin-1', errors))
+      with codecs.open(os.path.join(output_dir, fname), "w", "utf-8") as FILE:
+         FILE.write(self.render())
    def render(self):
       return ''
 
@@ -67,23 +68,19 @@ class Atom(XML_Template):
       items = self.interpolate['Items']
       s = ''
       for i in items:
-         for k in ['title', 'subtitle']:
+         for k in ['title', 'subtitle', 'content']:
             i['e'+k] = cgi.escape(i[k])
-         i['econtent'] = i['content'].decode('latin-1', 'ignore')
-         s += """<entry>
-      <id>%(id)s</id>
-      <title type="text/plain">%(etitle)s</title>
-      <summary>%(summary)s</summary>
-      <updated>%(updated)s</updated>
-      <link href="%(link)s" rel="alternate" type="text/html"/>""" % i
+         #i['econtent'] = i['content'].decode('ascii', 'ignore')
+         #i['esummary'] = i['summary'].decode('latin-1', 'ignore')
+         #i['etitle'] = smart_str(i['etitle'], encoding='ascii', errors='ignore')
+         s += '<entry>\n      <id>%(id)s</id>\n' % i
+         s += '      <title type="text/plain">%(title)s</title>\n' % i
+         s += '      <summary>%(summary)s</summary>\n'% i
+         s += '      <updated>%(updated)s</updated>\n' % i
+         s += '      <link href="%(link)s" rel="alternate" type="text/html"/>\n' % i
          if 'author' in i:
-            s+="""
-      <author><name>%(author)s</name></author>""" % i
-
-         s += """ 
-      <source>
-	<id>%(feed_id)s</id>
-""" % i
+            s+='\n      <author><name>%(author)s</name></author>\n' % i
+         s += '\n      <source>n\      <id>%(feed_id)s</id>\n' % i
 
          for l in i['links']:
             l['ehref'] = cgi.escape(l['href'])
@@ -92,9 +89,9 @@ class Atom(XML_Template):
          s += """	<subtitle>%(esubtitle)s</subtitle>
 	<title>%(feed_name)s</title>
 	<updated>%(updated)s</updated>
-      </source>
-
-      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">%(econtent)s</div></content>
+      </source>""" % i
+         s += """
+      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">%(content_encoded)s</div></content>
  </entry>
  """ % i
       return s
@@ -213,7 +210,7 @@ class Planet_Page(HTML_Template):
    def items(self):
       s = ''
       for o in self.interpolate['Items']:
-         for e in ['channel_link', 'channel_title_plain', 'channel_faceheight', 'channel_image', 'channel_facewidth', 'link', 'author']:
+         for e in ['channel_link', 'channel_title_plain', 'channel_faceheight', 'channel_image', 'channel_facewidth', 'link', 'author', 'title']:
             try:
                o['escaped_'+e] = self.escape(o[e])
             except KeyError:
@@ -225,8 +222,6 @@ class Planet_Page(HTML_Template):
          o['rendered_image'] = self.ensure('channel_image', '            <img class="face" src="%(escaped_channel_image)s" width="%(escaped_channel_facewidth)s" height="%(escaped_channel_faceheight)s" alt="">\n', o)
 
 
-         o['rendered_content'] = o['content'].decode('latin-1', 'ignore')
-
          for e in ['channel_link', 'channel_title_plain', 'link', 'author']:
             try:
                o['escaped_'+e] = self.escape(o[e])
@@ -236,17 +231,18 @@ class Planet_Page(HTML_Template):
          o['rendered_author'] = self.ensure('escaped_author', '%(escaped_author)s | ', o)
          if 'new_date' in o:
             s += '   <div class="dateheader">%(new_date)s</div>\n'
+
          s += """   <div class = "entry">
       <div class="entrybody" id="%(id)s"%(rendered_channel_language)s>
          %(rendered_image)s
 
          <div class="entrytitle" %(rendered_title_language)s>
             <a href="%(escaped_channel_link)s" title="%(escaped_channel_title_plain)s">%(channel_name)s</a>: 
-            <a href="%(escaped_link)s">%(title)s</a>
-         </div>
+            <a href="%(escaped_link)s">%(escaped_title)s</a> 
+        </div>
 
          <div class="content"%(rendered_content_language)s>
-            %(rendered_content)s
+            %(content_encoded)s
           </div>
                         
          <p align="right">

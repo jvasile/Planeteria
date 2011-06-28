@@ -24,9 +24,6 @@ from planet import Planet
 if not os.path.exists(DATA_DIR):
    os.mkdir(DATA_DIR)
 
-   
-
-
 """
    &quot; 	&#34;
 &amp; 	&#38;

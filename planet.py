@@ -8,6 +8,19 @@ from util import smart_str, parse_updated_time, berkeley_db, write_file, html2xm
 import templates
 import dateutil.parser
 
+def to_json(python_object):
+   if isinstance(python_object, time.struct_time):
+      return {'__class__': 'time.asctime',
+              '__value__': time.asctime(python_object)}
+
+   if isinstance(python_object, feedparser.CharacterEncodingOverride):
+      return {'__class__': 'basestring',
+              '__value__': str(python_object)}
+   raise TypeError(repr(python_object) + ' is not JSON serializable')
+
+def serialize_feedparse(parse_object):
+   return json.dumps(parse_object, default=to_json)
+
 class Planet():
    def __init__(self, *args, **kwargs):
       if 'direc' in kwargs:
@@ -51,10 +64,9 @@ class Planet():
    def load_json(self, j):
       self.load_dict(json.loads(j))
 
-
-   def save(self, update_config_timestamp=False):
+   def save(self, update_config_timestamp=False, ignore_missing_dir=False):
       output_dir = os.path.join(OUTPUT_DIR, self.direc)
-      if not os.path.exists(output_dir):
+      if not ignore_missing_dir and not os.path.exists(output_dir):
          log.info("Can't find %s directory.  Skipping save." % output_dir)
          return
 
@@ -79,31 +91,36 @@ class Planet():
       return json.dumps(self.serializable(), sort_keys=True, indent=3)
 
    def update_feed(self, url):
-      """Download feed if it's out of date"""
-      if not opt['force_check'] and time.time() < self.last_downloaded + CHECK_INTERVAL:
-         return
-      try:
-         new_data = urlopen(url).read()
-      except:
-         raise
-         return
-
-      new_data = smart_str(new_data, encoding='ascii', errors='ignore')
-      self.last_downloaded = time.time()
-
       with berkeley_db('cache') as db:
          try:
-            cache = db[url]
+            cache = json.loads(db[url])
          except KeyError:
-            cache = ''
+            log.info("Can't find %s in cache.  Making default." % url)
+            cache = {'data':'', 'last_downloaded':0, 'bozo':False, 'dload_fail':False}
 
-         if new_data != cache:
-            db[url] = new_data
-            print "Updating %s" % url
+      """Download feed if it's out of date"""
+      if not opt['force_check'] and time.time() < cache['last_downloaded'] + CHECK_INTERVAL:
+         log.debug("Cache is fresh.  Not downloading %s." % url)
+         return
+      try:
+         log.debug("Reading %s" % url)
+         import feedparser
+         parsed = feedparser.parse(url.strip())
+         cache['dload_fail'] = False
+      except:
+         cache['dload_fail']=True
+         with berkeley_db('cache') as db:
+            db[url] = json.dumps(cache, sort_keys=True, indent=3)
+         return
+
+
+      if parsed and parsed.entries: cache['data'] = parsed
+      cache['last_downloaded'] = time.time()
+      with berkeley_db('cache') as db:
+         db[url] = json.dumps(cache, default=to_json, sort_keys=True, indent=3)
+         log.debug("Saved downloaded feed for %s" % url)
 
    def update(self):
-      if not opt['force_check'] and time.time() < self.last_downloaded + CHECK_INTERVAL:
-         return
       output_dir = os.path.join(OUTPUT_DIR, self.direc)
       if not os.path.exists(output_dir):
          log.info("Can't find %s directory.  Skipping update." % output_dir)
@@ -138,28 +155,37 @@ class Planet():
          with berkeley_db('cache') as db:
             if not url in db:
                continue
-            cache = db[url]
-
-         parsed = feedparser.parse(cache)         
-         if (len(parsed.entries) == 0 and parsed.bozo and 
-             str(parsed.bozo_exception).startswith("'ascii' codec can't encode character")):
-            parsed = feedparser.parse(smart_str(self.data, encoding='ascii', errors='ignore'))
-
-         for e in parsed.entries:
+            cache = json.loads(db[url])
+         parsed = cache['data']#feedparser.parse(smart_str(cache, encoding='ascii', errors='ignore'))
+         if not parsed or not parsed['entries']:
+            log.debug("No data for %s.  Skipping." % url)
+            continue
+         
+         #import chardet
+         for e in parsed['entries']:
             e['links'] = parsed['feed']['links']
             e['feed_name'] = smart_str(parsed['feed']['title'], encoding='ascii', errors='ignore')
             e['channel_title_plain'] = e['feed_name']
             e['channel_image'] = f['image']
             e['channel_name'] = e['feed_name']
-            e['subtitle'] = parsed['feed']['subtitle']
+            if 'subtitle' in parsed['feed']:
+               e['subtitle'] = parsed['feed']['subtitle']
+            else:
+               e['subtitle']=''
             e['channel_link'] = e['feed_id'] = parsed['feed']['link']
             e['date'] = dateutil.parser.parse(e['updated'])
             e['updated'] = e['date']
+            if not 'id' in e: e['id'] = e['link']
+            if not 'link' in e: e['link'] = e['id']
+            if not e['id'] and not e['link']:
+               log.debug('%s has neither id nor link' % e['feed_name'])
             entries[e['id']] = e
 
          ## OPML template stuff and sidebar stuff
          feed_data = {}
          for l in parsed['feed']['links']:
+            if not 'type' in l:
+               l['type']='text/html'
             if l['rel']=="self":
                feed_data['url'] = l['href']
             elif l['rel']=="alternate":
@@ -172,7 +198,7 @@ class Planet():
 
       sorted_entries = sorted(entries.values(), reverse=True, 
                               key=parse_updated_time)
-         
+
       for e in sorted_entries[:50]:
          if not 'content' in e:
             e['content'] = e['summary']
@@ -193,14 +219,9 @@ class Planet():
       templates.Planet_Page(mopt).write(output_dir, "index.html")
 
    def del_feed(self, url):
-      d = None
-      for i in range(len(self.feeds)):
-         if self.feeds[i].url == url:
-            d = i
-            break
-      if d:
-         del self.feeds[d]
-      else:
+      try:
+         del self.feeds[url]
+      except KeyError:
          sys.stderr.write("Couldn't find feed %s\n" % url)
 
    def import_opml(self, filespec):

@@ -32,7 +32,10 @@ def parse_updated_time(entry):
 def just_body(xhtml):
    #print xhtml
    #sys.exit()
-   return str(xhtml).split(' <body>')[1].split(' </body>')[0]
+   try:
+      return str(xhtml).split(' <body>')[1].split(' </body>')[0]
+   except IndexError:
+      return ''
 
 class berkeley_db:
    def __init__(self, fname):
