@@ -147,7 +147,8 @@ def update_config(planet):
          else:
             # Copy the values from the form into planet
             for field in form_field:
-               planet.feeds[url][field] = str(Form.getvalue('%s%d' % (field, feed_count),'').strip())
+               planet.feeds[url][field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
+               log.debug(str(type(Form.getvalue('%s%d' % (field, feed_count),''))))
 
       feed_count += 1;
 
