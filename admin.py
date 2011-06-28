@@ -203,7 +203,7 @@ def main():
    ## Template
    from templates import Admin
    print "Content-type: text/html\n\n"
-   print Admin(template_vars(planet, Form)).render()
+   print Admin(template_vars(planet, Form)).render().encode('utf-8')
 
 if __name__ == "__main__":
    main()
