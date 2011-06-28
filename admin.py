@@ -145,11 +145,8 @@ def update_config(planet):
                  'image':Form.getvalue('image%d' % feed_count, '')}            
             planet.feeds[url] = t
          else:
-            import chardet
             # Copy the values from the form into planet
             for field in form_field:
-               c = chardet.detect(Form.getvalue('%s%d' % (field, feed_count),''))
-               log.debug(str(c))
                planet.feeds[url][field] = str(Form.getvalue('%s%d' % (field, feed_count),'').strip())
 
       feed_count += 1;
@@ -213,7 +210,7 @@ def main():
    from util import encode_for_xml
    a = Admin(template_vars(planet, Form))
    a = a.render()
-   a = a.encode('utf-8')
+   a = a.encode('utf-8', errors='replace')
    sys.stdout.write(a)
 
 if __name__ == "__main__":
