@@ -587,13 +587,10 @@ class Welcome(HTML_Template):
 
   <div class = "entry">
     <div class="entrytitle">Your New Planet</div>
-
     <p>Your planet has been created, but you need to set it up via <a
-    href="<TMPL_VAR base_href><TMPL_VAR direc>/admin.py">the admin interface</a> before it is
+    href="%(base_href)s><%(direc)s>/admin.py">the admin interface</a> before it is
     functional.</p>
-
-  </div> <!-- end entry -->
-
+  </div> <!-- end entry -->""" % self.interpolate  + """
 </div> <!-- end left -->
 
 <div id="right">
