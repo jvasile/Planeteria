@@ -151,7 +151,7 @@ class Msg:
       else:
          self.add("</p>")
 
-def encode_for_xml(unicode_data, encoding='ascii'):
+def encode_for_xml(unicode_data, encoding='latin-1'):
     """
     Encode unicode_data for use as XML or HTML, with characters outside
     of the encoding converted to XML numeric character references.
