@@ -149,16 +149,16 @@ def update_config(planet):
 
       feed_count += 1;
 
-    # handle edited url
-    to_delete=[]
-    for url in planet.feeds:
-       if not url in urls_seen:
-          to_delete.append(url)
-    for url in to_delete:
-       del planet.feeds[url]
-       log.debug("%s has changed.  Deleting old feed record." % url)
+   # handle edited url
+   to_delete=[]
+   for url in planet.feeds:
+      if not url in urls_seen:
+         to_delete.append(url)
+   for url in to_delete:
+      del planet.feeds[url]
+      log.debug("%s has changed.  Deleting old feed record." % url)
 
-    return planet
+   return planet
 
 ############################
  ##
