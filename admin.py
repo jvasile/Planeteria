@@ -145,13 +145,12 @@ def update_config(planet):
                  'image':Form.getvalue('image%d' % feed_count, '')}            
             planet.feeds[url] = t
          else:
+            import chardet
             # Copy the values from the form into planet
             for field in form_field:
-               planet.feeds[url][field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
-               import chardet
-               c = chardet.detect(planet.feeds[url]['name'].decode('utf-8', 'ignore'))
+               c = chardet.detect(Form.getvalue('%s%d' % (field, feed_count),''))
                log.debug(c)
-
+               planet.feeds[url][field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
 
       feed_count += 1;
 
