@@ -43,7 +43,7 @@ opt={'domain':'test.planeteria.org',
 import logging
 logger = logging.getLogger('planeteria')
 logger.setLevel(logging.DEBUG)
-fh = logging.FileHandler(os.path.join(BASE_DIR, 'planeteria.log'))
+fh = logging.FileHandler(os.path.join(BASE_DIR, 'planeteria.log'), encoding = "UTF-8")
 fh.setLevel(logging.DEBUG)
 fh_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 fh.setFormatter(fh_formatter)
