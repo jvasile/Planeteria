@@ -135,9 +135,11 @@ planets = []
 def parse_options():
    parser = OptionParser()
    parser.add_option("", "--force", action="store_true", dest="force_update", help="force update of feeds", default=False),
+   parser.add_option("", "--no-update", action="store_true", dest="no_update", help="prevent feed updates", default=False),
    (options, args) = parser.parse_args()
 
    opt['force_check'] = options.force_update
+   opt['no_update'] = options.no_update
 
    if len(args) >= 1:
       global planets
@@ -161,6 +163,7 @@ if __name__ == "__main__":
    galaxy = Galaxy(planets)
    galaxy.load()
    #galaxy.dump()
-   galaxy.update()
+   if not opt['no_update']:
+      galaxy.update()
    galaxy.generate()
 
