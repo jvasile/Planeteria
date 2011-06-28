@@ -209,7 +209,7 @@ def main():
    from util import encode_for_xml
    a = Admin(template_vars(planet, Form))
    a = a.render()
-   a = a.encode('utf-8')
+   #a = a.encode('utf-8')
    sys.stdout.write(a)
 
 if __name__ == "__main__":
