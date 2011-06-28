@@ -97,6 +97,8 @@ def template_vars(planet, config):
         f['idx'] = count
         f['row_class'] = "face%d" % (count % 2)
         f['image'] = feed['image']
+        if not f['image']:
+           f['image'] = feed['faceurl']
         f['feedurl'] = url
         f['facewidth'] = ''
         f['faceheight'] = '' 
@@ -198,7 +200,7 @@ def main():
 
    ## Template
    from templates import Admin
-   print "Content-type: text/html\n\n" + Admin(template_vars(planet, Form)).render() #.encode('latin-1', 'ignore')
+   print "Content-type: text/html\n\n" + Admin(template_vars(planet, Form)).render() 
 
 if __name__ == "__main__":
    main()
