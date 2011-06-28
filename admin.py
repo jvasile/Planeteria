@@ -149,7 +149,7 @@ def update_config(planet):
             for field in form_field:
                planet.feeds[url][field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
                import chardet
-               c = chardet.detect(planet.feeds[url]['name'].decode('utf-b'))
+               c = chardet.detect(planet.feeds[url]['name'].decode('utf-8'))
                log.debug(c)
 
 
