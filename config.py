@@ -55,5 +55,5 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 ch_formatter = logging.Formatter('%(levelname)s - %(message)s')
 ch.setFormatter(ch_formatter)
-logger.addHandler(ch)
+#logger.addHandler(ch)
 
