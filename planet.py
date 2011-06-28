@@ -251,17 +251,24 @@ def parse_options():
    from optparse import OptionParser
    parser = OptionParser()
    parser.add_option("-i", "--import", dest="import_opml", help="import opml FILE", metavar="FILE")
+   parser.add_option("-d", "--dump", dest="dump_planet", help="dump planet", action="store_true", default=False)
    (options, args) = parser.parse_args()
 
    if len(args) >= 1:
       global planets
       planets.extend(args)
 
+   if options.dump_planet:
+      for p in planets:
+         print "Dumping %s" % p
+         curr = Planet(direc=p)
+         print curr.dump()
+
    if options.import_opml:
       for p in planets:
          curr = Planet(direc=p)
          curr.import_opml(options.import_opml)
-
+         
 if __name__ == "__main__":
    parse_options()
 
