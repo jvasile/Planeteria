@@ -150,30 +150,3 @@ class Msg:
          self.add("<p>")
       else:
          self.add("</p>")
-
-def encode_for_xml(unicode_data, encoding='latin-1'):
-    """
-    Encode unicode_data for use as XML or HTML, with characters outside
-    of the encoding converted to XML numeric character references.
-    """
-    try:
-        return unicode_data.encode(encoding, 'xmlcharrefreplace')
-    except ValueError:
-        # ValueError is raised if there are unencodable chars in the
-        # data and the 'xmlcharrefreplace' error handler is not found.
-        # Pre-2.3 Python doesn't support the 'xmlcharrefreplace' error
-        # handler, so we'll emulate it.
-        return _xmlcharref_encode(unicode_data, encoding)
-
-def _xmlcharref_encode(unicode_data, encoding):
-    """Emulate Python 2.3's 'xmlcharrefreplace' encoding error handler."""
-    chars = []
-    # Step through the unicode_data string one character at a time in
-    # order to catch unencodable characters:
-    for char in unicode_data:
-        try:
-            chars.append(char.encode(encoding, 'strict'))
-        except UnicodeError:
-            chars.append('&#%i;' % ord(char))
-    return ''.join(chars)
-

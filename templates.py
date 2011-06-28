@@ -1,5 +1,5 @@
 import os, cgi, codecs
-from util import smart_str, encode_for_xml
+from util import smart_str
 
 class Template(object):
    errors = 'ignore'
