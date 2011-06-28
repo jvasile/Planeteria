@@ -76,7 +76,7 @@ class Atom(XML_Template):
       items = self.interpolate['Items']
       s = ''
       for i in items:
-         for k in ['title', 'subtitle', 'content', 'summary']:
+         for k in ['title', 'subtitle', 'content', 'summary', 'content_encoded']:
             i['e'+k] = cgi.escape(i[k])
          #i['econtent'] = i['content'].decode('ascii', 'ignore')
          #i['esummary'] = i['summary'].decode('latin-1', 'ignore')
@@ -100,7 +100,7 @@ class Atom(XML_Template):
 	<updated>%(updated)s</updated>
       </source>""" % i
          s += """
-      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml"><![CDATA[%(content_encoded)s]]></div></content>
+      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">%(econtent_encoded)s</div></content>
  </entry>
  """ % i
       return s
