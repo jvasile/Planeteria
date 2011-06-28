@@ -601,7 +601,7 @@ class Admin(HTML_Template):
    def render_feeds(self):
       s = ''
       for o in self.interpolate['Feeds']:
-         if 'image' in o:
+         if 'image' in o and o['image']:
             o['rendered_image'] = '<img src="%(image)s" width="%(facewidth)s" height="%(faceheight)s" alt="" />\n' % o
          else:
             o['rendered_image'] = '<img src="images/silhouette2.png" />\n'
