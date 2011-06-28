@@ -325,7 +325,7 @@ class Planet_Page(HTML_Template):
       <div class="entrytitle">Meta</div>
         <ul>
 	  <li>%(date)s</li>
-	  <li><a href="admin.py">Admin interface</a></li>
+	  <li><a href="/%(direc)s/admin.py">Admin interface</a></li>
 	</ul>
    </div>
 </div>	
