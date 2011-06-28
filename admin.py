@@ -149,7 +149,8 @@ def update_config(planet):
             for field in form_field:
                planet.feeds[url][field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
                import chardet
-               log.debug(chardet.detect(planet.feeds[url]['name']))
+               c = chardet.detect(planet.feeds[url]['name'])
+               log.debug(c)
 
 
       feed_count += 1;
