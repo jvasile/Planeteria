@@ -222,7 +222,6 @@ class Planet_Page(HTML_Template):
          o['rendered_content_language'] = self.ensure('content_language', ' lang="%(content_language)s"', o)
          o['rendered_image'] = self.ensure('channel_image', '            <img class="face" src="%(escaped_channel_image)s" width="%(escaped_channel_facewidth)s" height="%(escaped_channel_faceheight)s" alt="">\n', o)
 
-
          for e in ['channel_link', 'channel_title_plain', 'link', 'author']:
             try:
                o['escaped_'+e] = self.escape(o[e])
@@ -268,7 +267,8 @@ class Planet_Page(HTML_Template):
          o['rendered_message'] = self.ensure('escaped_message', ' class="message" title="%(escaped_message)s"', 
                                              o, 
                                              default='title="%(escaped_title_plain)s"' % o)
-
+         #if e['bozo']:
+         #   o['rendered_bozo'] = '[B]'
          s += '            <li><a href="%(escaped_url)s" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"></a> <a %(rendered_link)s%(rendered_message)s>%(author)s</a></li>\n' % o
       return s
 
@@ -289,7 +289,7 @@ class Planet_Page(HTML_Template):
       o['rendered_sidebar'] = self.ensure('sidebar')
       o['rendered_items'] = self.items()
       o['rendered_feeds'] = self.render_feeds()
-      o['rendered_channels'] =  self.render_channels()
+      o['rendered_channels'] =  self.render_channels() # remove?
       s="""<div id="left">
 
 <!-- BEGIN FEEDS -->
@@ -302,7 +302,7 @@ class Planet_Page(HTML_Template):
       <div class="entrytitle">Subscriptions</div>
       <ul>
 %(rendered_feeds)s
-%(rendered_channels)s
+<!-- %(rendered_channels)s -->
             <li> <a href="%(feed_url)s" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"> All feeds in one</a></li>
             <li> <a href="%(opml_url)s" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"> All feeds as OPML</a></li>
       </ul>
@@ -604,7 +604,7 @@ class Admin(HTML_Template):
          if 'image' in o and o['image']:
             o['rendered_image'] = '<img src="%(image)s" width="%(facewidth)s" height="%(faceheight)s" alt="" />\n' % o
          else:
-            o['rendered_image'] = '<img src="images/silhouette2.png" />\n'
+            o['rendered_image'] = '<img src="/pub.d/images/silhouette2.png" />\n'
          s += """
 		<tr class="%(row_class)s" id="feed_row%(idx)s">
                   <td style="vertical-align:middle">
@@ -660,6 +660,7 @@ class Admin(HTML_Template):
         <textarea rows="10" cols="75" name="Sidebar" wrap="physical"><TMPL_VAR sidebar></textarea>
       </div> 
 -->
+
       <div class = "entry" id="ChangeAuth">
         <div class="entrytitle">Change Password</div>
         If you want to change your password, enter a new one here.<br />
