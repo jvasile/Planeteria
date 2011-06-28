@@ -203,7 +203,8 @@ def main():
    ## Template
    from templates import Admin
    print "Content-type: text/html\n\n"
-   print Admin(template_vars(planet, Form)).render().encode("utf-8") 
+   from util import encode_for_xml
+   print Admin(template_vars(planet, Form)).render().encode_for_xml()
 
 if __name__ == "__main__":
    main()
