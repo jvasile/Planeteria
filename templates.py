@@ -654,8 +654,8 @@ class Admin(HTML_Template):
           <li>%(owner_name_input)s</li>
           <li>%(owner_email_input)s</li>
     
-    Your email address is viewable by anybody who comes to your
-    admin page or pulls your feed.  Feel free to lie about it.<br />
+    Your email address is viewable by anybody who comes to this page
+    or pulls your feed.  Feel free to lie about it.<br />
 
         </ol>
       </div> <!-- end entry -->
@@ -672,12 +672,11 @@ class Admin(HTML_Template):
 
       <div class = "entry" id="ChangeAuth">
         <div class="entrytitle">Change Password</div>
-
+	%(change_pass_input)s
         If you want to change your password, enter a new one here. I
         store your password as plain, unobfuscated text in my
-        database.  Please do not use a real password on this site.<br />
+        database.  Please do not use a real password on this site.
 
-	%(change_pass_input)s
       </div> <!-- end entry -->
 
       <div class = "entry" id="AuthGo">
