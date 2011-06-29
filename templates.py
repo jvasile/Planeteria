@@ -144,6 +144,7 @@ class HTML_Template(Template):
    <link rel="stylesheet" href="pub.d/form.css" type="text/css" />
    <link rel="stylesheet" href="pub.d/screen.css" type="text/css" />
    <link rel="stylesheet" href="pub.d/venus.css" type="text/css" />
+   <link rel="alternate" type="application/rss+xml" href="%(base_href)s/%(direc)s/atom.xml" title="Atom Feed" />
 """  % self.interpolate
 
       if 'admin' in self.interpolate:
