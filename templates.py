@@ -77,15 +77,12 @@ class Atom(XML_Template):
    def items(self):
       items = self.interpolate['Items']
       s = ''
-
-
       for i in items:
-         for k in ['title', 'subtitle', 'content', 'summary', 'content_encoded']:
+         for k in ['title', 'subtitle']:
             i['e'+k] = cgi.escape(i[k])
          s += u'<entry>\n      <id>%(id)s</id>\n' % i
          s += u'      <title type="text/plain">%(etitle)s</title>\n' % i
-         s += u'\n      <summary type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">' + i['summary'] + u'\n     </div>\n     </summary>\n' % i
-#         s += u'      <summary>%(esummary)s</summary>\n'% i
+         s += u'\n      <summary type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">' + i['summary_encoded'] + u'\n     </div>\n     </summary>\n' % i
          s += u'      <updated>%(updated)s</updated>\n' % i
          s += u'      <link href="%(link)s" rel="alternate" type="text/html"/>\n' % i
          if 'author' in i:
@@ -101,7 +98,7 @@ class Atom(XML_Template):
 	<title>%(feed_name)s</title>
 	<updated>%(updated)s</updated>
       </source>""" % i
-         s += u'\n      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">' + i['content'] + u'\n     </div>\n     </content>\n' % i
+         s += u'\n      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">' + i['content_encoded'] + u'\n     </div>\n     </content>\n' % i
          s +=' </entry>\n'
       return s
 

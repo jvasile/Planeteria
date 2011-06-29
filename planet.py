@@ -156,7 +156,7 @@ class Planet():
             if not url in db:
                continue
             cache = json.loads(db[url])
-         parsed = cache['data']#feedparser.parse(smart_str(cache, encoding='ascii', errors='ignore'))
+         parsed = cache['data']
          if not parsed or not parsed['entries']:
             log.debug("No data for %s.  Skipping." % url)
             continue
@@ -202,15 +202,15 @@ class Planet():
 
       for e in sorted_entries[:50]:
          if not 'content' in e:
-            e['content_encoded'] = e['summary']
-            e['content'] = html2xml(tidy2xhtml(e['summary']))
+            #e['content_encoded'] = e['summary']
+            e['content_encoded'] = html2xml(tidy2xhtml(e['summary']))
          else:
-            e['content_encoded'] = e['content'][0]['value']
-            e['content'] = html2xml(tidy2xhtml(e['content'][0]['value']))
+            #e['content_encoded'] = e['content'][0]['value']
+            e['content_encoded'] = html2xml(tidy2xhtml(e['content'][0]['value']))
 
          if not 'summary' in e:
             e['summary'] = e['content']
-         e['summary_encoded'] = e['content_encoded']
+         e['summary_encoded'] = html2xml(tidy2xhtml(e['summary']))
 
       lopt['Items'] = sorted_entries[:50]
       mopt = dict(lopt.items()+opt.items() + self.__dict__.items())

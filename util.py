@@ -114,26 +114,31 @@ def interpolate(template, vals):
    return tp.process(template)
 
 
-def tidy2xhtml(instr):
-   #print instr
-   #return instr
+def lxml_tidy(instr):
+   from lxml import etree
+   tree   = etree.HTML(instr.replace('\r', ''))
+   output_text = '\n'.join([ etree.tostring(stree, pretty_print=True, method="xml") 
+                             for stree in tree ])
+   return str(output_text)
+
+def soup_tidy(instr):
+   from BeautifulSoup import BeautifulSoup
+   tree = BeautifulSoup(instr)
+   good_html = tree.prettify()
+   return str(good_html)
+
+def html_tidy(instr):
    options = dict(output_xhtml=1,
                   add_xml_decl=0,
                   indent=1,
                   show_body_only=1,
                   )
    tidied = tidy.parseString(instr, **options)
-   
-   from lxml import etree
-   tree   = etree.HTML(str(tidied).replace('\r', ''))
-   output_text = '\n'.join([ etree.tostring(stree, pretty_print=True, method="xml") 
-                             for stree in tree ])
+   return str(tidied)
 
-   from BeautifulSoup import BeautifulSoup
-   tree = BeautifulSoup(str(output_text))
-   good_html = tree.prettify()
-
-   return good_html
+def tidy2xhtml(instr):
+   return lxml_tidy(html_tidy(instr))
+   return soup_tidy(lxml_tidy(html_tidy(instr)))
 
 
 class Msg:
