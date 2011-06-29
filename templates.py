@@ -40,7 +40,7 @@ class OPML(XML_Template):
       return """<?xml version="1.0"?>
 <opml version="1.1">
   <head>
-    <title type="text">%(title)s</title>
+    <title>%(title)s</title>
     <dateModified>%(datemodified)s</dateModified>
     <ownerName>%(user)s</ownerName>
     <ownerEmail>%(email)s</ownerEmail>
