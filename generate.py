@@ -149,17 +149,14 @@ if __name__ == "__main__":
 
    parse_options()
 
-   import templates
-   for p,t in {'copyright':'Code and Copyright',
-               'contact':'Contact Us',
-               'thanks':'Thanks!',
-               'tos':'Terms of Service',
-               'index':'Welcome to Planeteria',
-               }.items():
-      opt['title'] = t
-      eval('templates.%s(opt).write(OUTPUT_DIR, "%s.html")' % (p.capitalize(), p))
-   opt['title']='Planeteria'
 
+   import templates
+   for p,t in {'copyright':templates.Copyright,
+               'thanks':templates.Thanks,
+               'tos':templates.TOS,
+               'index':templates.Main_Page,
+               }.items():
+      t(opt).write(OUTPUT_DIR, "%s.html" % p)
    galaxy = Galaxy(planets)
    galaxy.load()
    #galaxy.dump()
