@@ -638,6 +638,11 @@ class Admin(HTML_Template):
       o = self.interpolate
       o['sidebar'] = self.sidebar()
       o['rendered_feeds'] = self.render_feeds()
+      if o['password'] == 'passme':
+         o['passme'] = "If you don't know the password, try the default password: passme.  You are encouraged to change this password."
+      else:
+         o['passme']=''
+
       return self.header() + """
 <div id="left">
 
@@ -683,11 +688,7 @@ class Admin(HTML_Template):
         <div class="entrytitle">Save Changes</div>
 	%(pass_input)s
         <input type="submit" value="Save Changes"><br />
-	<TMPL_IF passme>
-	If you don't know the password, try the default password:
-	passme.  You are encouraged to change this password.
-
-	</TMPL_IF>
+	%(passme)
       </div> <!-- end entry -->
 
       <div class="entry">
