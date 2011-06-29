@@ -341,9 +341,10 @@ class Copyright(HTML_Template):
 
     <p>I will at some point package the source code.  <b>Right now the
     code has some trashy hacks and the setup is extremely ugly.</b>
-    But now that I have running code, I'll clean it up slowly.  And
-    then the code will be available from this page.  But until I get
-    around to it, there's always github:
+    But now that I have running code, I'll clean it up slowly.  Please
+    <a href="https://github.com/jvasile/Planeteria/issues">let me know
+    about bugs</a>.  Soon the code will be available from this page.
+    But until I get around to it, there's always github:
 
     <blockquote>
     git clone git://github.com/jvasile/Planeteria.git
