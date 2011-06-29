@@ -10,9 +10,10 @@ import dateutil.parser
 
 def strip_body_tags(text):
    if text.startswith('<body>'):
-      return text[6:]
+      text =  text[6:]
    if text.endswith('</body>'):
-      return text[:-7]
+      text = text[:-7]
+   return text
 
 def to_json(python_object):
    if isinstance(python_object, time.struct_time):
