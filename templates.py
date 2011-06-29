@@ -138,16 +138,14 @@ class HTML_Template(Template):
    <meta name="robots" content="index, follow, noarchive" />
    <meta name="googlebot" content="noarchive" />
 """  % i
-      if 'Items' in self.interpolate:
-         s += '   <link rel="alternate" type="application/rss+xml" href="atom.xml" title="All these posts as one feed" />\n'  % i
+      if 'feed_url' in self.interpolate:
+         s += '   <link rel="alternate" type="application/rss+xml" href="%(feed_url)s" title="All these posts as one feed" />\n'  % i
 
       s += """   <title>%(title)s</title>
    <link rel="stylesheet" href="pub.d/form.css" type="text/css" />
    <link rel="stylesheet" href="pub.d/screen.css" type="text/css" />
    <link rel="stylesheet" href="pub.d/venus.css" type="text/css" />
 """ % i
-      if 'feed_url' in self.interpolate:
-         s+= '   <link rel="alternate" type="application/rss+xml" href="%(feed_url)s" title="Atom Feed" />\n'  % i
 
       if 'admin' in i:
          s += """     <script src="pub.d/admin.js" type="text/javascript"></script>
