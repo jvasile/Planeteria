@@ -81,7 +81,7 @@ class Atom(XML_Template):
          for k in ['title', 'subtitle']:
             i['e'+k] = cgi.escape(i[k])
          s += u'<entry>\n      <id>%(id)s</id>\n' % i
-         s += u'      <title type="text/plain">%(etitle)s</title>\n' % i
+         s += u'      <title type="text">%(etitle)s</title>\n' % i
          s += u'\n      <summary type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">' + i['summary_encoded'] + u'\n     </div>\n     </summary>\n' % i
          s += u'      <updated>%(updated)s</updated>\n' % i
          s += u'      <link href="%(link)s" rel="alternate" type="text/html"/>\n' % i
