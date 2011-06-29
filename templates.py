@@ -345,7 +345,7 @@ class Copyright(HTML_Template):
     around to it, there's always github:
 
     <blockquote>
-    git clone http://github.com/jvasile/planeteria
+    git clone git://github.com/jvasile/Planeteria.git
     </blockquote></p> 
 
     <p>Run generate.py in the root of that branch. See the <a
