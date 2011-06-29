@@ -665,13 +665,6 @@ class Admin(HTML_Template):
         </div><!-- end feeds -->
       </div> <!-- end entry -->
 
-<!--
-      <div class = "entry" id="SidebarBody">
-        <div class="entrytitle">Sidebar</div>
-        <textarea rows="10" cols="75" name="Sidebar" wrap="physical"><TMPL_VAR sidebar></textarea>
-      </div> 
--->
-
       <div class = "entry" id="ChangeAuth">
         <div class="entrytitle">Change Password</div>
         If you want to change your password, enter a new one here.<br />
