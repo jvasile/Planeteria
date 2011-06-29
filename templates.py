@@ -673,9 +673,9 @@ class Admin(HTML_Template):
       <div class = "entry" id="ChangeAuth">
         <div class="entrytitle">Change Password</div>
         If you want to change your password, enter a new one here.<br />
-       
-        <p>I store your password as plain, unobfuscated text in my
-        database.  Please do not use a real password on this site.</p>
+        <br />
+        I store your password as plain, unobfuscated text in my
+        database.  Please do not use a real password on this site.<br />
 
 	%(change_pass_input)s
       </div> <!-- end entry -->
