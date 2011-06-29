@@ -137,8 +137,7 @@ class Planet():
    def generate(self):
       output_dir = os.path.join(OUTPUT_DIR, self.direc)
       if not os.path.exists(output_dir):
-         log.info("Can't find %s directory.  Skipping generate, deleting planet." % output_dir)
-         self.delete()
+         log.info("Can't find %s directory.  Skipping generate." % output_dir)
          return
       print "Generating %s" % output_dir
 
