@@ -133,6 +133,9 @@ def update_config(planet):
    while (Form.has_key('section%d' % feed_count)):
       url = Form.getvalue('feedurl%d' % feed_count,'').strip()
       urls_seen.append(url)
+      if not url:
+         err("Ignoring feed with no url specified.")
+         continue
       if Form.getvalue('delete%d' % feed_count) == '1':
          del planet.feeds[url]
       else:
