@@ -216,13 +216,13 @@ class Planet():
 
       for e in sorted_entries[:50]:
          if not 'content' in e:
-            e['content_encoded'] = html2xml(tidy2xhtml(e['summary']))
+            e['content_encoded'] = strip_body_tags(html2xml(tidy2xhtml(e['summary'])).strip())
          else:
-            e['content_encoded'] = html2xml(tidy2xhtml(e['content'][0]['value']))
+            e['content_encoded'] = strip_body_tags(html2xml(tidy2xhtml(e['content'][0]['value'])).strip())
 
          if not 'summary' in e:
             e['summary'] = e['content'][0]['value']
-         e['summary_encoded'] = html2xml(tidy2xhtml(e['summary']))
+         e['summary_encoded'] = strip_body_tags(html2xml(tidy2xhtml(e['summary'])).strip())
 
          
       lopt['Items'] = sorted_entries[:50]
