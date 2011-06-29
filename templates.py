@@ -320,6 +320,9 @@ class Planet_Page(HTML_Template):
       return self.header() + s + self.footer()
 
 class Copyright(HTML_Template):
+   def __init__(self, interpolate):
+      HTML_Template.__init__(self, interpolate)
+      self.interpolate['title'] = 'Code and Copyright'
    def _render(self):
       return self.header() + """
 <div id="left">
@@ -348,7 +351,7 @@ class Copyright(HTML_Template):
     <p>Run generate.py in the root of that branch. See the <a
     href="/readme.html">readme</a> for details.</p>
 
-    <p>A previous version of Planeteria was based on a
+    <p>A previous version of Planeteria was based on <a
     href="http://intertwingly.net/code/venus/">Venus</a>, which I
     highly recommend if you are trying to run just one planet.</p>
 
@@ -382,6 +385,10 @@ class Contact(HTML_Template):
 """ % self.sidebar() + self.footer()
 
 class Thanks(HTML_Template):
+   def __init__(self, interpolate):
+      HTML_Template.__init__(self, interpolate)
+      self.interpolate['title'] = 'Thanks'
+
    def _render(self):
       return self.header() + """
 <div id="left">
@@ -442,7 +449,11 @@ class Thanks(HTML_Template):
 </div>	<!-- end right -->
 """ % self.sidebar() + self.footer()
 
-class Tos(HTML_Template):
+class TOS(HTML_Template):
+   def __init__(self, interpolate):
+      HTML_Template.__init__(self, interpolate)
+      self.interpolate['title'] = 'Terms of Service'
+
    def _render(self):
       return self.header() + """
 <div id="left">
@@ -468,6 +479,19 @@ class Tos(HTML_Template):
     want reliability, talk to me and we'll come up with something that
     works.</p>
 
+    <p>I store your password as plain, unobfuscated text in my
+    database.  Please do not use a real password on this site.
+    Security ranges from lax to nonexistent.  It's just feeds, and
+    it's not worth the effort of real security.</p>
+
+   <p>If your planet is inactive (i.e. nobody is
+    pulling the feed or viewing the planet page on a regular basis),
+    I'm probably going to delete it to conserve resources.</p>
+
+    <p>The email address you enter is viewable by anybody who comes to
+    your admin page or pulls your feed.  Feel free to lie about your
+    address.</p>
+
     <p>From time to time, I might add new terms here.  You agree to
     watch this page for changes and be bound by those new terms.</p>
 
@@ -480,7 +504,11 @@ class Tos(HTML_Template):
 </div>	<!-- end right -->
 """ % self.sidebar() + self.footer()
 
-class Index(HTML_Template):
+class Main_Page(HTML_Template):
+   def __init__(self, interpolate):
+      HTML_Template.__init__(self, interpolate)
+      self.interpolate['title'] = 'Welcome to Planeteria'
+
    def _render(self):
       for field in ['error', 'direc', 'subdirectory', 'turing']:
          if not field in self.interpolate:
