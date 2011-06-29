@@ -202,14 +202,12 @@ class Planet():
 
       for e in sorted_entries[:50]:
          if not 'content' in e:
-            #e['content_encoded'] = e['summary']
             e['content_encoded'] = html2xml(tidy2xhtml(e['summary']))
          else:
-            #e['content_encoded'] = e['content'][0]['value']
             e['content_encoded'] = html2xml(tidy2xhtml(e['content'][0]['value']))
 
          if not 'summary' in e:
-            e['summary'] = e['content']
+            e['summary'] = e['content'][0]['value']
          e['summary_encoded'] = html2xml(tidy2xhtml(e['summary']))
 
       lopt['Items'] = sorted_entries[:50]
