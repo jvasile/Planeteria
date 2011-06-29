@@ -199,7 +199,7 @@ class Planet():
                e['date'] = dateutil.parser.parse(e['updated']).strftime("%Y-%m-%d %H:%M:%S")
                e['updated'] = dateutil.parser.parse(e['updated']).isoformat()
             except KeyError:
-               log.debug(url + e.keys())
+               log.debug(url + str(e.keys()))
 
             if not 'id' in e: e['id'] = e['link']
             if not 'link' in e: e['link'] = e['id']
