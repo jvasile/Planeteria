@@ -8,6 +8,12 @@ from util import smart_str, parse_updated_time, berkeley_db, write_file, html2xm
 import templates
 import dateutil.parser
 
+def strip_body_tags(text):
+   if text.startswith('<body>'):
+      return text[6:]
+   if text.endswith('</body>'):
+      return text[:-7]
+
 def to_json(python_object):
    if isinstance(python_object, time.struct_time):
       return {'__class__': 'time.asctime',
@@ -181,9 +187,6 @@ class Planet():
                e['channel_link'] = e['feed_id'] = parsed['feed']['link']+'/'
 
             e['date'] = dateutil.parser.parse(e['updated']).isoformat()
-
-            #print e['updated'], "^^^^^^^^^^^^^", e['date']
-
             e['updated'] = e['date']
             if not 'id' in e: e['id'] = e['link']
             if not 'link' in e: e['link'] = e['id']
@@ -212,13 +215,13 @@ class Planet():
 
       for e in sorted_entries[:50]:
          if not 'content' in e:
-            e['content_encoded'] = html2xml(tidy2xhtml(e['summary']))
+            e['content_encoded'] = strip_body_tags(html2xml(tidy2xhtml(e['summary'])))
          else:
-            e['content_encoded'] = html2xml(tidy2xhtml(e['content'][0]['value']))
+            e['content_encoded'] = strip_body_tags(html2xml(tidy2xhtml(e['content'][0]['value'])))
 
          if not 'summary' in e:
             e['summary'] = e['content'][0]['value']
-         e['summary_encoded'] = html2xml(tidy2xhtml(e['summary']))
+         e['summary_encoded'] = strip_body_tags(html2xml(tidy2xhtml(e['summary'])))
 
       lopt['Items'] = sorted_entries[:50]
       mopt = dict(lopt.items()+opt.items() + self.__dict__.items())
