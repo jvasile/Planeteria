@@ -113,11 +113,14 @@ class Planet():
             db[url] = json.dumps(cache, sort_keys=True, indent=3)
          return
 
-
       if parsed and parsed.entries: cache['data'] = parsed
       cache['last_downloaded'] = time.time()
       with berkeley_db('cache') as db:
-         db[url] = json.dumps(cache, default=to_json, sort_keys=True, indent=3)
+         try:
+            db[url] = json.dumps(cache, default=to_json, sort_keys=True, indent=3)
+         except TypeError, e:
+            log.debug("Can't save feed (%s): %s" % (url, e))
+            return
          log.debug("Saved downloaded feed for %s" % url)
 
    def update(self):
@@ -134,7 +137,8 @@ class Planet():
    def generate(self):
       output_dir = os.path.join(OUTPUT_DIR, self.direc)
       if not os.path.exists(output_dir):
-         log.info("Can't find %s directory.  Skipping generate." % output_dir)
+         log.info("Can't find %s directory.  Skipping generate, deleting planet." % output_dir)
+         self.delete()
          return
       print "Generating %s" % output_dir
 
