@@ -6,13 +6,13 @@ var add_feed_btn = document.images["AddFeedBtn"];
 
 function set_focus(id) { document.getElementById(id).focus(); }
 
-function new_feed(section, url, name, face, faceurl, facewidth, faceheight) {
+function new_feed(section, url, name, face, image, facewidth, faceheight) {
     var f = new Array();
     f['section'] = section;
     f['feedurl'] = url;
     f['name'] = name;
     f['face'] = face;
-    f['faceurl'] = faceurl;
+    f['image'] = image;
     f['facewidth'] = facewidth;
     f['faceheight'] = faceheight;
 
@@ -50,8 +50,8 @@ function render_face_cell(idx){
     facecell.setAttribute('style', 'vertical-align:middle');
 
     Feed[idx]['feedimg'] = document.createElement("img");
-    if (Feed[idx]['faceurl']) {
-	Feed[idx]['feedimg'].src = Feed[idx]['faceurl'];
+    if (Feed[idx]['image']) {
+	Feed[idx]['feedimg'].src = Feed[idx]['image'];
 	if (Feed[idx]['facewidth']) {Feed[idx]['feedimg'].width = Feed[idx]['facewidth'];}
 	if (Feed[idx]['faceheight']) {Feed[idx]['feedimg'].height = Feed[idx]['faceheight'];}
     } else {
@@ -125,7 +125,7 @@ function render_feed_cell(idx) {
 
     cell.appendChild(feed_cell_label_input(idx, 'name', 'Feed Name'));
     cell.appendChild(feed_cell_label_input(idx, 'feedurl', 'Feed URL'));
-    cell.appendChild(feed_cell_label_input(idx, 'faceurl', 'Image URL'));
+    cell.appendChild(feed_cell_label_input(idx, 'image', 'Image URL'));
 
     return cell;
 }
