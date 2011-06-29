@@ -137,6 +137,8 @@ def html_tidy(instr):
    return str(tidied)
 
 def tidy2xhtml(instr):
+   if not instr:
+      return lxml_tidy(html_tidy(instr))
    return lxml_tidy(instr) #html_tidy(instr))
    return soup_tidy(lxml_tidy(html_tidy(instr)))
 
