@@ -119,15 +119,16 @@ class HTML_Template(Template):
 """
 
    def header(self):
+      i = self.interpolate
       s = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
    <base href="%(base_href)s" />
-"""  % self.interpolate
+"""  % i
       if 'owner_name' in self.interpolate:
-         s += '     <meta name="author" content="%(owner_name)s" />\n'  % self.interpolate
+         s += '     <meta name="author" content="%(owner_name)s" />\n'  % i
       if 'admin' in self.interpolate:
          s += '     <meta name="description" content="Admin interface for a planet blog aggregator" />\n'
 
@@ -136,23 +137,24 @@ class HTML_Template(Template):
    <meta name="keywords" content="Planet, admin, metaplanet, hackervisions, blog, aggregator" />
    <meta name="robots" content="index, follow, noarchive" />
    <meta name="googlebot" content="noarchive" />
-"""  % self.interpolate
+"""  % i
       if 'Items' in self.interpolate:
-         s += '   <link rel="alternate" type="application/rss+xml" href="atom.xml" title="All these posts as one feed" />\n'  % self.interpolate
+         s += '   <link rel="alternate" type="application/rss+xml" href="atom.xml" title="All these posts as one feed" />\n'  % i
 
       s += """   <title>%(title)s</title>
    <link rel="stylesheet" href="pub.d/form.css" type="text/css" />
    <link rel="stylesheet" href="pub.d/screen.css" type="text/css" />
    <link rel="stylesheet" href="pub.d/venus.css" type="text/css" />
-   <link rel="alternate" type="application/rss+xml" href="%(base_href)s/%(direc)s/atom.xml" title="Atom Feed" />
-"""  % self.interpolate
+""" % i
+      if 'feed_url' in self.interpolate:
+         s+= '   <link rel="alternate" type="application/rss+xml" href="%(feed_url)s" title="Atom Feed" />\n'  % i
 
-      if 'admin' in self.interpolate:
+      if 'admin' in i:
          s += """     <script src="pub.d/admin.js" type="text/javascript"></script>
      <script type="text/javascript">
         %(push_feeds)s
      </script>
-"""  % self.interpolate
+"""  % i
       s += """</head>
 <body>
 
