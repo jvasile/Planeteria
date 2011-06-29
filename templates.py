@@ -277,24 +277,11 @@ class Planet_Page(HTML_Template):
          s += '            <li><a href="%(escaped_url)s" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"></a> <a %(rendered_link)s%(rendered_message)s>%(author)s</a></li>\n' % o
       return s
 
-   def render_channels(self):
-      if not 'Channels' in self.interpolate:
-         return ''
-      assert False, "I don't think we use Channels, but if you see this, I'm wrong so finish this function."
-      s=''
-      for o in self.interpolate['Channels']:
-         s += """            <li>
-               <a href="<TMPL_VAR url ESCAPE="HTML">" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"></a> <a <TMPL_IF link>href="<TMPL_VAR link ESCAPE="HTML">" </TMPL_IF><TMPL_IF message>class="message" title="<TMPL_VAR message ESCAPE="HTML">"</TMPL_IF><TMPL_UNLESS message>title="<TMPL_VAR title_plain ESCAPE="HTML">"</TMPL_UNLESS>><TMPL_VAR name></a>
-            </li>
-"""
-      return s
-
    def _render(self):
       o = self.interpolate
       o['rendered_sidebar'] = self.ensure('sidebar')
       o['rendered_items'] = self.items()
       o['rendered_feeds'] = self.render_feeds()
-      o['rendered_channels'] =  self.render_channels() # remove?
       s="""<div id="left">
 
 <!-- BEGIN FEEDS -->
@@ -307,7 +294,6 @@ class Planet_Page(HTML_Template):
       <div class="entrytitle">Subscriptions</div>
       <ul>
 %(rendered_feeds)s
-<!-- %(rendered_channels)s -->
             <li> <a href="%(feed_url)s" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"> All feeds in one</a></li>
             <li> <a href="%(opml_url)s" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"> All feeds as OPML</a></li>
       </ul>
@@ -615,7 +601,7 @@ class Admin(HTML_Template):
 		  <td style="text-align:left">
 		    <input type="hidden" name="section%(idx)s" id="section%(idx)s" value="%(section)s" />
 		    <input type="hidden" name="delete%(idx)s" id="delete%(idx)s" value="0" />
-		    <a href="javascript:rm_feed(%(idx)s)"<img class="feedbtn" src="pub.d/images/rm-feed.png"></a> <label for="name%(idx)s">Feed Name:</label><br />
+		    <a href="javascript:rm_feed(%(idx)s)"<img class="feedbtn" src="/pub.d/images/rm-feed.png"></a> <label for="name%(idx)s">Feed Name:</label><br />
 		       <input type="text" size=40 name="name%(idx)s" id="name%(idx)s" value="%(name)s"><br />
 		       <label for="feedurl%(idx)s">Feed URL:</label><br />
 		       <input type="text" size=40 name="feedurl%(idx)s" id="feedurl%(idx)s" value="%(feedurl)s"><br />
