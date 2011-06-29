@@ -2,7 +2,7 @@ import os
 
 
 BASE_HREF = "file:///home/vasile/src/planeteria2/www/"
-BASE_HREF = "http://test.planeteria.org/"
+BASE_HREF = "http://planeteria.org/"
 BASE_DIR = os.path.dirname(os.path.abspath( __file__ ))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 CACHE_FILE = os.path.join(DATA_DIR, "cache.db")
@@ -35,7 +35,7 @@ opt={'domain':'test.planeteria.org',
      'version':VERSION,
      'data_format_version':DATA_FORMAT_VERSION,
      'check_interval':CHECK_INTERVAL,
-     'max_entries':MAX_ENTRIES
+     'max_entries':MAX_ENTRIES,
      }
 
 #opt.update(locals())
