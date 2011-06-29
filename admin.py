@@ -141,8 +141,8 @@ def update_config(planet):
          #   log.debug(a.decode('utf-8'))
          if not url in planet.feeds:
             t = {'url':url, 
-                 'name':Form.getvalue('name%d' % feed_count, ''), 
-                 'image':Form.getvalue('image%d' % feed_count, '')}            
+                 'name':Form.getvalue('name%d' % feed_count, '').strip(), 
+                 'image':Form.getvalue('image%d' % feed_count, '').strip()}
             planet.feeds[url] = t
          else:
             # Copy the values from the form into planet
@@ -208,11 +208,7 @@ def main():
    ## Template
    from templates import Admin
    print "Content-type: text/html\n\n"
-#   from util import encode_for_xml
    a = Admin(template_vars(planet, Form)).render()
-#   if isinstance(a, unicode):
-#      a = a.encode('utf-8')
-#   log.debug(str(type(a)))
    sys.stdout.write(a)
 
 if __name__ == "__main__":
