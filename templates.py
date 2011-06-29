@@ -542,10 +542,6 @@ class Main_Page(HTML_Template):
 
     </form>
 
-    <p>Please note this site is just getting off the ground, so things
-    might be bumpy.  <a href="contact.html">Email me</a> with bugs and
-    ideas for making the experience smoother.</p>
-
   </div> <!-- end entry -->
 
   <div class = "entry">
