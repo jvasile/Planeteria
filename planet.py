@@ -20,10 +20,14 @@ def to_json(python_object):
       return {'__class__': 'time.asctime',
               '__value__': time.asctime(python_object)}
 
-   if isinstance(python_object, feedparser.CharacterEncodingOverride):
-      return {'__class__': 'basestring',
-              '__value__': str(python_object)}
-   raise TypeError(repr(python_object) + ' is not JSON serializable')
+   #if isinstance(python_object, feedparser.CharacterEncodingOverride):
+   #   return {'__class__': 'basestring',
+   #           '__value__': str(python_object)}
+
+   return {'__class__': 'basestring',
+           '__value__': str(python_object)}
+
+   #raise TypeError(repr(python_object) + ' is not JSON serializable')
 
 def serialize_feedparse(parse_object):
    return json.dumps(parse_object, default=to_json)
@@ -71,6 +75,10 @@ class Planet():
    def load_json(self, j):
       self.load_dict(json.loads(j))
 
+   def save_cache(self, cache, url):
+      with berkeley_db('cache') as db:
+         db[url] = json.dumps(cache, sort_keys=True, indent=3)
+
    def save(self, update_config_timestamp=False, ignore_missing_dir=False):
       output_dir = os.path.join(OUTPUT_DIR, self.direc)
       if not ignore_missing_dir and not os.path.exists(output_dir):
@@ -98,6 +106,8 @@ class Planet():
       return json.dumps(self.serializable(), sort_keys=True, indent=3)
 
    def update_feed(self, url):
+      """Download feed if it's out of date"""
+
       with berkeley_db('cache') as db:
          try:
             cache = json.loads(db[url])
@@ -105,19 +115,16 @@ class Planet():
             log.info("Can't find %s in cache.  Making default." % url)
             cache = {'data':'', 'last_downloaded':0, 'dload_fail':False}
 
-      """Download feed if it's out of date"""
       if not opt['force_check'] and time.time() < cache['last_downloaded'] + CHECK_INTERVAL:
          log.debug("Cache is fresh.  Not downloading %s." % url)
          return
       try:
          log.debug("Reading %s" % url)
-         import feedparser
          parsed = feedparser.parse(url.strip())
          cache['dload_fail'] = False
       except:
          cache['dload_fail']=True
-         with berkeley_db('cache') as db:
-            db[url] = json.dumps(cache, sort_keys=True, indent=3)
+         self.save_cache(cache, url)
          return
 
       if parsed and parsed.entries: cache['data'] = parsed
@@ -127,6 +134,8 @@ class Planet():
             db[url] = json.dumps(cache, default=to_json, sort_keys=True, indent=3)
          except TypeError, e:
             log.debug("Can't save feed (%s): %s" % (url, e))
+            cache['error'] = str(e)
+            self.save_cache(cache, url)
             return
          log.debug("Saved downloaded feed for %s" % url)
 
