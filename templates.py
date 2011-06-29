@@ -1,5 +1,4 @@
 import os, cgi, codecs
-from util import smart_str
 
 class Template(object):
    errors = 'ignore'
@@ -75,24 +74,15 @@ class Atom(XML_Template):
    def items(self):
       items = self.interpolate['Items']
       s = ''
+
+
       for i in items:
          for k in ['title', 'subtitle', 'content', 'summary', 'content_encoded']:
             i['e'+k] = cgi.escape(i[k])
-         #import chardet
-         #print chardet.detect(i['content'])
-         #print unicode(i['content'].decode('utf-8'))
-         #import unicodedata
-         #i['econtent'] = unicodedata.normalize('NFKD', unicode(i['content'].decode('utf-8')))
-         #print i['econtent']
-         #u = unicode(i['content'].encode('utf-8'))
-         #print type(u), type(i['content'])#, repr(i['content'])
-         #i['econtent'] = i['content'].encode('utf-8', 'ignore')
-         i['econtent'] = smart_str(i['content'], encoding='utf-8', errors='ignore')
-         #i['esummary'] = i['summary'].decode('latin-1', 'ignore')
-         #i['etitle'] = smart_str(i['etitle'], encoding='ascii', errors='ignore')
          s += u'<entry>\n      <id>%(id)s</id>\n' % i
          s += u'      <title type="text/plain">%(etitle)s</title>\n' % i
-         s += u'      <summary>%(esummary)s</summary>\n'% i
+         s += u'\n      <summary type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">' + i['summary'] + u'\n     </div>\n     </summary>\n' % i
+#         s += u'      <summary>%(esummary)s</summary>\n'% i
          s += u'      <updated>%(updated)s</updated>\n' % i
          s += u'      <link href="%(link)s" rel="alternate" type="text/html"/>\n' % i
          if 'author' in i:
@@ -108,7 +98,7 @@ class Atom(XML_Template):
 	<title>%(feed_name)s</title>
 	<updated>%(updated)s</updated>
       </source>""" % i
-         s += u'\n      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">' + i['content'].decode('utf-8') + u'</div></content>\n' % i
+         s += u'\n      <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">' + i['content'] + u'\n     </div>\n     </content>\n' % i
          s +=' </entry>\n'
       return s
 

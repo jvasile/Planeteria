@@ -202,14 +202,15 @@ class Planet():
 
       for e in sorted_entries[:50]:
          if not 'content' in e:
-            e['content'] = e['summary']
             e['content_encoded'] = e['summary']
+            e['content'] = html2xml(tidy2xhtml(e['summary']))
          else:
             e['content_encoded'] = e['content'][0]['value']
-            e['content'] = html2xml(just_body(tidy2xhtml(e['content'][0]['value'])))
+            e['content'] = html2xml(tidy2xhtml(e['content'][0]['value']))
 
          if not 'summary' in e:
-            e['summary'] = ''#e['content']
+            e['summary'] = e['content']
+         e['summary_encoded'] = e['content_encoded']
 
       lopt['Items'] = sorted_entries[:50]
       mopt = dict(lopt.items()+opt.items() + self.__dict__.items())
@@ -246,21 +247,38 @@ class Planet():
    def dump(self):
       print self.json()
 
+   def dump_cache(self):
+      for url in self.feeds:
+         print url
+         with berkeley_db('cache') as db:
+            cache = db[url]
+         try:
+            cache = json.loads(cache)
+         except json.decoder.JSONDecodeError:
+            return
+         
+         print json.dumps(cache)
+
 planets = []
 def parse_options():
    from optparse import OptionParser
    parser = OptionParser()
    parser.add_option("-i", "--import", dest="import_opml", help="import opml FILE", metavar="FILE")
    parser.add_option("-d", "--dump", dest="dump_planet", help="dump planet", action="store_true", default=False)
+   parser.add_option("-c", "--cache", dest="dump_planet_cache", help="dump planet's cache", action="store_true", default=False)
    (options, args) = parser.parse_args()
 
    if len(args) >= 1:
       global planets
       planets.extend(args)
 
+   if options.dump_planet_cache:
+      for p in planets:
+         curr = Planet(direc=p)
+         print curr.dump_cache()
+
    if options.dump_planet:
       for p in planets:
-         print "Dumping %s" % p
          curr = Planet(direc=p)
          print curr.dump()
 

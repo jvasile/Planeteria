@@ -10,6 +10,7 @@ Utility functions
 import os, sys, dbm, time
 import htmltmpl # Debian package python-htmltmpl
 from config import *
+log = logging.getLogger('planeteria')
 import dateutil.parser
 
 try:
@@ -23,7 +24,7 @@ generated=[]
 
 def html2xml(ins):
    'replace all the html entities with xml equivs'
-   ins = ins.replace("&nbsp;", "&#160;")
+   ins = str(ins).replace("&nbsp;", "&#160;")
    return ins
 
 def parse_updated_time(entry):
@@ -118,10 +119,21 @@ def tidy2xhtml(instr):
    #return instr
    options = dict(output_xhtml=1,
                   add_xml_decl=0,
-                  indent=1
+                  indent=1,
+                  show_body_only=1,
                   )
    tidied = tidy.parseString(instr, **options)
-   return tidied
+   
+   from lxml import etree
+   tree   = etree.HTML(str(tidied).replace('\r', ''))
+   output_text = '\n'.join([ etree.tostring(stree, pretty_print=True, method="xml") 
+                             for stree in tree ])
+
+   from BeautifulSoup import BeautifulSoup
+   tree = BeautifulSoup(str(output_text))
+   good_html = tree.prettify()
+
+   return good_html
 
 
 class Msg:
