@@ -653,11 +653,11 @@ class Admin(HTML_Template):
           <li>%(planet_name_input)s</li>
           <li>%(owner_name_input)s</li>
           <li>%(owner_email_input)s</li>
-        </ol>
     
-    <p>The email address you enter is viewable by anybody who comes to
-    your admin page or pulls your feed.  Feel free to lie about your
-    address.</p>
+    <p>Your email address is viewable by anybody who comes to your
+    admin page or pulls your feed.  Feel free to lie about it.</p>
+
+        </ol>
       </div> <!-- end entry -->
 
       <div class = "entry" id="FeedsBody">
