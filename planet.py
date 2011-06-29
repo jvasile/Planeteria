@@ -175,7 +175,11 @@ class Planet():
                e['subtitle'] = parsed['feed']['subtitle']
             else:
                e['subtitle']=''
-            e['channel_link'] = e['feed_id'] = parsed['feed']['link']
+            if parsed['feed']['link'].endswith('/'):
+               e['channel_link'] = e['feed_id'] = parsed['feed']['link']
+            else:
+               e['channel_link'] = e['feed_id'] = parsed['feed']['link']+'/'
+
             e['date'] = dateutil.parser.parse(e['updated']).isoformat()
 
             #print e['updated'], "^^^^^^^^^^^^^", e['date']
