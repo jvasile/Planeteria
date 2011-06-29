@@ -87,7 +87,7 @@ class Atom(XML_Template):
          s += u'      <link href="%(link)s" rel="alternate" type="text/html"/>\n' % i
          if 'author' in i:
             s+=u'\n      <author><name>%(author)s</name></author>\n' % i
-         s += u'\n      <source>n\      <id>%(feed_id)s</id>\n' % i
+         s += u'\n      <source>\n      <id>%(feed_id)s</id>\n' % i
 
          for l in i['links']:
             if 'href' in l:
