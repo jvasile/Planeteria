@@ -331,32 +331,26 @@ class Copyright(HTML_Template):
     exclusive rights to them.  Click through the posts to the parent
     blogs and you should be able to find terms for reproduction.</p>
 
-    <p>All of the software behind this site is open source and some of
-    it was written by others.  In particular, Planeteria software is
-    based on <a href="http://intertwingly.net/code/venus/">Venus</a>,
-    which is GPL-licensed.</p>
-
-    <p>Everything else (i.e. the stuff I produced) is available under
-    the <a
+    <p>All of the software behind this site is open source. Everything
+    I produced is available under the <a
     href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">AGPLv3</a>.</p>
 
-    <p>I will at some point package the source code, templates, and
-    supporting scripts.  </b>Right now the code has some trashy hacks
-    and the setup is extremely ugly.</b> But now that I have running
-    code, I'll clean it up slowly.  And then the code will be
-    available from this page.  But until I get around to it, there's
-    always bazaar:
+    <p>I will at some point package the source code.  <b>Right now the
+    code has some trashy hacks and the setup is extremely ugly.</b>
+    But now that I have running code, I'll clean it up slowly.  And
+    then the code will be available from this page.  But until I get
+    around to it, there's always github:
 
     <blockquote>
-    bzr get http://bzr.hackervisions.org/planeteria
+    git clone http://github.com/jvasile/planeteria
     </blockquote></p> 
 
-    <p>Run the setup script in the root of that branch. See the <a
+    <p>Run generate.py in the root of that branch. See the <a
     href="/readme.html">readme</a> for details.</p>
 
-    <p>The setup script will download my mildly adjusted version of
-    Venus, which resides in a separate branch at
-    http://bzr.hackervisions.org/venus</p>
+    <p>A previous version of Planeteria was based on a
+    href="http://intertwingly.net/code/venus/">Venus</a>, which I
+    highly recommend if you are trying to run just one planet.</p>
 
   </div> <!-- end entry -->
 
