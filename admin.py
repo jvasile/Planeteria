@@ -135,6 +135,7 @@ def update_config(planet):
       urls_seen.append(url)
       if not url:
          err("Ignoring feed with no url specified.")
+         feed_count += 1;
          continue
       if Form.getvalue('delete%d' % feed_count) == '1':
          del planet.feeds[url]
