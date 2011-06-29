@@ -5,7 +5,10 @@ class Template(object):
    def __init__(self, interpolate):
       self.interpolate = interpolate
    def escape(self, s):
-      return cgi.escape(s)
+      if s:
+         return cgi.escape(s)
+      else:
+         return s
    def write(self, output_dir, fname, errors=None):
       if not errors:
          errors = self.errors
