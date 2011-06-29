@@ -176,7 +176,10 @@ class Planet():
             else:
                e['subtitle']=''
             e['channel_link'] = e['feed_id'] = parsed['feed']['link']
-            e['date'] = dateutil.parser.parse(e['updated'])
+            e['date'] = dateutil.parser.parse(e['updated']).isoformat()
+
+            #print e['updated'], "^^^^^^^^^^^^^", e['date']
+
             e['updated'] = e['date']
             if not 'id' in e: e['id'] = e['link']
             if not 'link' in e: e['link'] = e['id']
