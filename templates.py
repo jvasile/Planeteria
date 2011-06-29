@@ -688,7 +688,7 @@ class Admin(HTML_Template):
         <div class="entrytitle">Save Changes</div>
 	%(pass_input)s
         <input type="submit" value="Save Changes"><br />
-	%(passme)
+	%(passme)s
       </div> <!-- end entry -->
 
       <div class="entry">
