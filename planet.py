@@ -180,7 +180,6 @@ class Planet():
             log.debug("No data for %s.  Skipping." % url)
             continue
          
-         #import chardet
          for e in parsed['entries']:
             e['links'] = parsed['feed']['links']
             e['feed_name'] = smart_str(parsed['feed']['title'], encoding='ascii', errors='ignore')
