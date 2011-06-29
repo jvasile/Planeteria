@@ -336,7 +336,8 @@ class Copyright(HTML_Template):
 
     <p>All of the software behind this site is open source. Everything
     I produced is available under the <a
-    href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">AGPLv3</a>.</p>
+    href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">AGPLv3
+    license</a>.</p>
 
     <p>I will at some point package the source code.  <b>Right now the
     code has some trashy hacks and the setup is extremely ugly.</b>
@@ -652,6 +653,11 @@ class Admin(HTML_Template):
           <li>%(planet_name_input)s</li>
           <li>%(owner_name_input)s</li>
           <li>%(owner_email_input)s</li>
+    
+    <p>The email address you enter is viewable by anybody who comes to
+    your admin page or pulls your feed.  Feel free to lie about your
+    address.</p>
+
         </ol>
       </div> <!-- end entry -->
 
