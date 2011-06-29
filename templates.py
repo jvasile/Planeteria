@@ -683,6 +683,13 @@ class Admin(HTML_Template):
 	</TMPL_IF>
       </div> <!-- end entry -->
 
+      <div class="entry">
+        <div class="entrytitle">Patience Please</div>
+         After you save your changes, it will take a bit of time for
+         your page and feed to update, so don't freak out if you don't
+         see your changes immediately.
+      </div>
+
    </div></form>
 </div>	<!-- end left -->
 <div id="right">
