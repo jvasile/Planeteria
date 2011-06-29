@@ -582,7 +582,7 @@ class Main_Page(HTML_Template):
   <div class = "entry">
     <div class="entrytitle">Some Awesome Planets</div>
     <ul>
-      <!-- <li><a href="freedombox">FreedomBox</a></li> -->
+      <li><a href="freedombox">FreedomBox</a></li>
       <li><a href="planetnyc">Freedom To Share in NYC</a></li>
       <li><a href="wfs">Women in Free Software</a></li>
     </ul>
