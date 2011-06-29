@@ -684,7 +684,7 @@ class Admin(HTML_Template):
 	%(pass_input)s
         <input type="submit" value="Save Changes"><br />
 	<TMPL_IF passme>
-
+        %(password)s
 	If you don't know the password, try the default password:
 	passme.  You are encouraged to change this password.
 
