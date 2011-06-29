@@ -18,7 +18,7 @@ FEED_TIMEOUT = 100
 
 SPIDER_THREADS = 5
 
-opt={'domain':'test.planeteria.org',
+opt={'domain':'planeteria.org',
      'website_name':"Planeteria",
      'title':"Planeteria",
      'generator':"Planeteria %s" % VERSION,
