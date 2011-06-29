@@ -675,7 +675,7 @@ class Admin(HTML_Template):
 	%(change_pass_input)s<br />
         If you want to change your password, enter a new one here. I
         store your password as plain, unobfuscated text in my
-        database.  Please do not use a real password on this site.
+        database.
 
       </div> <!-- end entry -->
 
