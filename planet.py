@@ -70,7 +70,7 @@ class Planet():
          log.info("Can't find %s directory.  Skipping save." % output_dir)
          return
 
-      log.debug("Saving %s" %  self.direc)
+      log.debug("Saving the planet! %s" %  self.direc)
       if update_config_timestamp:
          self.last_config_change = time.time()
       with berkeley_db('planets') as db:
