@@ -601,7 +601,7 @@ class Admin(HTML_Template):
 		  <td style="text-align:left">
 		    <input type="hidden" name="section%(idx)s" id="section%(idx)s" value="%(section)s" />
 		    <input type="hidden" name="delete%(idx)s" id="delete%(idx)s" value="0" />
-		    <a href="javascript:rm_feed(%(idx)s)"<img class="feedbtn" src="/pub.d/images/rm-feed.png"></a> <label for="name%(idx)s">Feed Name:</label><br />
+		    <a href="javascript:rm_feed(%(idx)s)"><img class="feedbtn" src="/pub.d/images/rm-feed.png"></a> <label for="name%(idx)s">Feed Name:</label><br />
 		       <input type="text" size=40 name="name%(idx)s" id="name%(idx)s" value="%(name)s"><br />
 		       <label for="feedurl%(idx)s">Feed URL:</label><br />
 		       <input type="text" size=40 name="feedurl%(idx)s" id="feedurl%(idx)s" value="%(feedurl)s"><br />
