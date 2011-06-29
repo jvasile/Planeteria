@@ -654,8 +654,8 @@ class Admin(HTML_Template):
           <li>%(owner_name_input)s</li>
           <li>%(owner_email_input)s</li>
     
-    <p>Your email address is viewable by anybody who comes to your
-    admin page or pulls your feed.  Feel free to lie about it.</p>
+    Your email address is viewable by anybody who comes to your
+    admin page or pulls your feed.  Feel free to lie about it.<br />
 
         </ol>
       </div> <!-- end entry -->
