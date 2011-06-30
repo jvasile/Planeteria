@@ -117,6 +117,19 @@ class HTML_Template(Template):
       it. That's the whole point of community-building!</p>
   </div>
 """
+   def render_donations(self):
+      return """
+  <div class = "entry">
+    <div class="entrytitle">Donations</div>
+    <p>If you find Planeteria.org or the free software on which it runs useful, please help support this site.</p>
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+       <input type="hidden" name="cmd" value="_s-xclick">
+       <input type="hidden" name="hosted_button_id" value="49HBMGVGUAHPU">
+       <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+       <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+    </form>
+    <p><b>Bitcoin:</b> 17XkPWnefx3gYHFax74hNRfj6NtrGyJ4VN</p>
+  </div> <!-- end entry -->"""
 
    def header(self):
       i = self.interpolate
@@ -137,38 +150,28 @@ class HTML_Template(Template):
    <meta name="keywords" content="Planet, admin, metaplanet, hackervisions, blog, aggregator" />
    <meta name="robots" content="index, follow, noarchive" />
    <meta name="googlebot" content="noarchive" />
-"""  % i
-      if 'feed_url' in self.interpolate:
-         s += '   <link rel="alternate" type="application/rss+xml" href="%(feed_url)s" title="All these posts as one feed" />\n'  % i
-
-      s += """   <title>%(title)s</title>
+   <title>%(title)s</title>
    <link rel="stylesheet" href="pub.d/form.css" type="text/css" />
    <link rel="stylesheet" href="pub.d/screen.css" type="text/css" />
    <link rel="stylesheet" href="pub.d/venus.css" type="text/css" />
 """ % i
 
+      if 'feed_url' in self.interpolate:
+         s += '   <link rel="alternate" type="application/rss+xml" href="%(feed_url)s" title="All these posts as one feed" />\n'  % i
       if 'admin' in i:
-         s += """     <script src="pub.d/admin.js" type="text/javascript"></script>
-     <script type="text/javascript">
-        %(push_feeds)s
-     </script>
-"""  % i
-      s += """</head>
-<body>
-
-<div id="wrap">
-   <div id="header">
-"""  % i
-
-      if 'name' in i:
-         s += '         <h1 id="logo-text"><a href="%(base_href)s%(direc)s" accesskey="1" title="%(name)s">%(name)s</a></h1>\n'  % i
-      else: 
-         s += '         <h1 id="logo-text"><a href="" accesskey="1" title="site:%(website_name)s">%(website_name)s</a></h1>\n'  % i
+         s += '     <script src="pub.d/admin.js" type="text/javascript"></script>\n     <script type="text/javascript">\n        %(push_feeds)s\n     </script>\n' % i
+      s += '</head>\n<body>\n<div id="wrap">\n   <div id="header">\n'  % i
 
       if i['base_href'].startswith('file://'):
          i['index'] = 'index.html'
       else:
          i['index'] = ''
+
+      if 'name' in i:
+         s += '         <h1 id="logo-text"><a href="%(base_href)s%(direc)s/%(index)s" accesskey="1" title="%(name)s">%(name)s</a></h1>\n'  % i
+      else: 
+         s += '         <h1 id="logo-text"><a href="%(index)s" accesskey="1" title="site:%(website_name)s">%(website_name)s</a></h1>\n'  % i
+
       s += """      <p id="slogan">Blog aggregation.  By your community, for your community.</p>
       <a href="%(base_href)s%(index)s"><div id="header-image"><img src="pub.d/images/planeteria_200.png" /></div></a>
    </div>
@@ -287,6 +290,7 @@ class Planet_Page(HTML_Template):
       o['rendered_sidebar'] = self.ensure('sidebar')
       o['rendered_items'] = self.items()
       o['rendered_feeds'] = self.render_feeds()
+      o['rendered_donations'] = self.render_donations()
       s="""<div id="left">
 
 <!-- BEGIN FEEDS -->
@@ -304,6 +308,7 @@ class Planet_Page(HTML_Template):
       </ul>
    </div>
 
+   %(rendered_donations)s
    %(rendered_sidebar)s
 
    <div class="entry">
@@ -520,7 +525,7 @@ class Main_Page(HTML_Template):
       for field in ['error', 'direc', 'subdirectory', 'turing']:
          if not field in self.interpolate:
             self.interpolate[field] = ''
-
+      o['rendered_donations'] = self.render_donations()
       if o['base_href'] == '/':
          o['domain'] = "Your planet URL will be on this website in the subdirectory you specify,"
       else:
@@ -595,6 +600,8 @@ class Main_Page(HTML_Template):
       <li><a href="wfs">Women in Free Software</a></li>
     </ul>
   </div> <!-- end entry -->
+
+   %(rendered_donations)s
 </div>	<!-- end right -->
 """ % self.interpolate + self.footer()
 
