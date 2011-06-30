@@ -199,6 +199,7 @@ class Planet():
                e['date'] = dateutil.parser.parse(e['updated']).strftime("%Y-%m-%d %H:%M:%S")
                e['updated'] = dateutil.parser.parse(e['updated']).isoformat()
             except KeyError:
+               e['date'] = e['updated'] = '1970-01-01T00:00:00Z'
                log.debug("No updated field in entry for %s" % url)
 
             if not 'id' in e: e['id'] = e['link']
