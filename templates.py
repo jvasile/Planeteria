@@ -158,15 +158,19 @@ class HTML_Template(Template):
 
 <div id="wrap">
    <div id="header">
-"""  % self.interpolate
+"""  % i
 
-      if 'name' in self.interpolate:
-         s += '         <h1 id="logo-text"><a href="%(base_href)s%(direc)s" accesskey="1" title="%(name)s">%(name)s</a></h1>\n'  % self.interpolate
+      if 'name' in i:
+         s += '         <h1 id="logo-text"><a href="%(base_href)s%(direc)s" accesskey="1" title="%(name)s">%(name)s</a></h1>\n'  % i
       else: 
-         s += '         <h1 id="logo-text"><a href="" accesskey="1" title="site:%(website_name)s">%(website_name)s</a></h1>\n'  % self.interpolate
+         s += '         <h1 id="logo-text"><a href="" accesskey="1" title="site:%(website_name)s">%(website_name)s</a></h1>\n'  % i
 
+      if i['base_href'].startswith('file://'):
+         i['index'] = 'index.html'
+      else:
+         i['index'] = ''
       s += """      <p id="slogan">Blog aggregation.  By your community, for your community.</p>
-      <a href="%(base_href)s"><div id="header-image"><img src="pub.d/images/planeteria_200.png" /></div></a>
+      <a href="%(base_href)s%(index)s"><div id="header-image"><img src="pub.d/images/planeteria_200.png" /></div></a>
    </div>
 
    <!-- content -->
@@ -512,9 +516,16 @@ class Main_Page(HTML_Template):
       self.interpolate['title'] = 'Welcome to Planeteria'
 
    def _render(self):
+      o = self.interpolate
       for field in ['error', 'direc', 'subdirectory', 'turing']:
          if not field in self.interpolate:
             self.interpolate[field] = ''
+
+      if o['base_href'] == '/':
+         o['domain'] = "Your planet URL will be on this website in the subdirectory you specify,"
+      else:
+         o['domain'] = "Your planet URL will be %(base_href)ssubdirectory," % o
+
       return self.header() + """
 
 <div id="left">
@@ -530,7 +541,7 @@ class Main_Page(HTML_Template):
 
       <label for="subdirectory">Subdirectory:</label>
       <input type="text" size=40 id="subdirectory" name="subdirectory" value="%(subdirectory)s" /><br />
-      Your planet URL will be http://%(domain)s/subdirectory,
+      %(domain)s
       and the subdirectory may only consist of letters and numbers.<br/>
 
       <br /><br />
@@ -596,7 +607,7 @@ class Welcome(HTML_Template):
   <div class = "entry">
     <div class="entrytitle">Your New Planet</div>
     <p>Your planet has been created, but you need to set it up via <a
-    href="%(base_href)s/%(direc)s/admin.py">the admin interface</a> before it is
+    href="%(base_href)s%(direc)s/admin.py">the admin interface</a> before it is
     functional.</p>
   </div> <!-- end entry -->""" % self.interpolate  + """
 </div> <!-- end left -->

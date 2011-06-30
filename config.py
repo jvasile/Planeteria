@@ -1,25 +1,30 @@
 import os
 
+CHECK_INTERVAL = 3600 # dload feed once per hour
 
-BASE_HREF = "file:///home/vasile/src/planeteria2/www/"
-BASE_HREF = "http://planeteria.org/"
+### You sholdn't need to edit below here ###
+
 BASE_DIR = os.path.dirname(os.path.abspath( __file__ ))
 DATA_DIR = os.path.join(BASE_DIR, "data")
+BASE_HREF_FILE = os.path.join(DATA_DIR, 'base_href')
+if os.path.exists(BASE_HREF_FILE):
+    with open (BASE_HREF_FILE, 'r') as FILE:
+        BASE_HREF = FILE.readline().strip()
+    if not BASE_HREF.endswith('/'):
+        BASE_HREF += '/'
+else:
+    BASE_HREF = "/"
+
 CACHE_FILE = os.path.join(DATA_DIR, "cache.db")
 PLANETS_FILE = os.path.join(DATA_DIR, "planets.db")
 OUTPUT_DIR = os.path.join(BASE_DIR, "www")
 TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
-CHECK_INTERVAL = 3600 # dload feed once per hour
 VERSION = "2.1.0"
 DATA_FORMAT_VERSION = "0.1.0"
-CHECK_INTERVAL = 3600  # dload feed once per hour
 MAX_ENTRIES = 100
 FEED_TIMEOUT = 100
 
-SPIDER_THREADS = 5
-
-opt={'domain':'planeteria.org',
-     'website_name':"Planeteria",
+opt={'website_name':"Planeteria",
      'title':"Planeteria",
      'generator':"Planeteria %s" % VERSION,
      'generator_uri':"http://planeteria.org/copyright.html",
