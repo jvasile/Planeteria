@@ -114,6 +114,9 @@ class Planet():
          except KeyError:
             log.info("Can't find %s in cache.  Making default." % url)
             cache = {'data':'', 'last_downloaded':0, 'dload_fail':False}
+         except json.decoder.JSONDecodeError, e:
+            log.debug("Json error on url %s: %s" % (url, e))
+            return
 
       if not opt['force_check'] and time.time() < cache['last_downloaded'] + CHECK_INTERVAL:
          log.debug("Cache is fresh.  Not downloading %s." % url)
