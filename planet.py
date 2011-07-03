@@ -108,6 +108,7 @@ class Planet():
    def update_feed(self, url):
       """Download feed if it's out of date"""
 
+      force_check = opt['force_check']
       with berkeley_db('cache') as db:
          try:
             cache = json.loads(db[url])
@@ -115,8 +116,8 @@ class Planet():
             log.info("Can't find %s in cache.  Making default." % url)
             cache = {'data':'', 'last_downloaded':0, 'dload_fail':False}
          except json.decoder.JSONDecodeError, e:
-            log.debug("Json error on url %s: %s" % (url, e))
-            return
+            log.debug("Json error on updating url %s: %s" % (url, e))
+            force_check = True
 
       if not opt['force_check'] and time.time() < cache['last_downloaded'] + CHECK_INTERVAL:
          log.debug("Cache is fresh.  Not downloading %s." % url)
@@ -177,7 +178,12 @@ class Planet():
          with berkeley_db('cache') as db:
             if not url in db:
                continue
-            cache = json.loads(db[url])
+            try:
+               cache = json.loads(db[url])
+            except json.decoder.JSONDecodeError, e:
+               log.debug("Json error on generating url %s: %s" % (url, e))
+               continue
+
          parsed = cache['data']
          if not parsed or not parsed['entries']:
             log.debug("No data for %s.  Skipping." % url)
