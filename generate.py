@@ -18,6 +18,7 @@ import os, sys
 from optparse import OptionParser
 import config
 from config import *
+log = logging.getLogger('planeteria')
 from galaxy import Galaxy
 from planet import Planet
 
@@ -136,6 +137,7 @@ def parse_options():
    parser = OptionParser()
    parser.add_option("", "--force", action="store_true", dest="force_update", help="force update of feeds", default=False),
    parser.add_option("", "--no-update", action="store_true", dest="no_update", help="prevent feed updates", default=False),
+   parser.add_option('', '--delete-missing', dest="delete_missing", help="delete planets from db if they are not in file system", action="store_true", default=False)
    (options, args) = parser.parse_args()
 
    opt['force_check'] = options.force_update
@@ -144,6 +146,13 @@ def parse_options():
    if len(args) >= 1:
       global planets
       planets.extend(args)
+
+   if options.delete_missing:
+      log.debug("Deleting missing planets.")
+      galaxy = Galaxy(planets)
+      galaxy.load()
+      galaxy.delete_missing_planets()
+      sys.exit()
 
 if __name__ == "__main__":
 

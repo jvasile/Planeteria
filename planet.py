@@ -281,6 +281,13 @@ class Planet():
             else:
                self.feeds[url]={'url':url, 'name':name, 'image':''}
 
+   def delete_if_missing(self):
+      output_dir = os.path.join(OUTPUT_DIR, self.direc)
+      if not os.path.exists(output_dir):
+         with berkeley_db('planets') as db:
+            del db[self.direc]
+         log.info("Deleted missing planet: %s" % self.direc)
+
    def dump(self):
       print self.json()
 
@@ -303,6 +310,7 @@ def parse_options():
    parser.add_option("-i", "--import", dest="import_opml", help="import opml FILE", metavar="FILE")
    parser.add_option("-d", "--dump", dest="dump_planet", help="dump planet", action="store_true", default=False)
    parser.add_option("-c", "--cache", dest="dump_planet_cache", help="dump planet's cache", action="store_true", default=False)
+
    (options, args) = parser.parse_args()
 
    if len(args) >= 1:

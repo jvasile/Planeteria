@@ -38,3 +38,6 @@ class Galaxy(list):
          p.generate()
 
 
+   def delete_missing_planets(self):
+      for p in self.planets:
+         p.delete_if_missing()
