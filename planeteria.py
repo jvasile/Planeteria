@@ -32,6 +32,7 @@ def parse_options():
    parser.add_option("", "--force", action="store_true", dest="force_update", help="force update of feeds", default=False),
    parser.add_option("", "--no-update", action="store_true", dest="no_update", help="prevent feed updates", default=False),
    parser.add_option('', '--delete-missing', dest="delete_missing", help="delete planets from db if they are not in file system", action="store_true", default=False)
+   parser.add_option('', '--clean', dest="clean", help="remove missing planets, unused feeds", action="store_true", default=False)
    (options, args) = parser.parse_args()
 
    opt['force_check'] = options.force_update
@@ -41,12 +42,21 @@ def parse_options():
       global planets
       planets.extend(args)
 
-   if options.delete_missing:
+   if options.clean:
+      log.debug("Cleaning databse.")
+      galaxy = Galaxy(planets)
+      galaxy.load()
+      galaxy.delete_missing_planets()
+      galaxy.delete_unused_feeds()
+   elif options.delete_missing:
       log.debug("Deleting missing planets.")
       galaxy = Galaxy(planets)
       galaxy.load()
       galaxy.delete_missing_planets()
-      sys.exit()
+   else:
+      return
+
+   sys.exit()
 
 if __name__ == "__main__":
 
