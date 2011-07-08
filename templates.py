@@ -240,8 +240,8 @@ class Planet_Page(HTML_Template):
                o['escaped_'+e] = self.escape(o[e])
             except KeyError:
                o['escaped_'+e] = ''
-
-         o['rendered_author'] = self.ensure('escaped_author', '%(escaped_author)s | ', o)
+               
+         #o['rendered_author'] = self.ensure('escaped_author', '%(escaped_author)s', o)
          if 'new_date' in o:
             s += '   <div class="dateheader">%(new_date)s</div>\n'
 
@@ -250,7 +250,7 @@ class Planet_Page(HTML_Template):
          %(rendered_image)s
 
          <div class="entrytitle" %(rendered_title_language)s>
-            <a href="%(escaped_channel_link)s" title="%(escaped_channel_title_plain)s">%(rendered_author)s</a>
+            <a href="%(escaped_channel_link)s" title="%(escaped_channel_title_plain)s">%(name)s | </a>
             <a href="%(escaped_link)s">%(escaped_title)s</a> 
         </div>
 
@@ -260,7 +260,7 @@ class Planet_Page(HTML_Template):
                         
          <p align="right">
             <a href="%(escaped_link)s">
-            %(rendered_author)s%(escaped_channel_title_plain)s | 
+            %(name)s | %(escaped_channel_title_plain)s | 
             %(date)s</a></a>
          </p>
       </div>

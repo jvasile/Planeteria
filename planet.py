@@ -192,6 +192,7 @@ class Planet():
             continue
          
          for e in parsed['entries']:
+            e['name'] = f['name']
             e['links'] = parsed['feed']['links']
             e['feed_name'] = smart_str(parsed['feed']['title'], encoding='ascii', errors='ignore')
             e['channel_title_plain'] = e['feed_name']
