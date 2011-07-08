@@ -720,3 +720,4 @@ class Admin(HTML_Template):
   %(sidebar)s
 </div>	<!-- end right -->
 """ % o + self.footer()
+

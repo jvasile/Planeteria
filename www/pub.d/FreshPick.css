@@ -4,7 +4,7 @@
 	Version : 1.0   
 	Author : Erwin Aligam
 	Author URI : http://www.styleshout.com/       
-	Last Date Modified : April 24, 2009
+	Last Date Modified : July 07, 2011 by James Vasile (james@hackervisions.org)
  ------------------------------------------------ */
  
 /* ----------------------------------------------
@@ -14,7 +14,10 @@ body {
 	font: 12px/170% 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;
 	color: #666666; 	
 	margin: 0; 
+	margin-right: 200px;
 	padding: 0; 
+	padding-left: 20px;
+	padding-right: 20px;
 	background: #FFF url(images/bg.gif) repeat-x;
 	text-align: center;
 }
@@ -358,9 +361,15 @@ input.button {
 	padding-top: 15px;	
 }
 #right {
-	width: 285px;
-	float: right;
-	padding-top: 25px;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 225px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 285px;
 }
 
 #right h3 {
