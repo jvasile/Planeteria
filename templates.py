@@ -247,10 +247,10 @@ class Planet_Page(HTML_Template):
 
          s += """   <div class = "entry">
       <div class="entrybody" id="%(id)s"%(rendered_channel_language)s>
-         %(rendered_image)s
 
          <div class="entrytitle" %(rendered_title_language)s>
-            <a href="%(escaped_channel_link)s" title="%(escaped_channel_title_plain)s">%(name)s </a><br />
+            <div class="entrytitleauthor"><a href="%(escaped_channel_link)s" title="%(escaped_channel_title_plain)s">%(name)s </a></div><br />
+         %(rendered_image)s
             <a href="%(escaped_link)s">%(escaped_title)s</a> 
         </div>
 
