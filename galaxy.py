@@ -15,7 +15,6 @@ class Galaxy(list):
       self.planets.append(planet)
 
    def load(self):
-      p = []
       with berkeley_db('planets') as db:
          for k in db.keys():
             if not self.selected or k in self.selected:
@@ -37,7 +36,24 @@ class Galaxy(list):
       for p in self.planets:
          p.generate()
 
+   def delete_unused_feeds(self):
+      planets = []
+      with berkeley_db('planets') as db:
+         for k in db.keys():
+            planets.append(Planet(db[k]))
 
+      feed_urls = {}
+      for p in planets:
+         for f in p.feeds:
+            feed_urls[f] = f
+
+      feed_urls = feed_urls.keys()
+      with berkeley_db('cache') as db:
+         for k in db.keys():
+            if not k in feed_urls:
+               del db[k]
+               log.debug("Removed %s from cache." % k)
+         
    def delete_missing_planets(self):
       for p in self.planets:
          p.delete_if_missing()
