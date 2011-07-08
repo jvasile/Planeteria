@@ -250,7 +250,7 @@ class Planet_Page(HTML_Template):
          %(rendered_image)s
 
          <div class="entrytitle" %(rendered_title_language)s>
-            <a href="%(escaped_channel_link)s" title="%(escaped_channel_title_plain)s">%(channel_name)s</a>: 
+            <a href="%(escaped_channel_link)s" title="%(escaped_channel_title_plain)s">%(rendered_author)s</a>
             <a href="%(escaped_link)s">%(escaped_title)s</a> 
         </div>
 
@@ -269,6 +269,7 @@ class Planet_Page(HTML_Template):
       return s
 
    def render_feeds(self):
+      """This is the list of feeds on the right of the page."""
       s=''
       for o in self.interpolate['Feeds']:
          for e in ['url', 'link', 'message', 'title_plain']:
