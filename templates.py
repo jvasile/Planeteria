@@ -250,7 +250,7 @@ class Planet_Page(HTML_Template):
          %(rendered_image)s
 
          <div class="entrytitle" %(rendered_title_language)s>
-            <a href="%(escaped_channel_link)s" title="%(escaped_channel_title_plain)s">%(name)s | </a>
+            <a href="%(escaped_channel_link)s" title="%(escaped_channel_title_plain)s">%(name)s </a><br />
             <a href="%(escaped_link)s">%(escaped_title)s</a> 
         </div>
 
