@@ -93,7 +93,7 @@ class Planet():
       log.debug("Saving the planet! %s" %  self.direc)
       if update_config_timestamp:
          self.last_config_change = time.time()
-      with berkeley_db('planets2') as db:
+      with berkeley_db('planets') as db:
          db[self.direc] = self.json()
 
    def serializable(self):
