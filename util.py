@@ -9,7 +9,9 @@ Utility functions
 
 import os, sys, dbm, time
 import htmltmpl # Debian package python-htmltmpl
-from config import *
+import config as cfg
+from config import opt
+import logging
 log = logging.getLogger('planeteria')
 import dateutil.parser
 
@@ -42,7 +44,7 @@ class berkeley_db:
    def __init__(self, fname):
       self.fname = fname
    def __enter__(self):
-      self.db = dbm.open(os.path.join(DATA_DIR, self.fname), 'c')
+      self.db = dbm.open(os.path.join(cfg.data_dir, self.fname), 'c')
       return self.db
    def __exit__(self, type, value, traceback):
       self.db.close()

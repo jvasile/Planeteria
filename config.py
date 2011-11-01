@@ -4,9 +4,9 @@ CHECK_INTERVAL = 3600 # dload feed once per hour
 
 ### You sholdn't need to edit below here ###
 
-BASE_DIR = os.path.dirname(os.path.abspath( __file__ ))
-DATA_DIR = os.path.join(BASE_DIR, "data")
-BASE_HREF_FILE = os.path.join(DATA_DIR, 'base_href')
+base_dir = os.path.dirname(os.path.abspath( __file__ ))
+data_dir = os.path.join(base_dir, "data")
+BASE_HREF_FILE = os.path.join(data_dir, 'base_href')
 if os.path.exists(BASE_HREF_FILE):
     with open (BASE_HREF_FILE, 'r') as FILE:
         BASE_HREF = FILE.readline().strip()
@@ -15,10 +15,10 @@ if os.path.exists(BASE_HREF_FILE):
 else:
     BASE_HREF = "/"
 
-CACHE_FILE = os.path.join(DATA_DIR, "cache.db")
-PLANETS_FILE = os.path.join(DATA_DIR, "planets.db")
-OUTPUT_DIR = os.path.join(BASE_DIR, "www")
-TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
+CACHE_FILE = os.path.join(data_dir, "cache.db")
+PLANETS_FILE = os.path.join(data_dir, "planets.db")
+OUTPUT_DIR = os.path.join(base_dir, "www")
+TEMPLATE_DIR = os.path.join(base_dir, "templates")
 VERSION = "2.1.0"
 DATA_FORMAT_VERSION = "0.1.0"
 MAX_ENTRIES = 100
@@ -31,7 +31,7 @@ opt={'website_name':"Planeteria",
      'force_check': False,
      'template_dir':TEMPLATE_DIR,
      'new_planet_dir':os.path.join(TEMPLATE_DIR, "new_planet"),
-     'base_dir':BASE_DIR,
+     'base_dir':base_dir,
      'base_href':BASE_HREF,
      'domain':BASE_HREF.split("//")[1],
      'data_dir':DATA_DIR,
@@ -49,7 +49,7 @@ opt={'website_name':"Planeteria",
 import logging
 logger = logging.getLogger('planeteria')
 logger.setLevel(logging.DEBUG)
-fh = logging.FileHandler(os.path.join(BASE_DIR, 'planeteria.log'), encoding = "UTF-8")
+fh = logging.FileHandler(os.path.join(base_dir, 'planeteria.log'), encoding = "UTF-8")
 fh.setLevel(logging.DEBUG)
 fh_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 fh.setFormatter(fh_formatter)

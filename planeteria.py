@@ -16,14 +16,15 @@ Front End
 
 import os, sys
 from optparse import OptionParser
-import config
-from config import *
+import config as cfg
+from config import opt
+import logging
 log = logging.getLogger('planeteria')
 from galaxy import Galaxy
 from planet import Planet
 
-if not os.path.exists(DATA_DIR):
-   os.mkdir(DATA_DIR)
+if not os.path.exists(cfg.data_dir):
+   os.mkdir(cfg.data_dir)
 
 planets = []
 
@@ -62,14 +63,13 @@ if __name__ == "__main__":
 
    parse_options()
 
-
    import templates
    for p,t in {'copyright':templates.Copyright,
                'thanks':templates.Thanks,
                'tos':templates.TOS,
                'index':templates.Main_Page,
                }.items():
-      t(opt).write(OUTPUT_DIR, "%s.html" % p)
+      t(opt).write(cfg.OUTPUT_DIR, "%s.html" % p)
    galaxy = Galaxy(planets)
    galaxy.load()
    #galaxy.dump()

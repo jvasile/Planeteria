@@ -1,5 +1,7 @@
-import sys, time
-from config import *
+import os, sys, time
+import config as cfg
+from config import opt
+import logging
 log = logging.getLogger('planeteria')
 import feedparser
 import simplejson as json
@@ -7,6 +9,7 @@ from urllib import urlopen
 from util import smart_str, parse_updated_time, berkeley_db, write_file, html2xml, just_body, tidy2xhtml
 import templates
 import dateutil.parser
+
 
 def strip_body_tags(text):
    if text.startswith('<body>'):
@@ -45,10 +48,12 @@ class Planet():
          self.load_dict(kwargs)
 
    def load_dict(self, h):
-      if 'version' in h and h['version'] != DATA_FORMAT_VERSION:
+      if 'version' in h and h['version'] != cfg.DATA_FORMAT_VERSION:
          sys.stderr.write("Planet data file is version %s.  This is planeteria version %s.  Please upgrade or downgrade to match versions.\n" %
-                          (h['version'], DATA_FORMAT_VERSION))
+                          (h['version'], cfg.DATA_FORMAT_VERSION))
          sys.exit(-1)
+      print "\n\n\n"
+      print h
       self.direc = h['direc']
       self.name = h['name']
       self.user = h['user']
@@ -72,15 +77,17 @@ class Planet():
       #print self.feeds[0].dump()
       self.feeds = h['feeds']
 
+
    def load_json(self, j):
-      self.load_dict(json.loads(j))
+      j = unicode(j, errors='replace')
+      self.load_dict(json.loads(j, strict=False))
 
    def save_cache(self, cache, url):
       with berkeley_db('cache') as db:
          db[url] = json.dumps(cache, sort_keys=True, indent=3)
 
    def save(self, update_config_timestamp=False, ignore_missing_dir=False):
-      output_dir = os.path.join(OUTPUT_DIR, self.direc)
+      output_dir = os.path.join(cfg.OUTPUT_DIR, self.direc)
       if not ignore_missing_dir and not os.path.exists(output_dir):
          log.info("Can't find %s directory.  Skipping save." % output_dir)
          return
@@ -88,7 +95,7 @@ class Planet():
       log.debug("Saving the planet! %s" %  self.direc)
       if update_config_timestamp:
          self.last_config_change = time.time()
-      with berkeley_db('planets') as db:
+      with berkeley_db('planets2') as db:
          db[self.direc] = self.json()
 
    def serializable(self):
@@ -101,7 +108,7 @@ class Planet():
               'last_downloaded': self.last_downloaded,
               'sidebar':self.sidebar,
               'last_config_change':self.last_config_change,
-              'version':DATA_FORMAT_VERSION}
+              'version':cfg.DATA_FORMAT_VERSION}
    def json(self):
       return json.dumps(self.serializable(), sort_keys=True, indent=3)
 
@@ -121,7 +128,7 @@ class Planet():
             cache = {'data':'', 'last_downloaded':0, 'dload_fail':False}
             force_check = True
 
-      if not opt['force_check'] and time.time() < cache['last_downloaded'] + CHECK_INTERVAL:
+      if not opt['force_check'] and time.time() < cache['last_downloaded'] + cfg.CHECK_INTERVAL:
          log.debug("Cache is fresh.  Not downloading %s." % url)
          return
       try:
@@ -146,7 +153,7 @@ class Planet():
          log.debug("Saved downloaded feed for %s" % url)
 
    def update(self):
-      output_dir = os.path.join(OUTPUT_DIR, self.direc)
+      output_dir = os.path.join(cfg.OUTPUT_DIR, self.direc)
       if not os.path.exists(output_dir):
          log.info("Can't find %s directory.  Skipping update." % output_dir)
          return
@@ -157,7 +164,7 @@ class Planet():
       self.save()
 
    def generate(self):
-      output_dir = os.path.join(OUTPUT_DIR, self.direc)
+      output_dir = os.path.join(cfg.OUTPUT_DIR, self.direc)
       if not os.path.exists(output_dir):
          log.info("Can't find %s directory.  Skipping generate." % output_dir)
          return
@@ -165,9 +172,9 @@ class Planet():
 
       lopt = {'owner_name':self.user,
               'title':self.name,
-              'feed_url':"%s%s/atom.xml" % (BASE_HREF, self.direc),
-              'opml_url':"%s%s/opml.xml" % (BASE_HREF, self.direc),
-              'feed_page':"%s%s/" % (BASE_HREF, self.direc),
+              'feed_url':"%s%s/atom.xml" % (cfg.BASE_HREF, self.direc),
+              'opml_url':"%s%s/opml.xml" % (cfg.BASE_HREF, self.direc),
+              'feed_page':"%s%s/" % (cfg.BASE_HREF, self.direc),
               'updated':time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime(self.last_downloaded)),
               'date':time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()),
               'datemodified':time.strftime("%a, %d %b %Y %H:%M:%S GMT",time.gmtime(self.last_downloaded)),
@@ -283,7 +290,7 @@ class Planet():
                self.feeds[url]={'url':url, 'name':name, 'image':''}
 
    def delete_if_missing(self):
-      output_dir = os.path.join(OUTPUT_DIR, self.direc)
+      output_dir = os.path.join(cfg.OUTPUT_DIR, self.direc)
       if not os.path.exists(output_dir):
          with berkeley_db('planets') as db:
             del db[self.direc]
