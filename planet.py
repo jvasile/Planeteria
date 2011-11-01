@@ -262,6 +262,7 @@ class Planet():
       templates.OPML(mopt).write(output_dir, "opml.xml")
       templates.Atom(mopt).write(output_dir, "atom.xml")
       templates.Planet_Page(mopt).write(output_dir, "index.html")
+      templates.Snippet(mopt).write(output_dir, "snippet.html")
 
    def del_feed(self, url):
       try:

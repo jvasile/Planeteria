@@ -1,9 +1,10 @@
 import os, cgi, codecs
+from BeautifulSoup import BeautifulSoup
 
 class Template(object):
    errors = 'ignore'
    def __init__(self, interpolate):
-      self.interpolate = interpolate
+      self.interpolate = interpolate # interplation dict
    def escape(self, s):
       if s:
          return cgi.escape(s)
@@ -22,6 +23,8 @@ class Template(object):
       if isinstance(a, unicode):
          a = a.encode('utf-8')
       return a
+
+
 class XML_Template(Template):
    errors = 'xmlcharrefreplace'
 
@@ -197,7 +200,6 @@ class HTML_Template(Template):
 
 </div> <!-- end wrap -->
 
-
 </body>
 </html>
 """
@@ -328,6 +330,84 @@ class Planet_Page(HTML_Template):
 </div>	
 """ % o
       return self.header() + s + self.footer()
+
+class Snippet(HTML_Template):
+   def ensure(self, key, format_str=None, dictionary=None, default=''):
+      if not dictionary:
+         dictionary = self.interpolate
+
+      newline=''
+      if not format_str:
+         format_str =  "%(" + key + ")s"
+      elif format_str.endswith("\n"):
+         format_str = format_str[:-1]
+         newline="\n"
+
+      try:
+         if dictionary[key] != None and dictionary[key] != '':
+            return eval ("'%s'" % format_str + " % dictionary") + newline
+         return newline
+      except KeyError:
+         return default
+
+   def items(self):
+      s = ''
+      for o in self.interpolate['Items']:
+         for e in ['channel_link', 'channel_title_plain', 'channel_faceheight', 'channel_image', 'channel_facewidth', 'link', 'author', 'title']:
+            try:
+               o['escaped_'+e] = self.escape(o[e])
+            except KeyError:
+               o['escaped_'+e] = ''
+
+         o['rendered_channel_language'] = self.ensure('channel_language', ' lang="%(channel_language)s"', o)
+         o['rendered_title_language'] = self.ensure('title_language', ' lang="%(title_language)s"', o)
+         o['rendered_content_language'] = self.ensure('content_language', ' lang="%(content_language)s"', o)
+         o['rendered_image'] = self.ensure('channel_image', '            <img class="face" src="%(escaped_channel_image)s" width="%(escaped_channel_facewidth)s" height="%(escaped_channel_faceheight)s" alt="">\n', o)
+
+         for e in ['channel_link', 'channel_title_plain', 'link', 'author']:
+            try:
+               o['escaped_'+e] = self.escape(o[e])
+            except KeyError:
+               o['escaped_'+e] = ''
+
+         if o['escaped_channel_title_plain'].startswith("Twitter /"):
+            s += '<p>'+o['content_encoded'].split( o['escaped_channel_title_plain'].split(' / ')[1] )[1][2:]
+         elif o['name'] == "Github":
+            soup = BeautifulSoup(o['content_encoded'])
+            bq = soup.find('blockquote')
+            if bq:
+               c = bq.string
+            else:
+               bq = soup.find("div", { "class" : "message" })
+               if bq.string:
+                  c = bq.string
+               else:
+                  c = bq
+
+            s += '<p><a href="%s">%s</a>: %s</p>' % (o['escaped_link'], o['escaped_title'].split(' ',1)[1], c)
+         elif o['name'] == "Blog":
+            soup = BeautifulSoup(o['content_encoded'])
+            p = soup.findAll('p')
+            if p:
+               s += p[0].__repr__().replace('<br />', '').replace('<br>', '')
+               
+            else:
+               s += o['content_encoded']
+            if s.endswith('</p>'):
+               s=s[:-4]
+               s += ' (<a href="%s">blog</a>)</p>' % (o['escaped_link']) + '\n'
+            else:
+               s += ' (<a href="%s">blog</a>)' % (o['escaped_link']) + '\n'
+         else:
+            s += o['content_encoded']+'\n'
+      return s
+
+   def _render(self):
+      o = self.interpolate
+      o['rendered_items'] = self.items()
+      s="""%(rendered_items)s</div>""" % o
+      return s
+      #return self.header() + s + self.footer()
 
 class Copyright(HTML_Template):
    def __init__(self, interpolate):
@@ -605,7 +685,6 @@ class Main_Page(HTML_Template):
    %(rendered_donations)s
 </div>	<!-- end right -->
 """ % self.interpolate + self.footer()
-
 
 class Welcome(HTML_Template):
    def _render(self):
