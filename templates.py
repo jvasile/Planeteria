@@ -374,8 +374,8 @@ class Snippet(HTML_Template):
             c = '<p>'+o['content_encoded'].split( o['escaped_channel_title_plain'].split(' / ')[1] )[1][2:]
             import re
             c = re.sub("(http://[^ ]*)", r'<a href="\1">\1</a>', c)
-            c = re.sub(r"\s#(\w+)", r'<a href="https://identi.ca/selftag/\1">#\1</a>', c)
-            c = re.sub(r"^#(\w+)", r'<a href="https://identi.ca/selftag/\1">#\1</a>', c)
+            c = re.sub(r"\s#(\w+)", r'<a href="https://identi.ca/tag/\1">#\1</a>', c)
+            c = re.sub(r"^#(\w+)", r'<a href="https://identi.ca/tag/\1">#\1</a>', c)
             s += c
          elif o['name'] == "Github":
             soup = BeautifulSoup(o['content_encoded'])
