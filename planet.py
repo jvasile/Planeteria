@@ -52,8 +52,6 @@ class Planet():
          sys.stderr.write("Planet data file is version %s.  This is planeteria version %s.  Please upgrade or downgrade to match versions.\n" %
                           (h['version'], cfg.DATA_FORMAT_VERSION))
          sys.exit(-1)
-      print "\n\n\n"
-      print h
       self.direc = h['direc']
       self.name = h['name']
       self.user = h['user']
