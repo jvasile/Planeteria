@@ -1,4 +1,4 @@
-import os, cgi, codecs
+import os, cgi, codecs, re
 from BeautifulSoup import BeautifulSoup
 
 class Template(object):
@@ -370,12 +370,16 @@ class Snippet(HTML_Template):
             except KeyError:
                o['escaped_'+e] = ''
 
+         
          if o['escaped_channel_title_plain'].startswith("Twitter /"):
             c = '<p>'+o['content_encoded'].split( o['escaped_channel_title_plain'].split(' / ')[1] )[1][2:]
-            import re
-            c = re.sub("(http://[^ ]*)", r'<a href="\1">\1</a>', c)
+            c = re.sub("(https?://[^ ]*)", r'<a href="\1">\1</a>', c)
             c = re.sub(r"\s#(\w+)", r'<a href="https://identi.ca/tag/\1">#\1</a>', c)
             c = re.sub(r"^#(\w+)", r'<a href="https://identi.ca/tag/\1">#\1</a>', c)
+            s += c
+         elif o['name'] == "Diaspora":
+            c = o['content_encoded']+'\n'
+            c = re.sub("(https?://[^ ]*)", r'<a href="\1">\1</a>', c)
             s += c
          elif o['name'] == "Github":
             soup = BeautifulSoup(o['content_encoded'])
@@ -404,6 +408,7 @@ class Snippet(HTML_Template):
             else:
                s += ' (<a href="%s">blog</a>)' % (o['escaped_link']) + '\n'
          else:
+            print "|%s|" % o['name']
             s += o['content_encoded']+'\n'
       return s
 
