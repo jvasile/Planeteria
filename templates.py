@@ -105,7 +105,6 @@ class Atom(XML_Template):
          s +=' </entry>\n'
       return s
 
-
 class HTML_Template(Template):
    def sidebar(self):
       return """  <div class="entry">
@@ -373,14 +372,14 @@ class Snippet(HTML_Template):
          
          if o['escaped_channel_title_plain'].startswith("Twitter /"):
             c = '<p>'+o['content_encoded'].split( o['escaped_channel_title_plain'].split(' / ')[1] )[1][2:]
-            c = re.sub("(https?://[^ ]*)", r'<a href="\1">\1</a>', c)
+            c = re.sub("(https?://[^ <]*)", r'<a href="\1">\1</a>', c)
             c = re.sub(r"\s#(\w+)", r'<a href="https://identi.ca/tag/\1">#\1</a>', c)
             c = re.sub(r"^#(\w+)", r'<a href="https://identi.ca/tag/\1">#\1</a>', c)
             s += c
          elif o['name'] == "Diaspora":
-            c = o['content_encoded']+'\n'
-            c = re.sub("(https?://[^ ]*)", r'<a href="\1">\1</a>', c)
-            s += c
+            c = o['content_encoded']
+            c = re.sub("(https?://[^ <]*)", r'<a href="\1">\1</a>', c)
+            s += c+'\n'
          elif o['name'] == "Github":
             soup = BeautifulSoup(o['content_encoded'])
             bq = soup.find('blockquote')
