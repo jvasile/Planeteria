@@ -73,43 +73,46 @@ def render_push_feed(planet):
    return ret
          
 def template_vars(planet, config):
-    "Returns a dict with the template vars in it"
-    doc = opt.copy()
-    global error
-    doc['admin']=1
-    doc['error'] = error
-    doc['name'] = planet.name
-    doc['title'] = planet.name
-    doc = dict(doc.items() + planet.__dict__.items() + [(c, config[c]) for c in config])
-    if doc['password'] == 'passme':
-        doc['passme'] = 1
-    doc['planet_name_input'] = render_text_input("PlanetName", "Planet name", doc['name'], 40)
-    doc['owner_name_input'] = render_text_input("OwnerName", "Your name", doc['user'], 40)
-    doc['owner_email_input']=render_text_input("OwnerEmail", "Your email", doc['email'], 40)
-    doc['change_pass_input'] = render_text_input("ChangePass", "New Password", Form.getvalue('ChangePass',''))
-    doc['pass_input'] = render_pass_input("Pass", "Password", Form.getvalue('Pass', ''))
-    doc['push_feeds'] = render_push_feed(planet)
+   "Returns a dict with the template vars in it"
+   doc = opt.copy()
+   global error
+   doc['admin']=1
+   doc['error'] = error
+   doc['name'] = planet.name
+   doc['title'] = planet.name
+   doc = dict(doc.items() + planet.__dict__.items() + [(c, config[c]) for c in config])
+   if doc['password'] == 'passme':
+      doc['passme'] = 1
+   doc['planet_name_input'] = render_text_input("PlanetName", "Planet name", doc['name'], 40)
+   doc['owner_name_input'] = render_text_input("OwnerName", "Your name", doc['user'], 40)
+   doc['owner_email_input']=render_text_input("OwnerEmail", "Your email", doc['email'], 40)
+   doc['change_pass_input'] = render_text_input("ChangePass", "New Password", Form.getvalue('ChangePass',''))
+   doc['pass_input'] = render_pass_input("Pass", "Password", Form.getvalue('Pass', ''))
+   doc['push_feeds'] = render_push_feed(planet)
 
-    doc['timestamp'] = planet.last_config_change
-    doc['Feeds']=[]
-    count = 0
-    for url, feed in planet.feeds.items():
-        f={} 
-        f['idx'] = count
-        f['row_class'] = "face%d" % (count % 2)
-        f['image'] = feed['image']
-        if not f['image'] and 'faceurl' in feed:
-           f['image'] = feed['faceurl']
-           log.debug("Pulled url from feed['faceurl'].")
-        f['feedurl'] = url
-        f['facewidth'] = ''
-        f['faceheight'] = '' 
-        f['section'] = url
-        f['name'] = feed['name']
+   doc['timestamp'] = planet.last_config_change
+   doc['Feeds']=[]
+   count = 0
+   for url, feed in planet.feeds.items():
+      f={} 
+      f['idx'] = count
+      f['row_class'] = "face%d" % (count % 2)
+      f['image'] = feed['image']
+      if not f['image'] and 'faceurl' in feed:
+         f['image'] = feed['faceurl']
+         log.debug("Pulled url from feed['faceurl'].")
+      f['feedurl'] = url
+      f['facewidth'] = ''
+      f['faceheight'] = '' 
+      f['section'] = url
+      f['name'] = feed['name']
 
-        doc['Feeds'].append(f)
-        count += 1;
-    return doc
+      doc['Feeds'].append(f)
+      count += 1;
+
+   from operator import itemgetter, attrgetter
+   doc['Feeds'] = sorted(doc['Feeds'], key=itemgetter('name'))
+   return doc
 
 ############################
  ##
@@ -181,13 +184,13 @@ def main():
    import cgitb
    cgitb.enable()
 
+   opt['planet_subdir'] = 'wfs'
+
    global Form
    Form = cgi.FieldStorage()
 
    from planet import Planet
    planet = Planet(direc=opt['planet_subdir'])
-   #import_opml('../../opml.xml', planet)
-   #sys.exit()
 
    ## Handle form input
    if Form.has_key('PlanetName'):
