@@ -6,7 +6,7 @@ log = logging.getLogger('planeteria')
 import feedparser
 import simplejson as json
 from urllib import urlopen
-from util import smart_str, parse_updated_time, berkeley_db, write_file, html2xml, just_body, tidy2xhtml
+from util import smart_str, parse_updated_time, our_db, write_file, html2xml, just_body, tidy2xhtml
 import templates
 import dateutil.parser
 
@@ -38,7 +38,7 @@ def serialize_feedparse(parse_object):
 class Planet():
    def __init__(self, *args, **kwargs):
       if 'direc' in kwargs:
-         with berkeley_db('planets') as db:
+         with our_db('planets') as db:
             self.load_json(db[kwargs['direc']])
       elif isinstance(args[0], basestring):
          self.load_json(args[0])
@@ -81,8 +81,9 @@ class Planet():
       self.load_dict(json.loads(j, strict=False))
 
    def save_cache(self, cache, url):
-      with berkeley_db('cache') as db:
-         db[url] = json.dumps(cache, sort_keys=True, indent=3)
+      with our_db('cache') as db:
+         j = json.dumps(cache, sort_keys=True, indent=3)
+         db[url.encode("utf-8")] = j
 
    def save(self, update_config_timestamp=False, ignore_missing_dir=False):
       output_dir = os.path.join(cfg.OUTPUT_DIR, self.direc)
@@ -93,8 +94,8 @@ class Planet():
       log.debug("Saving the planet! %s" %  self.direc)
       if update_config_timestamp:
          self.last_config_change = time.time()
-      with berkeley_db('planets') as db:
-         db[self.direc] = self.json()
+      with our_db('planets') as db:
+         db[self.direc.encode("utf-8")] = self.json()
 
    def serializable(self):
       return {'direc':self.direc,
@@ -114,9 +115,9 @@ class Planet():
       """Download feed if it's out of date"""
 
       force_check = opt['force_check']
-      with berkeley_db('cache') as db:
+      with our_db('cache') as db:
          try:
-            cache = json.loads(db[url])
+            cache = json.loads(db[url.encode("utf-8")])
          except KeyError:
             log.info("Can't find %s in cache.  Making default." % url)
             cache = {'data':'', 'last_downloaded':0, 'dload_fail':False}
@@ -140,7 +141,7 @@ class Planet():
 
       if parsed and parsed.entries: cache['data'] = parsed
       cache['last_downloaded'] = time.time()
-      with berkeley_db('cache') as db:
+      with our_db('cache') as db:
          try:
             db[url] = json.dumps(cache, default=to_json, sort_keys=True, indent=3)
          except TypeError, e:
@@ -182,11 +183,11 @@ class Planet():
       entries = {}
       lopt['Feeds']=[]
       for url, f in self.feeds.items():
-         with berkeley_db('cache') as db:
-            if not url in db:
+         with our_db('cache') as db:
+            if not url.encode("utf-8") in db:
                continue
             try:
-               cache = json.loads(db[url])
+               cache = json.loads(db[url.encode("utf-8")])
             except json.decoder.JSONDecodeError, e:
                log.debug("Json error on generating url %s: %s" % (url, e))
                continue
@@ -291,7 +292,7 @@ class Planet():
    def delete_if_missing(self):
       output_dir = os.path.join(cfg.OUTPUT_DIR, self.direc)
       if not os.path.exists(output_dir):
-         with berkeley_db('planets') as db:
+         with our_db('planets') as db:
             del db[self.direc]
          log.info("Deleted missing planet: %s" % self.direc)
 
@@ -301,7 +302,7 @@ class Planet():
    def dump_cache(self):
       for url in self.feeds:
          print url
-         with berkeley_db('cache') as db:
+         with our_db('cache') as db:
             cache = db[url]
          try:
             cache = json.loads(cache)

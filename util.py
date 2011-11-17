@@ -7,7 +7,7 @@ Released under AGPL, version 3 or later <http://www.fsf.org/licensing/licenses/a
 Utility functions
 """
 
-import os, sys, dbm, time
+import os, sys, dbm, time, shelve
 import htmltmpl # Debian package python-htmltmpl
 import config as cfg
 from config import opt
@@ -39,6 +39,15 @@ def just_body(xhtml):
       return str(xhtml).split(' <body>')[1].split(' </body>')[0]
    except IndexError:
       return ''
+
+class our_db:
+   def __init__(self, fname):
+      self.fname = fname + ".shelf"
+   def __enter__(self):
+      self.db = shelve.open(os.path.join(cfg.data_dir, self.fname), 'c', writeback=False)
+      return self.db
+   def __exit__(self, type, value, traceback):
+      self.db.close()
 
 class berkeley_db:
    def __init__(self, fname):

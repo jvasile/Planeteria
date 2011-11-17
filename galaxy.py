@@ -1,4 +1,4 @@
-from util import berkeley_db
+from util import our_db
 from planet import Planet
 
 class Galaxy(list):
@@ -15,9 +15,8 @@ class Galaxy(list):
       self.planets.append(planet)
 
    def load(self):
-      with berkeley_db('planets') as db:
+      with our_db('planets') as db:
          for k in db.keys():
-            print db[k]
             if not self.selected or k in self.selected:
                self.append(Planet(db[k]))
 
@@ -39,7 +38,7 @@ class Galaxy(list):
 
    def delete_unused_feeds(self):
       planets = []
-      with berkeley_db('planets') as db:
+      with our_db('planets') as db:
          for k in db.keys():
             planets.append(Planet(db[k]))
 
@@ -49,7 +48,7 @@ class Galaxy(list):
             feed_urls[f] = f
 
       feed_urls = feed_urls.keys()
-      with berkeley_db('cache') as db:
+      with our_db('cache') as db:
          for k in db.keys():
             if not k in feed_urls:
                del db[k]

@@ -60,27 +60,6 @@ def parse_options():
    sys.exit()
 
 if __name__ == "__main__":
-
-   import shelve
-
-   from util import berkeley_db
-
-   SH = shelve.open(os.path.join(cfg.data_dir, "cache.shelf"), 'c')
-   with berkeley_db('cache') as db:
-      for k in db.keys():
-         print k
-         SH[k] = db[k]
-   SH.close()
-
-   SH = shelve.open(os.path.join(cfg.data_dir, "planets.shelf"), 'c')
-   with berkeley_db('planets') as db:
-      for k in db.keys():
-         print k
-         SH[k] = db[k]
-   SH.close()
-   
-
-   sys.exit()
    parse_options()
 
    print "Options parsed."
