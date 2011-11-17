@@ -405,7 +405,7 @@ class Snippet(HTML_Template):
             else:
                s += ' (<a href="%s">blog</a>)' % (o['escaped_link']) + '\n'
          else:
-            print "|%s|" % o['name']
+            #print "|%s|" % o['name']
             s += o['content_encoded']+'\n'
       return s
 
