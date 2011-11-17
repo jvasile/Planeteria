@@ -17,6 +17,7 @@ class Galaxy(list):
    def load(self):
       with berkeley_db('planets') as db:
          for k in db.keys():
+            print db[k]
             if not self.selected or k in self.selected:
                self.append(Planet(db[k]))
 

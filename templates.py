@@ -368,8 +368,6 @@ class Snippet(HTML_Template):
                o['escaped_'+e] = self.escape(o[e])
             except KeyError:
                o['escaped_'+e] = ''
-
-         
          if o['escaped_channel_title_plain'].startswith("Twitter /"):
             c = '<p>'+o['content_encoded'].split( o['escaped_channel_title_plain'].split(' / ')[1] )[1][2:]
             c = re.sub("(https?://[^ <]*)", r'<a href="\1">\1</a>', c)

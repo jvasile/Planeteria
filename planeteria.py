@@ -61,8 +61,29 @@ def parse_options():
 
 if __name__ == "__main__":
 
+   import shelve
+
+   from util import berkeley_db
+
+   SH = shelve.open(os.path.join(cfg.data_dir, "cache.shelf"), 'c')
+   with berkeley_db('cache') as db:
+      for k in db.keys():
+         print k
+         SH[k] = db[k]
+   SH.close()
+
+   SH = shelve.open(os.path.join(cfg.data_dir, "planets.shelf"), 'c')
+   with berkeley_db('planets') as db:
+      for k in db.keys():
+         print k
+         SH[k] = db[k]
+   SH.close()
+   
+
+   sys.exit()
    parse_options()
 
+   print "Options parsed."
    import templates
    for p,t in {'copyright':templates.Copyright,
                'thanks':templates.Thanks,
@@ -72,6 +93,7 @@ if __name__ == "__main__":
       t(opt).write(cfg.OUTPUT_DIR, "%s.html" % p)
    galaxy = Galaxy(planets)
    galaxy.load()
+   print "Galaxies loaded"
    #galaxy.dump()
    if not opt['no_update']:
       galaxy.update()
