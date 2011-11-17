@@ -143,7 +143,7 @@ class Planet():
       cache['last_downloaded'] = time.time()
       with our_db('cache') as db:
          try:
-            db[url] = json.dumps(cache, default=to_json, sort_keys=True, indent=3)
+            db[url.encode("utf8")] = json.dumps(cache, default=to_json, sort_keys=True, indent=3)
          except TypeError, e:
             log.debug("Can't save feed (%s): %s" % (url, e))
             cache['error'] = str(e)
