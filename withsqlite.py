@@ -3,6 +3,20 @@
 import os, sys, sqlite3
 import simplejson as json
 
+def to_json(python_object):
+   if isinstance(python_object, time.struct_time):
+      return {'__class__': 'time.asctime',
+              '__value__': time.asctime(python_object)}
+
+   #if isinstance(python_object, feedparser.CharacterEncodingOverride):
+   #   return {'__class__': 'basestring',
+   #           '__value__': str(python_object)}
+
+   return {'__class__': 'basestring',
+           '__value__': str(python_object)}
+
+   #raise TypeError(repr(python_object) + ' is not JSON serializable')
+
 class sqlite_db():
    """
 Backends a dict on an sqlite db.  This class aims to present like a
