@@ -14,6 +14,7 @@ from config import opt
 import logging
 log = logging.getLogger('planeteria')
 import dateutil.parser
+import withsqlite
 
 try:
    import tidy
@@ -40,7 +41,11 @@ def just_body(xhtml):
    except IndexError:
       return ''
 
-class our_db:
+class sqlite_db(withsqlite.sqlite_db):
+   def __init__(self, fname):
+      withsqlite.sqlite_db.__init__(self, os.path.join(cfg.data_dir, fname))
+
+class shelve_db:
    def __init__(self, fname):
       self.fname = fname + ".shelf"
    def __enter__(self):
@@ -48,6 +53,9 @@ class our_db:
       return self.db
    def __exit__(self, type, value, traceback):
       self.db.close()
+
+class our_db(sqlite_db):
+   pass
 
 class berkeley_db:
    def __init__(self, fname):

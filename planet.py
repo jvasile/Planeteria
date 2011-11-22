@@ -32,14 +32,11 @@ def to_json(python_object):
 
    #raise TypeError(repr(python_object) + ' is not JSON serializable')
 
-def serialize_feedparse(parse_object):
-   return json.dumps(parse_object, default=to_json)
-
 class Planet():
    def __init__(self, *args, **kwargs):
       if 'direc' in kwargs:
          with our_db('planets') as db:
-            self.load_json(db[kwargs['direc']])
+            self.load_dict(db[kwargs['direc']])
       elif isinstance(args[0], basestring):
          self.load_json(args[0])
       elif isinstance(args[0], dict):
@@ -82,8 +79,8 @@ class Planet():
 
    def save_cache(self, cache, url):
       with our_db('cache') as db:
-         j = json.dumps(cache, sort_keys=True, indent=3)
-         db[url.encode("utf-8")] = j
+         #db[url.encode("utf-8")] = cache
+         db[url] = cache
 
    def save(self, update_config_timestamp=False, ignore_missing_dir=False):
       output_dir = os.path.join(cfg.OUTPUT_DIR, self.direc)
@@ -95,7 +92,8 @@ class Planet():
       if update_config_timestamp:
          self.last_config_change = time.time()
       with our_db('planets') as db:
-         db[self.direc.encode("utf-8")] = self.json()
+         #db[self.direc.encode("utf-8")] = self.serializable()
+         db[self.direc] = self.serializable()
 
    def serializable(self):
       return {'direc':self.direc,
@@ -117,7 +115,8 @@ class Planet():
       force_check = opt['force_check']
       with our_db('cache') as db:
          try:
-            cache = json.loads(db[url.encode("utf-8")])
+            #cache = db[url.encode("utf-8")]
+            cache = db[url]
          except KeyError:
             log.info("Can't find %s in cache.  Making default." % url)
             cache = {'data':'', 'last_downloaded':0, 'dload_fail':False}
@@ -143,7 +142,8 @@ class Planet():
       cache['last_downloaded'] = time.time()
       with our_db('cache') as db:
          try:
-            db[url.encode("utf8")] = json.dumps(cache, default=to_json, sort_keys=True, indent=3)
+            #db[url.encode("utf8")] = cache
+            db[url] = cache
          except TypeError, e:
             log.debug("Can't save feed (%s): %s" % (url, e))
             cache['error'] = str(e)
@@ -184,10 +184,11 @@ class Planet():
       lopt['Feeds']=[]
       for url, f in self.feeds.items():
          with our_db('cache') as db:
-            if not url.encode("utf-8") in db:
+            if not url in db:
                continue
             try:
-               cache = json.loads(db[url.encode("utf-8")])
+               #cache = db[url.encode("utf-8")]
+               cache = db[url]
             except json.decoder.JSONDecodeError, e:
                log.debug("Json error on generating url %s: %s" % (url, e))
                continue
@@ -304,10 +305,6 @@ class Planet():
          print url
          with our_db('cache') as db:
             cache = db[url]
-         try:
-            cache = json.loads(cache)
-         except json.decoder.JSONDecodeError:
-            return
          
          print json.dumps(cache)
 
