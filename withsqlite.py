@@ -1,6 +1,6 @@
 #!/usr/bin/env python 
 
-import os, sys, sqlite3
+import os, sys, sqlite3, time
 import simplejson as json
 
 def to_json(python_object):
@@ -35,9 +35,6 @@ serialize it, you can't put it in the dict.
 
 Unimplemented mapping API:
 a.copy() 	a (shallow) copy of a 	
-k in a 	True if a has a key k, else False
-k not in a 	Equivalent to not k in a
-a.has_key(k) 	Equivalent to k in a, use that form in new code 	
 a.update([b]) 	updates a with key/value pairs from b, overwriting existing keys, returns None 
 a.fromkeys(seq[, value]) 	Creates a new dictionary with keys from seq and values set to value 
 a.setdefault(k[, x]) 	a[k] if k in a, else x (also setting it)
@@ -72,7 +69,7 @@ a.itervalues() 	return an iterator over the mapping's values
       "If it's just a string, serialize it ourselves"
       if isinstance(val, basestring):
          return '"%s"' % val
-      return json.dumps(val, sort_keys=True, indent=3)
+      return json.dumps(val, default=to_json, sort_keys=True, indent=3)
    def __setitem__(self, key, val):
       """a[k] = v 	set a[k] to v 	"""
 
@@ -90,6 +87,13 @@ a.itervalues() 	return an iterator over the mapping's values
       except TypeError:
          raise KeyError, key
       return json.loads(f)
+   def __contains__(self, key):
+      """k in a 	True if a has a key k, else False
+         k not in a 	Equivalent to not k in a"""
+      self.crsr.execute("select COUNT(*) from store where key=?", [key])
+      return self.crsr.fetchone()[0] != 0
+   def has_key(self, key):
+      return self.__contains__(key)
    def __len__(self):
       """len(a) 	the number of items in a"""
       self.crsr.execute("select COUNT(*) from store")
@@ -133,3 +137,6 @@ if __name__=="__main__":
       print db.get('b',5)
       print db.get('b')
       print db.get('c',5)
+      print 'as' in db
+      print 'asdf' not in db
+      print db.has_key('as')
