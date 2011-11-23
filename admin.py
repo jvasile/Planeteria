@@ -144,7 +144,7 @@ def update_config(planet):
          del planet.feeds[url]
       else:
          if not url in planet.feeds:
-            t = {'url':url, 
+            t = {'feedurl':url, 
                  'name':Form.getvalue('name%d' % feed_count, '').strip(), 
                  'image':Form.getvalue('image%d' % feed_count, '').strip()}
             planet.feeds[url] = t

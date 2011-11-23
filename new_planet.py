@@ -63,7 +63,7 @@ def make_planet(subdir):
                'user':'',
                'email':'',
                'password':'passme',
-               'feeds':{'http://hackervisions.org/?feed=rss2':{'image':'http://www.softwarefreedom.org/img/staff/vasile.jpg','name':'James Vasile', 'url':'http://hackervisions.org/?feed=rss2'}}
+               'feeds':{'http://hackervisions.org/?feed=rss2':{'image':'http://www.softwarefreedom.org/img/staff/vasile.jpg','name':'James Vasile', 'feedurl':'http://hackervisions.org/?feed=rss2'}}
                })
     
    p.save()
