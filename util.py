@@ -136,6 +136,8 @@ def interpolate(template, vals):
 def lxml_tidy(instr):
    from lxml import etree
    tree   = etree.HTML(instr.replace('\r', ''))
+   if not tree:
+      return ''
    output_text = '\n'.join([ etree.tostring(stree, pretty_print=True, method="xml") 
                              for stree in tree ])
    return str(output_text)

@@ -251,10 +251,15 @@ class Planet():
                               key=parse_updated_time)
 
       for e in sorted_entries[:50]:
+         print "!"
          if not 'content' in e:
             e['content_encoded'] = strip_body_tags(html2xml(tidy2xhtml(e['summary'])).strip())
-         else:
+         elif e['content'][0]['value']:
             e['content_encoded'] = strip_body_tags(html2xml(tidy2xhtml(e['content'][0]['value'])).strip())
+         else:
+            e['summary_encoded'] = 'N/A'
+            e['content_encoded'] = 'N/A'
+            continue
 
          if not 'summary' in e:
             e['summary'] = e['content'][0]['value']
@@ -289,10 +294,10 @@ class Planet():
 
          if url:
             if url in self.feeds:
-               self.feeds[url]['url'] = url
+               self.feeds[url]['feedurl'] = url
                if name: self.feeds[url]['name'] = name
             else:
-               self.feeds[url]={'url':url, 'name':name, 'image':''}
+               self.feeds[url]={'feedurl':url, 'name':name, 'image':''}
 
    def delete_if_missing(self):
       output_dir = os.path.join(cfg.OUTPUT_DIR, self.direc)
