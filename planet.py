@@ -251,7 +251,6 @@ class Planet():
                               key=parse_updated_time)
 
       for e in sorted_entries[:50]:
-         print "!"
          if not 'content' in e:
             e['content_encoded'] = strip_body_tags(html2xml(tidy2xhtml(e['summary'])).strip())
          elif e['content'][0]['value']:
