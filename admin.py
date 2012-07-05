@@ -184,7 +184,7 @@ def main():
    import cgitb
    cgitb.enable()
 
-   opt['planet_subdir'] = 'wfs'
+#   opt['planet_subdir'] = 'wfs'
 
    global Form
    Form = cgi.FieldStorage()
