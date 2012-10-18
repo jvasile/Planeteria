@@ -385,10 +385,13 @@ class Snippet(HTML_Template):
                c = bq.string
             else:
                bq = soup.find("div", { "class" : "message" })
-               if bq.string:
-                  c = bq.string
+               if bq:
+                  if bq.string:
+                     c = bq.string
+                  else:
+                     c = bq
                else:
-                  c = bq
+                  c=""
 
             s += '<p><a href="%s">%s</a>: %s</p>' % (o['escaped_link'], o['escaped_title'].split(' ',1)[1], c)
          elif o['name'] == "Blog":
