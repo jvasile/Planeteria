@@ -25,6 +25,14 @@ except KeyError:
 
 generated=[]
 
+def pretty_print_dict (d, indent=0):
+   for key, value in d.iteritems():
+      print '\t' * indent + str(key)
+      if isinstance(value, dict):
+         pretty_print_dict(value, indent+1)
+      else:
+         print '\t' * (indent+1) + str(value)
+
 def html2xml(ins):
    'replace all the html entities with xml equivs'
    ins = str(ins).replace("&nbsp;", "&#160;")
@@ -136,7 +144,7 @@ def interpolate(template, vals):
 def lxml_tidy(instr):
    from lxml import etree
    tree   = etree.HTML(instr.replace('\r', ''))
-   if not tree:
+   if tree is None: #not tree:
       return ''
    output_text = '\n'.join([ etree.tostring(stree, pretty_print=True, method="xml") 
                              for stree in tree ])
