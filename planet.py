@@ -214,13 +214,18 @@ class Planet():
             else:
                e['channel_link'] = e['feed_id'] = parsed['feed']['link']+'/'
 
-            try:
+            if 'updated' in e:
                e['date'] = dateutil.parser.parse(e['updated']).strftime("%Y-%m-%d %H:%M:%S")
                e['updated'] = dateutil.parser.parse(e['updated']).isoformat()
-            except KeyError:
+            elif 'published_parsed' in e:
+               e['date'] = dateutil.parser.parse(e['published_parsed']['__value__']).strftime("%Y-%m-%d %H:%M:%S")
+               e['updated'] = dateutil.parser.parse(e['published_parsed']['__value__']).isoformat()
+            else:
                e['date'] = e['updated'] = '1970-01-01T00:00:00Z'
-               log.debug("No updated field in entry for %s" % url)
-
+               # We really should assume the blog post is from when it is first seen for lack of a better option
+               #e['date'] = e['updated'] = datetime.now().strftime("%Y-%m-%dT%H:00Z")
+               log.debug("No updated or date field in entry for %s" % url)
+               #pretty_print_dict(e)
             if not 'id' in e: e['id'] = e['link']
             if not 'link' in e: e['link'] = e['id']
             if not e['id'] and not e['link']:
