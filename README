@@ -21,7 +21,8 @@ Add a line to your crontab:
 Planeteria depends on some libraries.  On my Debian box, I can get them all with this:
 
      aptitude install python-feedparser python-utidylib python-simplejson \
-     python-beautifulsoup python-lxml
+     python-beautifulsoup python-lxml python-htmltmpl python-dateutil
+
 
 
 ### Set base href
