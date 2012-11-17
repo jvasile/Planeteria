@@ -119,6 +119,34 @@ class HTML_Template(Template):
       it. That's the whole point of community-building!</p>
   </div>
 """
+   def render_contact_box(self):
+      i = self.interpolate
+      owner = email = None
+      if 'owner_name' in i:
+         owner = '%(owner_name)s'  % i
+      if 'owner_email' in i:
+         email = '%(owner_email)s'  % i
+         email = email.replace('@', " AT ").replace('.', " DOT ")
+      if not owner and not email:
+         return ''
+
+      s = '<div class = "entry">\n   <div class="entrytitle">Contact</div>\n<p>Want to see your blog on this planet?  '
+
+      if owner:
+         s += "It's maintained by %s" % owner
+         if email:
+            s += " (%s).  Get in touch and let them know you want to join!" % email
+         else:
+            s += ".  If you know how to reach this person, let them know you want to join the planet!"
+      else:
+         if email:
+            s += "Contact the planet's maintainer at %s and let them know you want to join!" % email
+         else:
+            s += "If you know how to reach the maintainer of this planet, get in touch and let them know you want to join!"
+         
+      s += "</p>\n</div>"
+      return s
+
    def render_donations(self):
       return """
   <div class = "entry">
@@ -293,6 +321,7 @@ class Planet_Page(HTML_Template):
       o['rendered_items'] = self.items()
       o['rendered_feeds'] = self.render_feeds()
       o['rendered_donations'] = self.render_donations()
+      o['rendered_contact'] = self.render_contact_box()
       s="""<div id="left">
 
 <!-- BEGIN FEEDS -->
@@ -310,6 +339,7 @@ class Planet_Page(HTML_Template):
       </ul>
    </div>
 
+   %(rendered_contact)s
    %(rendered_donations)s
    %(rendered_sidebar)s
 

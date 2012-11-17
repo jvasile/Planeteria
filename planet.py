@@ -168,8 +168,8 @@ class Planet():
          log.info("Can't find %s directory.  Skipping generate." % output_dir)
          return
       print "Generating %s" % output_dir
-
       lopt = {'owner_name':self.user,
+              'owner_email':self.email,
               'title':self.name,
               'feed_url':"%s%s/atom.xml" % (cfg.BASE_HREF, self.direc),
               'opml_url':"%s%s/opml.xml" % (cfg.BASE_HREF, self.direc),
