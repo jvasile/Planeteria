@@ -13,7 +13,7 @@ if os.path.exists(BASE_HREF_FILE):
     if not BASE_HREF.endswith('/'):
         BASE_HREF += '/'
 else:
-    BASE_HREF = "/"
+    BASE_HREF = "//"
 
 CACHE_FILE = os.path.join(data_dir, "cache.db")
 PLANETS_FILE = os.path.join(data_dir, "planets.db")
