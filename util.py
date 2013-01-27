@@ -22,6 +22,8 @@ except KeyError:
    if not 'PATH' in os.environ:
       os.environ['PATH'] = ''
       import tidy
+except (OSError, ImportError):
+   import tidylib as tidy
 
 generated=[]
 
