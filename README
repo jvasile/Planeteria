@@ -14,7 +14,7 @@ Make sure your web server can read/execute everything and that it can write to `
 
 Add a line to your crontab:
 
-     15 * * * * cd /path/to/planeteria; ./generator.py
+     15 * * * * cd /path/to/planeteria; ./planeteria.py
 
 ### Dependencies
 
