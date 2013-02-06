@@ -3,10 +3,17 @@
 
 ## About Planeteria
 
-Planets are ...
-Planeteria.org is a hosted planet reader. 
-[copy text from site about where the code comes from]
-Created by James Vasile (james@hackervisions.net) in 2010 [check the date]
+A _planet_ is a collection of posts from many different blogs, all somewhat related to one topic. It's a great way to keep tabs on a subject, a community, a technology, a team, a project or anything else that attracts a diverse range of bloggers.
+
+Planeteria.org is a hosted planet reader. Planeteria allows anyone to make a planet, host it and administer it on Planeteria.org. After you make your planet, tell people about it. That's the whole point of community-building!
+
+## Planeteria code
+
+This is a free open source project licensed under the [AGPLv3 license](http://www.fsf.org/licensing/licenses/agpl-3.0.html).
+
+Created by James Vasile (james at hackervisions dot net) in 2010. In 2013, OPW intern Aleta Dunne (aleta dot dunne at gmail dot com) took on fixing some of these hacks. 
+
+Please let us know about bugs on the [Github issue tracker](https://github.com/jvasile/Planeteria/issues). 
 
 
 ## Installation
@@ -56,7 +63,7 @@ Note that without running it on a virtual server, form submission won't work, so
 Run ```planeteria.py``` which should generate the html files for the site and place them in the ```/www``` folder.  Then open ```/www/index.html``` in a browser window.
 
 
-### Running the site on an Apache server
+### Running the site on an Apache server virtual host
 
 The site requires sqlite3.
 
@@ -74,16 +81,16 @@ Make sure that the Planeteria directory is accessible by the web server (read/ex
 
 *For those setting up a virtual host on a Mac, [this site](http://www.456bereastreet.com/archive/201104/apache_with_virtual_hosts_php_and_ssi_on_mac_os_x_106/) walks you through the process in more detail than described below.* 
 
-If you are setting up a virtual host, in your /etc/hosts file, add a new line underneath ```127.0.0.1 localhost``` that says 
+In your /etc/hosts file, add a new line underneath ```127.0.0.1 localhost``` that says 
 
     127.0.0.1 planeteria.local
 
-In your httpd.conf file, make sure it points to the /extra/httpd-vhosts.conf file like so:
+In your httpd.conf file, make sure it points to the /extra/httpd-vhosts.conf file like below.  Verify the file path!
 
     # Virtual hosts
     Include /private/etc/apache2/extra/httpd-vhosts.conf
 
-(The second line is usually commented out.)
+(The second line is commented out by default.)
 
 In your ```/extra/httpd-vhosts.conf``` file, add the following settings:
 
@@ -110,7 +117,7 @@ Once your settings are saved, reboot the server and follow the directions above 
 
 ### Set base href
 
-You need to tell Planeteria what domain and directory it lives in by creating a ```data/base_href``` file with the domain.  It must start with ```http://```.  On the server which runs the site, that file contains ```http://planeteria.org```.  On Aleta's virtual server, the file contains ```http://planeteria.local``` which just adds http:// to the server name used in her ```/etc/hosts``` file.  
+You need to tell Planeteria what domain and directory it lives in by creating a ```data/base_href``` file with the domain.  It must start with ```http://```.  On the server which runs the site, that file contains ```http://planeteria.org```.  On Aleta's virtual host, the file contains ```http://planeteria.local``` which just adds http:// to the server name used in her ```/etc/hosts``` file.  
 
 ### Automatic updates
 
