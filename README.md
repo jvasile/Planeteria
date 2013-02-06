@@ -85,7 +85,7 @@ In your httpd.conf file, make sure it points to the /extra/httpd-vhosts.conf fil
 
 (The second line is usually commented out.)
 
-In your '''/extra/httpd-vhosts.conf''' file, add the following settings:
+In your ```/extra/httpd-vhosts.conf``` file, add the following settings:
 
     <VirtualHost *:80>
         ServerName  planeteria.local (it should match the server name in your /etc/hosts file)
