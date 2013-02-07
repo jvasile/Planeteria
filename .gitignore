@@ -3,7 +3,9 @@
 *.pyc
 *.tmplc
 *~
-data/*.db
-www/*.html
+data
+www
 templates/*.html
 *.log
+.DS_Store
+env
