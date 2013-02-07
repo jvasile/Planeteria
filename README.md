@@ -7,13 +7,17 @@ A _planet_ is a collection of posts from many different blogs, all somewhat rela
 
 Planeteria.org is a hosted planet reader. Planeteria allows anyone to make a planet, host it and administer it on Planeteria.org. After you make your planet, tell people about it. That's the whole point of community-building!
 
-## Planeteria code
+Planeteria was created by James Vasile (james at hackervisions dot net) in 2010 and has been maintained in his copious spare time since its creation.
+
+## About Planeteria's code
 
 This is a free open source project licensed under the [AGPLv3 license](http://www.fsf.org/licensing/licenses/agpl-3.0.html).
 
-Created by James Vasile (james at hackervisions dot net) in 2010. In 2013, OPW intern Aleta Dunne (aleta dot dunne at gmail dot com) took on fixing some of these hacks. 
+This software was originally built on [Venus](http://intertwingly.net/code/venus/). Venus is great if you're only running one planet, I highly recommend it.  However trying to scale up the code for a single planet to make one system do many planets proved to be tricky, so those dependencies were discarded for more flexibility. The code is less robust as a result and could use some love.
 
-Please let us know about bugs on the [Github issue tracker](https://github.com/jvasile/Planeteria/issues). 
+In 2013, Aleta Dunne (aleta dot dunne at gmail dot com) took on fixing up the site as an internship project for the [GNOME Outreach Program for Women (OPW)](http://live.gnome.org/OutreachProgramForWomen).  We always welcome more help, though!
+
+Please let us know about bugs on the [Github issue tracker](https://github.com/jvasile/Planeteria/issues), or submit a patch!
 
 
 ## Installation
@@ -28,7 +32,7 @@ Planeteria is compatible with Python versions 2.3 - 2.7.
 
 ### Dependencies
 
-Planeteria depends on some libraries.  Follow the instructions for your OS below.  We've only tested the installation on Debian and Mac OS X so far; we welcome any contributors who would like to help develop installation instructions for other operating systems. 
+Planeteria depends on several libraries.  Follow the instructions for your OS below.  We've only tested the installation on Debian and Mac OS X so far; we welcome any contributors who would like to help develop installation instructions for other operating systems. 
 
 We recommend installing these in a virtual environment (virtualenv) to avoid conflicts with dependencies for other projects run on the same machine. To learn more about installing and using ```virtualenv```, go to [http://www.virtualenv.org/en/latest/](http://www.virtualenv.org/en/latest/)
 
@@ -58,7 +62,7 @@ which installs tidy.
 
 
 ### Loading the site on your machine
-Note that without running it on a virtual server, form submission won't work, so you won't be able to create or administer a planet, however you can view the homepage just fine.
+Note that without running it on an Apache server, form submission won't work, so you won't be able to create or administer a planet, however you can view the static pages just fine.
 
 Run ```planeteria.py``` which should generate the html files for the site and place them in the ```/www``` folder.  Then open ```/www/index.html``` in a browser window.
 
@@ -92,7 +96,7 @@ In your httpd.conf file, make sure it points to the /extra/httpd-vhosts.conf fil
 
 (The second line is commented out by default.)
 
-In your ```/extra/httpd-vhosts.conf``` file, add the following settings:
+In your /extra/httpd-vhosts.conf file, add the following settings:
 
     <VirtualHost *:80>
         ServerName  planeteria.local (it should match the server name in your /etc/hosts file)
@@ -111,13 +115,13 @@ In your ```/extra/httpd-vhosts.conf``` file, add the following settings:
         AddHandler cgi-script cgi py pl
     </Directory>
 
-Make sure to replace ```/path/to/Planeteria``` with the full file path to the location of the cloned Planeteria repo. Be especially attentive to the trailing slashes and quotation marks around the file paths, they may vary from machine to machine and can make the difference of whether the server can find the root directory or not.  
+Make sure to replace /path/to/Planeteria with the full file path to the location of the cloned Planeteria repo. Be especially attentive to the trailing slashes and quotation marks around the file paths, they may vary from machine to machine and can make the difference of whether the server can find the root directory or not.  
 
 Once your settings are saved, reboot the server and follow the directions above to load the site.
 
 ### Set base href
 
-You need to tell Planeteria what domain and directory it lives in by creating a ```data/base_href``` file with the domain.  It must start with ```http://```.  On the server which runs the site, that file contains ```http://planeteria.org```.  On Aleta's virtual host, the file contains ```http://planeteria.local``` which just adds http:// to the server name used in her ```/etc/hosts``` file.  
+You need to tell Planeteria what domain and directory it lives in by creating a ```data/base_href``` file with the domain.  It must start with ```http://```.  On the server which runs the site, that file contains ```http://planeteria.org```.  On Aleta's virtual host, the base_href file contains ```http://planeteria.local``` which just adds http:// to the server name used in her ```/etc/hosts``` file.  
 
 ### Automatic updates
 
