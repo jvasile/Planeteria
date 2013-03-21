@@ -11,8 +11,11 @@ dedicate to Planeteria.
 ## IN PROGRESS
 
 Website Redesign with Twitter Bootstrap
-	•	The redesign will modernize the code with HTML5 & jQuery, make the site friendly to mobile devices (responsive design), and make minor improvements to the UI and sitemap.
-	•	New feed tagging feature will allow planet readers to read the blogs in the feed that interest them most.
+ * The redesign will modernize the code with HTML5 & jQuery, make the
+   site friendly to mobile devices (responsive design), and make minor
+   improvements to the UI and sitemap.
+ * New feed tagging feature will allow planet readers to read the
+   blogs in the feed that interest them most.
 
 Addressing various bugs relating to proper parsing of feeds so that
 they display correctly.  These are documented in the Github issue
@@ -28,7 +31,7 @@ Community-building around the project and individual planets
    the feed to make it useful and relevant to readers.
  * Create spaces for discussion about Planeteria.
     - Planeteria mailing list will be set up very soon for an archived
-      discussion space.   
+      discussion space.
     - Currently, much of the discussion about Planeteria happens on
     #opw channel on irc.gnome.org where @aleta can often be
     found.  This is a useful tool for real-time conversations and
