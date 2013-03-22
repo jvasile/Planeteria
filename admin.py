@@ -119,6 +119,20 @@ def template_vars(planet, config):
 ##  Config.ini Stuff
  ##
 ############################
+
+# Helper function to prevent duplicate key values for new feeds.
+def good_field(x):
+   """Forms sometimes have duplicate fields; when they do, it turns into an array.
+   Error cases always had a blank string and a real string. 
+   This function returns the real string. """
+   if isinstance(x,str): 
+      return x
+   else:
+      for value in x:
+         if len(value) > 1:
+            return value
+
+# Main function for config.ini
 def update_config(planet):
    """Grab new values from the form and stick them in config.
    Modifies config in place.  Does not save to file."""
@@ -134,26 +148,25 @@ def update_config(planet):
 
    urls_seen = []
    while (Form.has_key('section%d' % feed_count)):
-      url = Form.getvalue('feedurl%d' % feed_count,'').strip()
+      url = good_field(Form.getvalue('feedurl%d' % feed_count,'')).strip()
       urls_seen.append(url)
       if not url:
          err("Ignoring feed with no url specified.")
          feed_count += 1;
          continue
-      if Form.getvalue('delete%d' % feed_count) == '1':
+      if good_field(Form.getvalue('delete%d' % feed_count)) == '1':
          del planet.feeds[url]
       else:
          if not url in planet.feeds:
             t = {'feedurl':url, 
-                 'name':Form.getvalue('name%d' % feed_count, '').strip(), 
+                 'name':good_field(Form.getvalue('name%d' % feed_count, '').strip()),
                  'image':Form.getvalue('image%d' % feed_count, '').strip()}
             planet.feeds[url] = t
          else:
             # Copy the values from the form into planet
             for field in form_field:
-               planet.feeds[url][field] = Form.getvalue('%s%d' % (field, feed_count),'').strip()
-               log.debug(str(type(Form.getvalue('%s%d' % (field, feed_count),''))))
-
+               planet.feeds[url][field] = good_field(Form.getvalue('%s%d' % (field, feed_count),'')).strip()
+               log.debug(str(type(good_field(Form.getvalue('%s%d' % (field, feed_count),'')))))
       feed_count += 1;
 
    # handle edited url
