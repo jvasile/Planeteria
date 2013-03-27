@@ -53,6 +53,9 @@ opt={'website_name':"Planeteria",
 
 #opt.update(locals())
 
+if not os.path.exists(opt['log_dir']):
+    os.mkdir(opt['log_dir'])
+
 import logging
 logger = logging.getLogger('planeteria')
 logger.setLevel(logging.DEBUG)
