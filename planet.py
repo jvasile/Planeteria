@@ -271,7 +271,7 @@ class Planet():
 
          
       lopt['Items'] = sorted_entries[:50]
-      mopt = dict(lopt.items()+opt.items() + self.__dict__.items())
+      mopt = dict(opt.items()+lopt.items() + self.__dict__.items()) 
 
       # generate pages
       templates.OPML(mopt).write(output_dir, "opml.xml")
