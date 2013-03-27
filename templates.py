@@ -222,7 +222,7 @@ class HTML_Template(Template):
       <div id="footer-outer">
          <div id="footer-bottom">
       <p><a href="thanks.html">Thanks</a> | <a href="contact.html">Contact</a> | <a href="copyright.html">Copyright</a> | <a href="tos.html">Terms of Use</a></p>
-      <p>You can have the <a href="copyright.html">code</a> to this page under the terms of the <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">AGPLv3</a>.</p>
+      <p>You can have the <a href="https://github.com/jvasile/Planeteria">code</a> to this page under the terms of the <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">AGPLv3</a>.</p>
    </div></div></div>
 
 </div> <!-- end wrap -->
