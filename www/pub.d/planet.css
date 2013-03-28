@@ -182,6 +182,8 @@ img.face {
 	float: left;
         margin-left: 2em;
         margin-right: 2em;
+	max-height: 150px;
+	max-width: 150px;
 }
 
 tr.face0 td {
