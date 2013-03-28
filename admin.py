@@ -214,7 +214,7 @@ def main():
          err("Admin page has expired!  Perhaps somebody else is " +
              "editing this planet at the same time as you?  Please " +
              "reload this page and try again.")
-         if debug: err("%s != %s" % (Form.getvalue('Timestamp'), planet.last_config_change))
+         #if debug: err("%s != %s" % (Form.getvalue('Timestamp'), planet.last_config_change))
       elif Form.getvalue('Pass','') == '':
          err("Please enter your password at the bottom of the page.")
       elif Form.getvalue('Pass') != orig_pass:
