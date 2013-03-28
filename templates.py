@@ -750,12 +750,12 @@ class Admin(HTML_Template):
       s = ''
       for o in self.interpolate['Feeds']:
          if 'image' in o and o['image']:
-            o['rendered_image'] = '<img src="%(image)s" width="%(facewidth)s" height="%(faceheight)s" alt="" />\n' % o
+            o['rendered_image'] = '<img class="face" src="%(image)s" width="%(facewidth)s" height="%(faceheight)s" alt="" />\n' % o
          else:
-            o['rendered_image'] = '<img src="/pub.d/images/silhouette2.png" />\n'
+            o['rendered_image'] = '<img class="face" src="/pub.d/images/silhouette2.png" />\n'
          s += """
 		<tr class="%(row_class)s" id="feed_row%(idx)s">
-                  <td style="vertical-align:middle">
+                  <td style="vertical-align:middle" class="entrytitleauthor">
                       %(rendered_image)s
                   </td>
 		  <td style="text-align:left">
