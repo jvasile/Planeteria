@@ -8,7 +8,6 @@ Utility functions
 """
 
 import os, sys, dbm, time, shelve
-import htmltmpl # Debian package python-htmltmpl
 import config as cfg
 from config import opt
 import logging
@@ -120,28 +119,6 @@ def write_add(output_dir, output_fname, contents):
    """Do a write_file and add to list of generated files"""
    write_file(output_dir, output_fname, contents)
    generated.append(os.path.join(output_dir, output_fname))
-
-def interpolate(template, vals):
-   "apply the keys and values in vals to template, return filled-in template"
-   try:
-      print template_vars['base_href']
-   except:
-      pass
-
-   manager = htmltmpl.TemplateManager()
-   template = manager.prepare(template)
-   tp = htmltmpl.TemplateProcessor(html_escape=0)
-   for key in vals:
-      try:
-         if isinstance(vals[key], basestring):
-            tp.set(key, smart_str(vals[key], encoding='ascii', errors='ignore'))
-         elif vals[key]:
-            tp.set(key, vals[key])
-
-      except:
-         pass
-   return tp.process(template)
-
 
 def lxml_tidy(instr):
    from lxml import etree
