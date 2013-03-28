@@ -32,16 +32,6 @@ def template_vars(subdir="", form_vals={}):
    return doc
 
 def validate_input(subdir):
-   """
->>> validate_input("good_name")
-True
->>> validate_input("http://planeteria.org/ICannotFollowDirections")
-False
->>> validate_input("planet name should not have spaces")
-False
->>> validate_input("planet_name_shouldn't_have_an_apostrophe")
-False
-"""
 
    if subdir == "":
       return False
@@ -108,8 +98,4 @@ def main():
    print templates.Main_Page(doc).render().encode('utf-8', 'ignore')
 
 if __name__ == "__main__":
-   if len(sys.argv) > 1 and sys.argv[1]=="test":
-      import doctest
-      doctest.testmod()
-   else:
-      main()
+   main()
