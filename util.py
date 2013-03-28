@@ -1,7 +1,7 @@
 #!/usr/bin/python
 """
-Planeteria admin interface
-Copyright 2009 James Vasile <james@hackervisions.org>
+Planeteria util functions
+Copyright 2009-2013 James Vasile <james@hackervisions.org>
 Released under AGPL, version 3 or later <http://www.fsf.org/licensing/licenses/agpl-3.0.html>
 
 Utility functions
