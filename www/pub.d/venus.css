@@ -77,8 +77,8 @@ img.face {
         float: left;
 	padding-right: 1em;
 	padding-bottom: 1em;
-	max-height: 150px;
-	max-width: 150px;
+	max-height: 8em;
+	max-width: 8em;
 }
 
 tr.face0 td {
