@@ -17,10 +17,7 @@ if os.path.exists(BASE_HREF_FILE):
 else:
     BASE_HREF = "/"
 
-CACHE_FILE = os.path.join(data_dir, "cache.db")
-PLANETS_FILE = os.path.join(data_dir, "planets.db")
 OUTPUT_DIR = os.path.join(base_dir, "www")
-TEMPLATE_DIR = os.path.join(base_dir, "templates")
 VERSION = "2.1.0"
 DATA_FORMAT_VERSION = "0.1.0"
 MAX_ENTRIES = 100
@@ -34,8 +31,7 @@ opt={'website_name':"Planeteria",
      'generator':"Planeteria %s" % VERSION,
      'generator_uri':"http://planeteria.org/copyright.html",
      'force_check': False,
-     'template_dir':TEMPLATE_DIR,
-     'new_planet_dir':os.path.join(TEMPLATE_DIR, "new_planet"),
+     'new_planet_dir':os.path.join(base_dir, "new_planet_skel"),
      'base_dir':base_dir,
      'log_dir':os.path.join(base_dir, "log"),
      'base_href':BASE_HREF,
@@ -43,7 +39,6 @@ opt={'website_name':"Planeteria",
      'domain':BASE_HREF.split("//")[1],
      'data_dir':data_dir,
      'output_dir':OUTPUT_DIR,
-     'template_dir':TEMPLATE_DIR,
      'check_interval':CHECK_INTERVAL,
      'version':VERSION,
      'data_format_version':DATA_FORMAT_VERSION,

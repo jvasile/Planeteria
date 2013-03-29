@@ -31,7 +31,6 @@ if __name__ == "__main__":
    global debug
    debug = True
    opt['planet_subdir'] = opt['planet_dir'].split(os.sep)[-1]
-   opt['template_fname'] = os.path.join(opt['template_dir'], 'admin.tmpl')
    output_dir = opt['planet_dir']
 
 #######################
