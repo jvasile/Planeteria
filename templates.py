@@ -33,9 +33,9 @@ class OPML(XML_Template):
       s = ''
       for f in self.interpolate['Feeds']:
          g = {}
-         for field in ['title', 'author', 'url']:
+         for field in ['title', 'author', 'url', 'image']:
             g['e'+field] = self.escape(f[field])
-         s += """    <outline type="rss" text="%(eauthor)s" title="%(etitle)s" xmlUrl="%(eurl)s" />\n""" % g
+         s += """    <outline type="rss" text="%(eauthor)s" title="%(etitle)s" xmlUrl="%(eurl)s" imageUrl="%(eimage)s"/>\n""" % g
       return s
 
    def _render(self):
