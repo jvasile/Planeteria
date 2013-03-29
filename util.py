@@ -42,14 +42,6 @@ def html2xml(ins):
 def parse_updated_time(entry):
    return str(entry['updated'])
    
-def just_body(xhtml):
-   #print xhtml
-   #sys.exit()
-   try:
-      return str(xhtml).split(' <body>')[1].split(' </body>')[0]
-   except IndexError:
-      return ''
-
 class sqlite_db(withsqlite.sqlite_db):
    def __init__(self, fname):
       withsqlite.sqlite_db.__init__(self, os.path.join(cfg.data_dir, fname))
@@ -103,10 +95,10 @@ def merge_dict(a, b):
       else: a[k] = b[k]
    return a
 
-def dict_val(dict, key):
-   "Returns dict[key], but if key isn't present, returns a blank string"
+def dict_val(dic, key):
+   "Returns dic[key], but if key isn't present, returns a blank string"
    try:
-      return dict[key]
+      return dic[key]
    except KeyError:
       return ''
 
@@ -120,12 +112,22 @@ def write_add(output_dir, output_fname, contents):
    write_file(output_dir, output_fname, contents)
    generated.append(os.path.join(output_dir, output_fname))
 
+def strip_body_tags(text):
+   text = text.strip()
+   if text.startswith('<body>'):
+      text =  text[6:]
+   if text.endswith('</body>'):
+      text = text[:-7]
+   return text.strip()
+
 def lxml_tidy(instr):
    from lxml import etree
-   tree   = etree.HTML(instr.replace('\r', ''))
-   if tree is None: #not tree:
+   if instr == "":
       return ''
-   output_text = '\n'.join([ etree.tostring(stree, pretty_print=True, method="xml") 
+   tree  = etree.HTML(instr.replace('\r', ''))
+   if tree is None:
+      return ''
+   output_text = '\n'.join([ etree.tostring(stree, pretty_print=True, method="html") 
                              for stree in tree ])
    return str(output_text)
 
@@ -136,6 +138,17 @@ def soup_tidy(instr):
    return str(good_html)
 
 def html_tidy(instr):
+   """We can't really use this because html_tidy pukes on unknown tags
+   and rss feeds contain all kinds of crazy stuff.
+
+   Maybe we could play with force_output=1 and figure out which tags
+   are odd and then add them to new-blocklevel-tags, new-empty-tags,
+   new-inline-tags, and new-pre-tags, but that would be a ton of iffy
+   work.
+
+   And we don't really need tidy html, do we?
+   """
+   return "Don't use html_tidy."
    options = dict(output_xhtml=1,
                   add_xml_decl=0,
                   indent=1,
@@ -146,9 +159,9 @@ def html_tidy(instr):
 
 def tidy2xhtml(instr):
    if not instr:
-      return lxml_tidy(html_tidy(instr))
-   return lxml_tidy(instr) #html_tidy(instr))
-   return soup_tidy(lxml_tidy(html_tidy(instr)))
+      return ''
+   return lxml_tidy(instr)
+   #return soup_tidy(lxml_tidy(html_tidy(instr)))
 
 
 class Msg:
