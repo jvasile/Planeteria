@@ -33,9 +33,9 @@ class OPML(XML_Template):
       s = ''
       for f in self.interpolate['Feeds']:
          g = {}
-         for field in ['title', 'author', 'url']:
+         for field in ['title', 'author', 'url', 'image']:
             g['e'+field] = self.escape(f[field])
-         s += """    <outline type="rss" text="%(eauthor)s" title="%(etitle)s" xmlUrl="%(eurl)s" />\n""" % g
+         s += """    <outline type="rss" text="%(eauthor)s" title="%(etitle)s" xmlUrl="%(eurl)s" imageUrl="%(eimage)s"/>\n""" % g
       return s
 
    def _render(self):
@@ -222,7 +222,7 @@ class HTML_Template(Template):
       <div id="footer-outer">
          <div id="footer-bottom">
       <p><a href="thanks.html">Thanks</a> | <a href="contact.html">Contact</a> | <a href="copyright.html">Copyright</a> | <a href="tos.html">Terms of Use</a></p>
-      <p>You can have the <a href="copyright.html">code</a> to this page under the terms of the <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">AGPLv3</a>.</p>
+      <p>You can have the <a href="https://github.com/jvasile/Planeteria">code</a> to this page under the terms of the <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">AGPLv3</a>.</p>
    </div></div></div>
 
 </div> <!-- end wrap -->
@@ -280,7 +280,7 @@ class Planet_Page(HTML_Template):
          <div class="entrytitle" %(rendered_title_language)s>
             <div class="entrytitleauthor"><a href="%(escaped_channel_link)s" title="%(escaped_channel_title_plain)s">%(name)s </a></div><br />
          %(rendered_image)s
-            <a href="%(escaped_link)s">%(escaped_title)s</a> 
+            <a href="%(escaped_link)s">%(title)s</a> 
         </div>
 
          <div class="content"%(rendered_content_language)s>
@@ -750,12 +750,12 @@ class Admin(HTML_Template):
       s = ''
       for o in self.interpolate['Feeds']:
          if 'image' in o and o['image']:
-            o['rendered_image'] = '<img src="%(image)s" width="%(facewidth)s" height="%(faceheight)s" alt="" />\n' % o
+            o['rendered_image'] = '<img class="face" src="%(image)s" width="%(facewidth)s" height="%(faceheight)s" alt="" />\n' % o
          else:
-            o['rendered_image'] = '<img src="/pub.d/images/silhouette2.png" />\n'
+            o['rendered_image'] = '<img class="face" src="/pub.d/images/silhouette2.png" />\n'
          s += """
 		<tr class="%(row_class)s" id="feed_row%(idx)s">
-                  <td style="vertical-align:middle">
+                  <td style="vertical-align:middle" class="entrytitleauthor">
                       %(rendered_image)s
                   </td>
 		  <td style="text-align:left">

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
-Planeteria admin interface
+Planeteria new planet interface
 Copyright 2009 James Vasile <james@hackervisions.org>
 Released under AGPL, version 3 or later <http://www.fsf.org/licensing/licenses/agpl-3.0.html>
 
@@ -40,7 +40,7 @@ def validate_input(subdir):
 
    if re.search('\\W', subdir):
       err.add("Subdirectory can only contain letters, numbers and underscores.")
-      valie = False
+      valid = False
 
    return valid
 

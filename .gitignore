@@ -4,8 +4,12 @@
 *.tmplc
 *~
 data
-www
 templates/*.html
 *.log
 .DS_Store
 env
+
+# ignore www but not the pub.d dir
+/www/*
+!/www/pub.d/
+!/www/pub.d/*

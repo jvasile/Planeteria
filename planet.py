@@ -4,7 +4,10 @@ from config import opt
 import logging
 log = logging.getLogger('planeteria')
 import feedparser
-import simplejson as json
+try:
+   import simplejson as json
+except ImportError:
+   import json
 from urllib import urlopen
 from util import smart_str, parse_updated_time, our_db, write_file, html2xml, just_body, tidy2xhtml
 import templates
@@ -271,7 +274,7 @@ class Planet():
 
          
       lopt['Items'] = sorted_entries[:50]
-      mopt = dict(lopt.items()+opt.items() + self.__dict__.items())
+      mopt = dict(opt.items()+lopt.items() + self.__dict__.items()) 
 
       # generate pages
       templates.OPML(mopt).write(output_dir, "opml.xml")
