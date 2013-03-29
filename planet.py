@@ -4,7 +4,10 @@ from config import opt
 import logging
 log = logging.getLogger('planeteria')
 import feedparser
-import simplejson as json
+try:
+   import simplejson as json
+except ImportError:
+   import json
 from urllib import urlopen
 from util import smart_str, parse_updated_time, our_db, write_file, html2xml, just_body, tidy2xhtml
 import templates
