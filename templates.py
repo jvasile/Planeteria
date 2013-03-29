@@ -176,7 +176,7 @@ class HTML_Template(Template):
          s += '     <meta name="description" content="Admin interface for a planet blog aggregator" />\n'
 
       s += """   <meta name="license" content="Various.  See source blogs for individual posts." />
-   <meta name="generator" content="%(generator)s">
+   <meta name="generator" content="%(generator)s" />
    <meta name="keywords" content="Planet, admin, metaplanet, hackervisions, blog, aggregator" />
    <meta name="robots" content="index, follow, noarchive" />
    <meta name="googlebot" content="noarchive" />
