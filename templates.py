@@ -474,14 +474,15 @@ class Copyright(HTML_Template):
     But now that I have running code, I'll clean it up slowly.  Please
     <a href="https://github.com/jvasile/Planeteria/issues">let me know
     about bugs</a>.  Soon the code will be available from this page.
-    But until I get around to it, there's always github:
+    But until I get around to it, there's always GitHub:
 
     <blockquote>
     git clone git://github.com/jvasile/Planeteria.git
     </blockquote></p> 
 
     <p>Run generate.py in the root of that branch. See the <a
-    href="/readme.html">readme</a> for details.</p>
+    href="https://github.com/jvasile/Planeteria/blob/master/README">readme</a>
+    for details.</p>
 
     <p>A previous version of Planeteria was based on <a
     href="http://intertwingly.net/code/venus/">Venus</a>, which I
