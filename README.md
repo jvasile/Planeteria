@@ -44,7 +44,8 @@ tackle any of those!
 
 ## Installation
 
-Planeteria is compatible with Python versions 2.3 - 2.7.
+Planeteria is compatible with Python versions 2.3 - 2.7.  For an
+overview of its components, see `doc/overview.dia`.
 
 
 ### Grab the code from the master repo:
