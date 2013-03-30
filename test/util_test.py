@@ -21,12 +21,12 @@ class tidy2html_test(unittest.TestCase):
 
     def self_closing_tag_test(s):
         """Self-closing tags shouldn't be rendered as just <tag/>, except for <br/>.
-        See bug # 10"""
+        See bug # 10 and commit 9a9f67acfb336fead33a4808be5f7e29335a9d0f"""
         s.assertNotEqual(u.strip_body_tags(u.tidy2html("<i></i>")), '<i/>')
 
     def empty_tag_test(s):
         """Self-closing tags shouldn't be rendered as just <tag/>, except for <br/>.
-        See bug # 10"""
+        See bug # 10 and commit 9a9f67acfb336fead33a4808be5f7e29335a9d0f"""
         s.assertEqual(u.strip_body_tags(u.tidy2html("hey: <i> </i>")),
                     "<p>hey: <i> </i></p>")
 
