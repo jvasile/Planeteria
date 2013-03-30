@@ -157,7 +157,7 @@ def html_tidy(instr):
    tidied = tidy.parseString(instr, **options)
    return str(tidied)
 
-def tidy2xhtml(instr):
+def tidy2html(instr):
    if not instr:
       return ''
    return lxml_tidy(instr)
