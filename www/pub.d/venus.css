@@ -102,3 +102,6 @@ tr.face1 td {
     border: 0px;
     padding: 0px;
 }
+
+strong, b, strong *, b * { font-weight: bold !important; }
+em, i, em *, i * { font-style: italic !important; }
