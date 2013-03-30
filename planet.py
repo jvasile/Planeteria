@@ -9,7 +9,7 @@ try:
 except ImportError:
    import json
 from urllib import urlopen
-from util import smart_str, parse_updated_time, our_db, write_file, html2xml, tidy2xhtml
+from util import smart_str, parse_updated_time, our_db, write_file, html2xml
 import util as u
 import templates
 import dateutil.parser
@@ -254,9 +254,9 @@ class Planet():
 
       for e in sorted_entries[:50]:
          if not 'content' in e:
-            e['content_encoded'] = u.strip_body_tags(html2xml(tidy2xhtml(e['summary'])).strip())
+            e['content_encoded'] = u.strip_body_tags(html2xml(u.tidy2html(e['summary'])).strip())
          elif e['content'][0]['value']:
-            e['content_encoded'] = u.strip_body_tags(html2xml(tidy2xhtml(e['content'][0]['value'])).strip())
+            e['content_encoded'] = u.strip_body_tags(html2xml(u.tidy2html(e['content'][0]['value'])).strip())
          else:
             e['summary_encoded'] = 'N/A'
             e['content_encoded'] = 'N/A'
@@ -264,7 +264,7 @@ class Planet():
 
          if not 'summary' in e:
             e['summary'] = e['content'][0]['value']
-         e['summary_encoded'] = u.strip_body_tags(html2xml(tidy2xhtml(e['summary'])).strip())
+         e['summary_encoded'] = u.strip_body_tags(html2xml(u.tidy2html(e['summary'])).strip())
 
          
       lopt['Items'] = sorted_entries[:50]
