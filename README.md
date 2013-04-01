@@ -62,10 +62,24 @@ or submit a patch!
 We have a roadmap in ROADMAP.md, please feel ping us if you want to
 tackle any of those!
 
+### Unit Tests
+
 There are some tests in the `test` directory.  Run them from the main
 directory with `nosetests .` and you will see the start of some unit
 testing.  Please don't use the tests on a live, deployed install.
 They create and destroy test planets.
+
+The tests include tests of the web functionality and expect the site
+to live on planeteria.localhost.  To run those tests, you'll want to
+do be logged in as the same user that your apache instance runs under
+(try `sudo su www-data; bash`).  Otherwise, there is a permissions
+mismatch when the user running the tests tries to delete a file
+created by the web server and the 644 permissions prevent it.  If you
+get permission denied errors when running nosetests, this might be the
+problem.
+
+If you want to see the debug output while running nosetest, do `tail
+-f log/planeteria.log` in another screen or console.
 
 ## Installation
 
