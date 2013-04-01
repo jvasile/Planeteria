@@ -33,6 +33,10 @@ Options:
  * --delete-missing  delete planets from db if they are not in file system
  * --clean           remove missing planets, unused feeds
 
+The `--clean` flag doesn't remove old posts from the cache (just
+unused feeds), and it doesn't delete unused planets, but in a future
+version, it will.
+
 ## About Planeteria's code
 
 This is a free open source project licensed under the
@@ -221,6 +225,6 @@ often.  Planeteria.org runs it every 15 minutes.
 
 To set this up, add a line like this to your crontab:
 
-    15 * * * * cd /path/to/Planeteria; ./planeteria.py --delete-missing
+    15 * * * * cd /path/to/Planeteria; ./planeteria.py --clean
 
 Happy hacking!
