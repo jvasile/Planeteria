@@ -62,6 +62,11 @@ or submit a patch!
 We have a roadmap in ROADMAP.md, please feel ping us if you want to
 tackle any of those!
 
+There are some tests in the `test` directory.  Run them from the main
+directory with `nosetests .` and you will see the start of some unit
+testing.  Please don't use the tests on a live, deployed install.
+They create and destroy test planets.
+
 ## Installation
 
 Planeteria is compatible with Python versions 2.3 - 2.7.  For an
