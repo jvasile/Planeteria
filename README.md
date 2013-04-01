@@ -17,6 +17,22 @@ Planeteria was created by James Vasile (james at hackervisions dot
 net) in 2010 and has been maintained in his copious spare time since
 its creation.
 
+## Command Line Options to planeteria.py
+
+Planeteria is run as a command line tool (planeteria.py) and two CGI
+scripts (admin.py and new_planet.py).  The command line tool is used
+as follows:
+
+Usage: planeteria.py [options]
+
+Options:
+
+ * -h, --help        show this help message and exit
+ * --force           force downloading of cached upstream feeds
+ * --no-update       prevent downloading of upstream feeds
+ * --delete-missing  delete planets from db if they are not in file system
+ * --clean           remove missing planets, unused feeds
+
 ## About Planeteria's code
 
 This is a free open source project licensed under the
@@ -203,8 +219,8 @@ want to deploy the site on a server to run on its own, you will need
 to set up a cron job to run planeteria.py automatically every so
 often.  Planeteria.org runs it every 15 minutes.
 
-To set this up, add a line to your crontab:
+To set this up, add a line like this to your crontab:
 
-    15 * * * * cd /path/to/Planeteria; ./planeteria.py
+    15 * * * * cd /path/to/Planeteria; ./planeteria.py --delete-missing
 
 Happy hacking!
