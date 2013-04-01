@@ -11,8 +11,9 @@ for h in log.handlers:
 def run_twill_script(script):
     with open('test/twill.tmp', 'w') as OUTF:
         OUTF.write(script)
-    subprocess.call("twill-sh -q -u http://planeteria.localhost test/twill.tmp", shell=True)
+    ret = subprocess.call("twill-sh -q -u http://planeteria.localhost test/twill.tmp", shell=True)
     os.unlink('test/twill.tmp')
+    return ret
 
 def destroy_temp_planet(planet_name):
     galaxy = Galaxy([planet_name])
@@ -80,7 +81,7 @@ class make_planet_test(unittest.TestCase):
 
     @raises(BadSubdirNameError)
     def apostrophe_test(s):
-        name = "planet name should not have spaces"
+        name = "planet_name_shouldn't_have_an_apostrophe"
         make_temp_planet(name)
         destroy_temp_planet(name)
 
@@ -95,7 +96,6 @@ fv 1 turing yes
 fv 1 subdirectory twilltest
 submit 3
 code 200
-exit
 """
         run_twill_script(script)
 
@@ -109,6 +109,29 @@ exit
     def make_planet_test_skel_files(s):
         files = os.listdir(os.path.join(opt['output_dir'],"twilltest"))
         s.assertTrue('index.html' in files)
+
+    def try_bad_subdir(s, subdir):
+        script = """code 200
+showforms
+fv 1 turing yes
+fv 1 subdirectory %s
+submit 3
+code 200
+find "Subdirectory can only contain letters, numbers and underscores."
+""" % subdir
+        return run_twill_script(script)
+
+    def badchars_test(s):
+        name = "http://planeteria.org/ICannotFollowDirections"
+        s.assertEqual(s.try_bad_subdir(name), 0)
+
+    def spaces_test(s):
+        name = '"planet name should not have spaces"'
+        s.assertEqual(s.try_bad_subdir(name), 0)
+
+    def apostrophe_test(s):
+        name = "planet_name_shouldn't_have_an_apostrophe"
+        s.assertEqual(s.try_bad_subdir(name), 0)
     
     @classmethod
     def teardown_class(cls):
