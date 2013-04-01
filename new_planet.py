@@ -73,9 +73,6 @@ def make_planet(subdir):
    return True
 
     
-## Setup and globals
-VERSION = "0.1";
-
 def main():
    global Form
    Form = cgi.FieldStorage()
