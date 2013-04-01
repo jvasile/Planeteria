@@ -10,8 +10,9 @@ __authors__ = [ "James Vasile <james@hackervisions.org>"]
 __license__ = "AGPLv3"
 
 
-import os,sys,re
-import cgi, shutil
+import os,sys,re, shutil
+from util import our_db
+import cgi
 import cgitb
 cgitb.enable()
 
@@ -57,6 +58,11 @@ def make_planet(subdir, output_dir=None):
       output_dir = opt['output_dir']
 
    path = os.path.join(output_dir, subdir)
+   
+   with our_db('planets') as db:
+      if os.path.exists(path) and not subdir in db:
+         log.debug("Exists on disk but not in db, recreating from scratch")
+         shutil.rmtree(path)
 
    try:
       shutil.copytree(opt['new_planet_dir'], path, symlinks=True)
