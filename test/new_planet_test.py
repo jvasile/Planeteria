@@ -29,15 +29,20 @@ class make_planet_test(unittest.TestCase):
         nosetest = galaxy.get_planet_by_subdir("nosetest")
         if nosetest:
             nosetest.delete()
+        make_planet("nosetest")
 
     def make_planet_test(s):
-        make_planet("nosetest")
         s.assertTrue(os.path.exists(os.path.join(opt['output_dir'],"nosetest")))
-        
+
+    def make_planet_test_skel_links(s):
         files = os.listdir(os.path.join(opt['output_dir'],"nosetest"))
-        s.assertTrue('admin.py'  in files)
+        s.assertTrue('admin.py' in files and 'pub.d' in files)
         s.assertTrue('index.html' in files)
-        s.assertTrue('pub.d' in files)
+
+    def make_planet_test_skel_files(s):
+        files = os.listdir(os.path.join(opt['output_dir'],"nosetest"))
+        s.assertTrue('index.html' in files)
+
 
     @classmethod
     def teardown_class(cls):
