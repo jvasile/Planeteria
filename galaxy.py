@@ -1,5 +1,7 @@
 from util import our_db
 from planet import Planet
+import logging
+log = logging.getLogger('planeteria')
 
 class Galaxy(list):
    "A collection of planets"
