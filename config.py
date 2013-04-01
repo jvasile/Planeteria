@@ -55,6 +55,7 @@ import logging
 logger = logging.getLogger('planeteria')
 logger.setLevel(logging.DEBUG)
 fh = logging.FileHandler(os.path.join(opt['log_dir'], 'planeteria.log'), encoding = "UTF-8")
+fh.set_name("planeteria file logger")
 fh.setLevel(logging.DEBUG)
 fh_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 fh.setFormatter(fh_formatter)
@@ -63,6 +64,7 @@ logger.addHandler(fh)
 
 # create console handler with a higher log level
 ch = logging.StreamHandler()
+ch.set_name("planeteria console logger")
 ch.setLevel(logging.DEBUG)
 ch_formatter = logging.Formatter('%(levelname)s - %(message)s')
 ch.setFormatter(ch_formatter)
