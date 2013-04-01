@@ -1,6 +1,8 @@
+import unittest, copy
+from galaxy import Galaxy
 from new_planet import *
 
-class validate_input_test():
+class validate_input_test(unittest.TestCase):
     def usual_case_test(s):
         assert validate_input("good_name45")
 
@@ -12,3 +14,31 @@ class validate_input_test():
 
     def apostrophe_test(s):
         assert not validate_input("planet_name_shouldn't_have_an_apostrophe")
+
+
+class make_planet_test(unittest.TestCase):
+    @classmethod
+    def setup_class(cls):
+        galaxy = Galaxy(['nosetest'])
+        galaxy.load()
+        nosetest = galaxy.get_planet_by_subdir("nosetest")
+        if nosetest:
+            nosetest.delete()
+
+    def make_planet_test(s):
+        make_planet("nosetest")
+        s.assertTrue(os.path.exists(os.path.join(opt['output_dir'],"nosetest")))
+        
+        files = os.listdir(os.path.join(opt['output_dir'],"nosetest"))
+        s.assertTrue('admin.py'  in files)
+        s.assertTrue('index.html' in files)
+        s.assertTrue('pub.d' in files)
+
+    @classmethod
+    def teardown_class(cls):
+        galaxy = Galaxy(['nosetest'])
+        galaxy.load()
+        nosetest = galaxy.get_planet_by_subdir("nosetest")
+        if nosetest:
+            nosetest.delete()
+        
