@@ -245,8 +245,9 @@ class Planet():
          feed_data = {}
 
          # Default these to the feed itself
-         feed_data['url'] = f['feedurl']
-         feed_data['link'] = f['feedurl']
+         if 'feedurl' in f:
+            feed_data['url'] = f['feedurl']
+            feed_data['link'] = f['feedurl']
 
          for l in e['links']:
             if not 'type' in l:
