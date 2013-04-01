@@ -2,6 +2,11 @@ import unittest, copy
 from galaxy import Galaxy
 from new_planet import *
 
+## Remove console logger to avoid clutter (see planeteria log instead)
+for h in log.handlers:
+    if h.get_name() == "planeteria console logger":
+        log.removeHandler(h)
+
 class validate_input_test(unittest.TestCase):
     def usual_case_test(s):
         assert validate_input("good_name45")
