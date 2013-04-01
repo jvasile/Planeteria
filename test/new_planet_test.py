@@ -114,7 +114,7 @@ code 200
         script = """code 200
 showforms
 fv 1 turing yes
-fv 1 subdirectory %s
+fv 1 subdirectory "%s"
 submit 3
 code 200
 find "Subdirectory can only contain letters, numbers and underscores."
@@ -126,7 +126,7 @@ find "Subdirectory can only contain letters, numbers and underscores."
         s.assertEqual(s.try_bad_subdir(name), 0)
 
     def spaces_test(s):
-        name = '"planet name should not have spaces"'
+        name = "planet name should not have spaces"
         s.assertEqual(s.try_bad_subdir(name), 0)
 
     def apostrophe_test(s):
