@@ -1,4 +1,4 @@
-import unittest, copy
+import unittest, subprocess
 from galaxy import Galaxy
 from new_planet import *
 from nose.tools import raises
@@ -7,6 +7,23 @@ from nose.tools import raises
 for h in log.handlers:
     if h.get_name() == "planeteria console logger":
         log.removeHandler(h)
+
+def run_twill_script(script):
+    with open('test/twill.tmp', 'w') as OUTF:
+        OUTF.write(script)
+    subprocess.call("twill-sh -q -u http://planeteria.localhost test/twill.tmp", shell=True)
+    os.unlink('test/twill.tmp')
+
+def destroy_temp_planet(planet_name):
+    galaxy = Galaxy([planet_name])
+    galaxy.load()
+    p = galaxy.get_planet_by_subdir(planet_name)
+    if p:
+        p.delete()
+
+def make_temp_planet(planet_name):
+    destroy_temp_planet(planet_name)
+    return make_planet(planet_name)
 
 class validate_input_test(unittest.TestCase):
     def usual_case_test(s):
@@ -23,49 +40,77 @@ class validate_input_test(unittest.TestCase):
 
 
 class make_planet_test(unittest.TestCase):
-    @classmethod
-    def setup_class(cls):
-        galaxy = Galaxy(['nosetest'])
-        galaxy.load()
-        nosetest = galaxy.get_planet_by_subdir("nosetest")
-        if nosetest:
-            nosetest.delete()
-        make_planet("nosetest")
-
     def make_planet_test(s):
+        make_temp_planet('nosetest')
         s.assertTrue(os.path.exists(os.path.join(opt['output_dir'],"nosetest")))
+        destroy_temp_planet('nosetest')
 
     def make_planet_test_skel_links(s):
+        make_temp_planet('nosetest')
         files = os.listdir(os.path.join(opt['output_dir'],"nosetest"))
+        s.assertTrue('admin.py' in files and 'pub.d' in files)
+        destroy_temp_planet('nosetest')
+
+    def make_planet_test_skel_files(s):
+        make_temp_planet('nosetest')
+        files = os.listdir(os.path.join(opt['output_dir'],"nosetest"))
+        s.assertTrue('index.html' in files)
+        destroy_temp_planet('nosetest')
+
+    def planet_exists_on_disk_but_not_in_db_test(s):
+        destroy_temp_planet('nosetest1')
+        path = os.path.join(opt['output_dir'],"nosetest1")
+        if os.path.exists(path):
+            shutil.rmtree(path)
+        os.mkdir(path)
+        s.assertTrue(make_temp_planet('nosetest1'))
+        destroy_temp_planet('nosetest1')
+
+    @raises(BadSubdirNameError)
+    def badchars_test(s):
+        name = "http://planeteria.org/ICannotFollowDirections"
+        make_temp_planet(name)
+        destroy_temp_planet(name)
+
+    @raises(BadSubdirNameError)
+    def spaces_test(s):
+        name = "planet name should not have spaces"
+        make_temp_planet(name)
+        destroy_temp_planet(name)
+
+    @raises(BadSubdirNameError)
+    def apostrophe_test(s):
+        name = "planet name should not have spaces"
+        make_temp_planet(name)
+        destroy_temp_planet(name)
+
+class make_planet_gui_test(unittest.TestCase):
+    @classmethod
+    def setup_class(cls):
+        destroy_temp_planet("twilltest")
+        # make twilltest planet via web interface
+        script = """code 200
+showforms
+fv 1 turing yes
+fv 1 subdirectory twilltest
+submit 3
+code 200
+exit
+"""
+        run_twill_script(script)
+
+    def make_planet_test(s):
+        s.assertTrue(os.path.exists(os.path.join(opt['output_dir'],"twilltest")))
+
+    def make_planet_test_skel_links(s):
+        files = os.listdir(os.path.join(opt['output_dir'],"twilltest"))
         s.assertTrue('admin.py' in files and 'pub.d' in files)
 
     def make_planet_test_skel_files(s):
-        files = os.listdir(os.path.join(opt['output_dir'],"nosetest"))
+        files = os.listdir(os.path.join(opt['output_dir'],"twilltest"))
         s.assertTrue('index.html' in files)
-
-    @raises(BadSubdirNameError)
-    def invalid_subdir_test(s):
-        subdir = "planet name should not have spaces"
-        galaxy = Galaxy([subdir])
-        galaxy.load()
-        p = galaxy.get_planet_by_subdir("nosetest")
-        if p:
-            p.delete()
-
-        make_planet(subdir)
-
-        galaxy = Galaxy(["planet name should not have spaces"])
-        galaxy.load()
-        p = galaxy.get_planet_by_subdir("nosetest")
-        if p:
-            p.delete()
-
-        
+    
     @classmethod
     def teardown_class(cls):
-        galaxy = Galaxy(['nosetest'])
-        galaxy.load()
-        nosetest = galaxy.get_planet_by_subdir("nosetest")
-        if nosetest:
-            nosetest.delete()
+        destroy_temp_planet("twilltest")
         
