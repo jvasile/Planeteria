@@ -112,7 +112,6 @@ class Planet():
       force_check = opt['force_check']
       with our_db('cache') as db:
          try:
-            #cache = db[url.encode("utf-8")]
             cache = db[url]
          except KeyError:
             log.info("Can't find %s in cache.  Making default." % url)
@@ -135,7 +134,11 @@ class Planet():
          self.save_cache(cache, url)
          return
 
-      if parsed and parsed.entries: cache['data'] = parsed
+      if parsed and parsed.entries:
+         if not parsed['feed']:
+            log.debug("HELP")
+         cache['data'] = parsed
+
       cache['last_downloaded'] = time.time()
       with our_db('cache') as db:
          try:
@@ -184,7 +187,6 @@ class Planet():
             if not url in db:
                continue
             try:
-               #cache = db[url.encode("utf-8")]
                cache = db[url]
             except json.decoder.JSONDecodeError, e:
                log.debug("Json error on generating url %s: %s" % (url, e))
@@ -197,8 +199,14 @@ class Planet():
          
          for e in parsed['entries']:
             e['name'] = f['name']
-            e['links'] = parsed['feed']['links']
-            e['feed_name'] = smart_str(parsed['feed']['title'], encoding='ascii', errors='ignore')
+            if 'links' in parsed['feed']:
+               e['links'] = parsed['feed']['links']
+            else:
+               e['links'] = []
+            if 'title' in parsed['feed']:
+               e['feed_name'] = smart_str(parsed['feed']['title'], encoding='ascii', errors='ignore')
+            else:
+               e['feed_name'] = f['name']
             e['channel_title_plain'] = e['feed_name']
             e['channel_image'] = f['image']
             e['channel_name'] = e['feed_name']
@@ -206,11 +214,13 @@ class Planet():
                e['subtitle'] = parsed['feed']['subtitle']
             else:
                e['subtitle']=''
-            if parsed['feed']['link'].endswith('/'):
-               e['channel_link'] = e['feed_id'] = parsed['feed']['link']
+            if 'link' in parsed['feed']:
+               if parsed['feed']['link'].endswith('/'):
+                  e['channel_link'] = e['feed_id'] = parsed['feed']['link']
+               else:
+                  e['channel_link'] = e['feed_id'] = parsed['feed']['link']+'/'
             else:
-               e['channel_link'] = e['feed_id'] = parsed['feed']['link']+'/'
-
+               e['channel_link'] = e['feed_id'] = f['feedurl']
             if 'updated' in e:
                e['date'] = dateutil.parser.parse(e['updated']).strftime("%Y-%m-%d %H:%M:%S")
                e['updated'] = dateutil.parser.parse(e['updated']).isoformat()
@@ -235,7 +245,12 @@ class Planet():
 
          ## OPML template stuff and sidebar stuff
          feed_data = {}
-         for l in parsed['feed']['links']:
+
+         # Default these to the feed itself
+         feed_data['url'] = f['feedurl']
+         feed_data['link'] = f['feedurl']
+
+         for l in e['links']:
             if not 'type' in l:
                l['type']='text/html'
             if l['rel']=="self":
@@ -244,7 +259,10 @@ class Planet():
                if 'href' in l:
                   feed_data['link'] = l['href']
          feed_data['author'] = f['name']
-         feed_data['title'] = smart_str(parsed['feed']['title'], encoding='ascii', errors='ignore')
+         if 'title' in parsed['feed']:
+            feed_data['title'] = smart_str(parsed['feed']['title'], encoding='ascii', errors='ignore')
+         else:
+            feed_data['title'] = f['name']
          feed_data['image'] = f['image']
          if 'feedurl' in f:
             feed_data['url'] = f['feedurl']
