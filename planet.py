@@ -135,8 +135,6 @@ class Planet():
          return
 
       if parsed and parsed.entries:
-         if not parsed['feed']:
-            log.debug("HELP")
          cache['data'] = parsed
 
       cache['last_downloaded'] = time.time()
