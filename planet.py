@@ -1,4 +1,4 @@
-import os, sys, time, shutil
+import os, sys, time, shutil, datetime
 import config as cfg
 from config import opt
 import logging
@@ -215,8 +215,12 @@ class Planet():
                e['date'] = dateutil.parser.parse(e['updated']).strftime("%Y-%m-%d %H:%M:%S")
                e['updated'] = dateutil.parser.parse(e['updated']).isoformat()
             elif 'published_parsed' in e:
-               e['date'] = dateutil.parser.parse(e['published_parsed']['__value__']).strftime("%Y-%m-%d %H:%M:%S")
-               e['updated'] = dateutil.parser.parse(e['published_parsed']['__value__']).isoformat()
+               if len(e['published_parsed']) == 9:
+                  e['date'] = time.strftime("%Y-%m-%d %H:%M:%S", e['published_parsed'])
+                  e['updated'] = datetime.date.fromtimestamp(time.mktime(e['published_parsed'])).isoformat()
+               else:
+                  e['date'] = dateutil.parser.parse(e['published_parsed']['__value__']).strftime("%Y-%m-%d %H:%M:%S")
+                  e['updated'] = dateutil.parser.parse(e['published_parsed']['__value__']).isoformat()
             else:
                e['date'] = e['updated'] = '1970-01-01T00:00:00Z'
                # We really should assume the blog post is from when it is first seen for lack of a better option
