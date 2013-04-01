@@ -59,3 +59,9 @@ class Galaxy(list):
    def delete_missing_planets(self):
       for p in self.planets:
          p.delete_if_missing()
+
+   def get_planet_by_subdir(self, subdir):
+      for p in self.planets:
+         if p.direc == subdir:
+            return p
+      return None
