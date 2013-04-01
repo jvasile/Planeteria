@@ -1,4 +1,4 @@
-import os, sys, time
+import os, sys, time, shutil
 import config as cfg
 from config import opt
 import logging
@@ -275,6 +275,17 @@ class Planet():
       templates.Atom(mopt).write(output_dir, "atom.xml")
       templates.Planet_Page(mopt).write(output_dir, "index.html")
       templates.Snippet(mopt).write(output_dir, "snippet.html")
+
+      for f in os.listdir(opt['new_planet_dir']):
+         if f == "index.html":
+            continue
+         src = os.path.join(opt['new_planet_dir'], f)
+         dst = os.path.join(output_dir, f)
+         if os.path.islink(src):
+            linkto = os.readlink(src)
+            os.symlink(linkto, dst)
+         else:
+            shutil.copy(src, dst)
 
    def del_feed(self, url):
       try:
