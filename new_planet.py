@@ -24,6 +24,9 @@ err=Msg(web=True)
 
 import templates
 
+class BadSubdirNameError(Exception):
+   pass
+
 def template_vars(subdir="", form_vals={}):
    "Returns a dict with the template vars in it"
    doc=dict(form_vals.items() + opt.items())
@@ -47,6 +50,9 @@ def validate_input(subdir):
    return valid
 
 def make_planet(subdir, output_dir=None):
+   if not validate_input(subdir):
+      raise BadSubdirNameError, subdir
+
    if not output_dir:
       output_dir = opt['output_dir']
 
