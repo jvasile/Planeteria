@@ -30,8 +30,8 @@ planets = []
 
 def parse_options():
    parser = OptionParser()
-   parser.add_option("", "--force", action="store_true", dest="force_update", help="force update of feeds", default=False),
-   parser.add_option("", "--no-update", action="store_true", dest="no_update", help="prevent feed updates", default=False),
+   parser.add_option("", "--force", action="store_true", dest="force_update", help="force downloading of cached upstream feeds", default=False),
+   parser.add_option("", "--no-update", action="store_true", dest="no_update", help="prevent downloading of upstream feeds", default=False),
    parser.add_option('', '--delete-missing', dest="delete_missing", help="delete planets from db if they are not in file system", action="store_true", default=False)
    parser.add_option('', '--clean', dest="clean", help="remove missing planets, unused feeds", action="store_true", default=False)
    (options, args) = parser.parse_args()
