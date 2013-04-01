@@ -333,12 +333,16 @@ class Planet():
             else:
                self.feeds[url]={'feedurl':url, 'name':name, 'image':''}
 
+   def delete(self):
+      with our_db('planets') as db:
+         del db[self.direc]
+      shutil.rmtree(os.path.join(cfg.OUTPUT_DIR, self.direc))
+      log.info("Deleted planet: %s" % self.direc)
+
    def delete_if_missing(self):
       output_dir = os.path.join(cfg.OUTPUT_DIR, self.direc)
       if not os.path.exists(output_dir):
-         with our_db('planets') as db:
-            del db[self.direc]
-         log.info("Deleted missing planet: %s" % self.direc)
+         self.delete()
 
    def dump(self):
       print self.json()
