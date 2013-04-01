@@ -43,7 +43,6 @@ class make_planet_test(unittest.TestCase):
         files = os.listdir(os.path.join(opt['output_dir'],"nosetest"))
         s.assertTrue('index.html' in files)
 
-
     @classmethod
     def teardown_class(cls):
         galaxy = Galaxy(['nosetest'])
