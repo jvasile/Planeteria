@@ -15,8 +15,10 @@ import cgi, shutil
 import cgitb
 cgitb.enable()
 
-from config import *
-log = logging.getLogger('planeteria')
+#from config import *
+import config as cfg
+from config import opt
+log = cfg.logging.getLogger('planeteria')
 from util import Msg
 err=Msg(web=True)
 
@@ -54,7 +56,9 @@ def make_planet(subdir, output_dir=None):
       shutil.copytree(opt['new_planet_dir'], path, symlinks=True)
    except(OSError), errstr:
       if os.path.exists(path):
-         err.add("%s already exists. Please choose another subdirectory name." % subdir)
+         msg = "%s planet already exists. Please choose another subdirectory name." % subdir
+         err.add(msg)
+         log.info(msg)
          return False
       err.add("Couldn't create planet: %s" % errstr)
       return False
@@ -72,6 +76,8 @@ def make_planet(subdir, output_dir=None):
    mopt = dict(opt.items()+p.__dict__.items())
 
    templates.Welcome(mopt).write(path, 'index.html')
+
+   log.info("Made planet: %s" % path)
    return True
 
     
