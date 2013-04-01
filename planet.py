@@ -281,11 +281,12 @@ class Planet():
             continue
          src = os.path.join(opt['new_planet_dir'], f)
          dst = os.path.join(output_dir, f)
-         if os.path.islink(src):
-            linkto = os.readlink(src)
-            os.symlink(linkto, dst)
-         else:
-            shutil.copy(src, dst)
+         if not os.path.exists(dst):
+            if os.path.islink(src):
+               linkto = os.readlink(src)
+               os.symlink(linkto, dst)
+            else:
+               shutil.copy(src, dst)
 
    def del_feed(self, url):
       try:
