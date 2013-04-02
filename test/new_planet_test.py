@@ -91,7 +91,6 @@ class make_planet_gui_test(unittest.TestCase):
         destroy_temp_planet("twilltest")
         # make twilltest planet via web interface
         script = """code 200
-showforms
 fv 1 turing yes
 fv 1 subdirectory twilltest
 submit 3
@@ -110,15 +109,16 @@ code 200
         files = os.listdir(os.path.join(opt['output_dir'],"twilltest"))
         s.assertTrue('index.html' in files)
 
-    def try_bad_subdir(s, subdir):
+    def try_bad_subdir(s, subdir, turing=True, msg=None):
+        if not msg:
+            msg = "Subdirectory can only contain letters, numbers and underscores."
         script = """code 200
-showforms
-fv 1 turing yes
+fv 1 turing %s
 fv 1 subdirectory "%s"
 submit 3
 code 200
-find "Subdirectory can only contain letters, numbers and underscores."
-""" % subdir
+find "%s"
+""" % ("yes" if turing else "no", subdir, msg)
         return run_twill_script(script)
 
     def badchars_test(s):
@@ -132,7 +132,11 @@ find "Subdirectory can only contain letters, numbers and underscores."
     def apostrophe_test(s):
         name = "planet_name_shouldn't_have_an_apostrophe"
         s.assertEqual(s.try_bad_subdir(name), 0)
-    
+
+    def turing_test(s):
+        name = "harmlessplanetname"
+        s.assertEqual(s.try_bad_subdir(name, turing=False, msg="sociopath"), 0)
+
     @classmethod
     def teardown_class(cls):
         destroy_temp_planet("twilltest")
