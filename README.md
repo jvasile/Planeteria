@@ -80,6 +80,9 @@ nosetests, this might be the problem.
 If you want to see the debug output while running nosetest, do `tail
 -f log/planeteria.log` in another screen or console.
 
+Once you have complete coverage of everything except util.py, any
+uncovered functions in util.py can be moved to util_unused.
+
 ## Installation
 
 Planeteria is compatible with Python versions 2.3 - 2.7.  For an
