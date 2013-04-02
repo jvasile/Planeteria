@@ -8,6 +8,7 @@ templates/*.html
 *.log
 .DS_Store
 env
+*.autosave
 
 # ignore www but not the pub.d dir
 /www/*
