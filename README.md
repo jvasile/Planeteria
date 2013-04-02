@@ -246,6 +246,6 @@ often.  Planeteria.org runs it every 15 minutes.
 
 To set this up, add a line like this to your crontab:
 
-    15 * * * * cd /path/to/Planeteria; ./planeteria.py --clean
+    15 * * * * cd /path/to/Planeteria; ./planeteria.py
 
 Happy hacking!
