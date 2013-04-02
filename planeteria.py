@@ -23,8 +23,10 @@ log = logging.getLogger('planeteria')
 from galaxy import Galaxy
 from planet import Planet
 
-if not os.path.exists(cfg.data_dir):
-   os.mkdir(cfg.data_dir)
+try:
+   os.makedirs(opt['data_dir'])
+except OSError:
+   pass
 
 planets = []
 
@@ -55,14 +57,11 @@ def parse_options():
       galaxy.load()
       galaxy.delete_missing_planets()
    else:
-      return
+      return True
 
-   sys.exit()
+   return False
 
-if __name__ == "__main__":
-   parse_options()
-
-   print "Options parsed."
+def main():
    import templates
    for p,t in {'copyright':templates.Copyright,
                'thanks':templates.Thanks,
@@ -73,8 +72,13 @@ if __name__ == "__main__":
    galaxy = Galaxy(planets)
    galaxy.load()
    print "Galaxies loaded"
-   #galaxy.dump()
    if not opt['no_update']:
       galaxy.update()
    galaxy.generate()
+
+if __name__ == "__main__":
+   if parse_options():
+      print "Options parsed."
+      main()
+
 
