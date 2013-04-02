@@ -289,6 +289,24 @@ class Planet():
 
          
       lopt['Items'] = sorted_entries[:50]
+
+      # now do it again for xml
+      for e in sorted_entries[:50]:
+         if not 'content' in e:
+            e['content_encoded'] = u.strip_body_tags(html2xml(u.tidy2html(e['summary'], xml=True)).strip())
+         elif e['content'][0]['value']:
+            e['content_encoded'] = u.strip_body_tags(html2xml(u.tidy2html(e['content'][0]['value'], xml=True)).strip())
+         else:
+            e['summary_encoded'] = 'N/A'
+            e['content_encoded'] = 'N/A'
+            continue
+
+         if not 'summary' in e:
+            e['summary'] = e['content'][0]['value']
+         e['summary_encoded'] = u.strip_body_tags(html2xml(u.tidy2html(e['summary'], xml=True)).strip())
+
+      lopt['ItemsXML'] = sorted_entries[:50]
+
       mopt = dict(opt.items()+lopt.items() + self.__dict__.items()) 
 
       # generate pages
