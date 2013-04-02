@@ -11,7 +11,7 @@ for h in log.handlers:
 def run_twill_script(script):
     with open('test/twill.tmp', 'w') as OUTF:
         OUTF.write(script)
-    ret = subprocess.call("twill-sh -q -u http://planeteria.localhost test/twill.tmp", shell=True)
+    ret = subprocess.call("twill-sh -q -u %s test/twill.tmp" % opt['base_href'], shell=True)
     os.unlink('test/twill.tmp')
     return ret
 
@@ -97,6 +97,9 @@ submit 3
 code 200
 """
         run_twill_script(script)
+
+    def base_href_test(s):
+        s.assertNotEqual(opt['base_href'], "/", "Must set base href to run gui tests.")
 
     def make_planet_test(s):
         s.assertTrue(os.path.exists(os.path.join(opt['output_dir'],"twilltest")))
