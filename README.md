@@ -69,14 +69,13 @@ directory with `nosetests .` and you will see the start of some unit
 testing.  Please don't use the tests on a live, deployed install.
 They create and destroy test planets.
 
-The tests include tests of the web functionality and expect the site
-to live on planeteria.localhost.  To run those tests, you'll want to
-do be logged in as the same user that your apache instance runs under
-(try `sudo su www-data; bash`).  Otherwise, there is a permissions
-mismatch when the user running the tests tries to delete a file
-created by the web server and the 644 permissions prevent it.  If you
-get permission denied errors when running nosetests, this might be the
-problem.
+The tests include tests of the web functionality.  To run those tests,
+you'll want to do be logged in as the same user that your apache
+instance runs under (try `sudo su www-data; bash`).  Otherwise, there
+is a permissions mismatch when the user running the tests tries to
+delete a file created by the web server and the 644 permissions
+prevent it.  If you get permission denied errors when running
+nosetests, this might be the problem.
 
 If you want to see the debug output while running nosetest, do `tail
 -f log/planeteria.log` in another screen or console.
@@ -111,11 +110,6 @@ window:
 
     aptitude install python-feedparser python-utidylib python-simplejson \
     python-beautifulsoup python-lxml python-htmltmpl python-dateutil
-    
-If you want to run the tests, you'll need to set base href (see below)
-and install `python-nose` and `python-twill` too:
-
-    aptitude install python-nose python-twill
 
 #### Package installation on Mac OS X
 
@@ -172,7 +166,7 @@ site and place them in the ```/www``` folder.  Then open
 The site requires sqlite3.
 
 
-#### Permissions
+### Permissions
 
 Make sure that the Planeteria directory is accessible by the web
 server (read/execute permission).  You also need to give the server
