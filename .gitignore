@@ -9,6 +9,7 @@ templates/*.html
 .DS_Store
 env
 *.autosave
+.noseids
 
 # ignore www but not the pub.d dir
 /www/*
