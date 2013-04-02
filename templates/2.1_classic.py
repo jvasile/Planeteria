@@ -78,7 +78,7 @@ class Atom(XML_Template):
 </feed>
 """ % o
    def items(self):
-      items = self.interpolate['Items']
+      items = self.interpolate['ItemsXML']
       s = ''
       for i in items:
          for k in ['title', 'subtitle']:

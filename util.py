@@ -120,14 +120,14 @@ def strip_body_tags(text):
       text = text[:-7]
    return text.strip()
 
-def lxml_tidy(instr):
+def lxml_tidy(instr, xml=False):
    from lxml import etree
    if instr == "":
       return ''
    tree  = etree.HTML(instr.replace('\r', ''))
    if tree is None:
       return ''
-   output_text = '\n'.join([ etree.tostring(stree, pretty_print=True, method="html") 
+   output_text = '\n'.join([ etree.tostring(stree, pretty_print=True, method= "xml" if xml else "html") 
                              for stree in tree ])
    return str(output_text)
 
@@ -157,10 +157,11 @@ def html_tidy(instr):
    tidied = tidy.parseString(instr, **options)
    return str(tidied)
 
-def tidy2html(instr):
+
+def tidy2html(instr, xml=False):
    if not instr:
       return ''
-   return lxml_tidy(instr)
+   return lxml_tidy(instr, xml)
    #return soup_tidy(lxml_tidy(html_tidy(instr)))
 
 
