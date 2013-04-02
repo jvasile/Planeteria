@@ -65,7 +65,7 @@ tackle any of those!
 ### Unit Tests
 
 There are some tests in the `test` directory.  Run them from the main
-directory with `nosetests .` and you will see the start of some unit
+directory with `test/nose.sh .` and you will see the start of some unit
 testing.  Please don't use the tests on a live, deployed install.
 They create and destroy test planets.
 
