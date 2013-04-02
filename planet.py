@@ -354,7 +354,10 @@ class Planet():
    def delete(self):
       with our_db('planets') as db:
          del db[self.direc]
-      shutil.rmtree(os.path.join(cfg.OUTPUT_DIR, self.direc))
+      try:
+         shutil.rmtree(os.path.join(cfg.OUTPUT_DIR, self.direc))
+      except OSError:
+         pass
       log.info("Deleted planet: %s" % self.direc)
 
    def delete_if_missing(self):
