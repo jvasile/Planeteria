@@ -327,6 +327,12 @@ class Planet():
             else:
                shutil.copy(src, dst)
 
+   def add_feed(self, url, name, image):
+      t = {'feedurl':url, 
+           'name':name,
+           'image':image}
+      self.feeds[url] = t
+
    def del_feed(self, url):
       try:
          del self.feeds[url]
