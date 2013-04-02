@@ -111,6 +111,11 @@ window:
 
     aptitude install python-feedparser python-utidylib python-simplejson \
     python-beautifulsoup python-lxml python-htmltmpl python-dateutil
+    
+If you want to run the tests, you'll need to set base href (see below)
+and install `python-nose` and `python-twill` too:
+
+    aptitude install python-nose python-twill
 
 #### Package installation on Mac OS X
 
@@ -167,7 +172,7 @@ site and place them in the ```/www``` folder.  Then open
 The site requires sqlite3.
 
 
-### Permissions
+#### Permissions
 
 Make sure that the Planeteria directory is accessible by the web
 server (read/execute permission).  You also need to give the server
