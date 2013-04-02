@@ -9,13 +9,12 @@ data_dir = os.path.join(base_dir, "data")
 BASE_HREF_FILE = os.path.join(data_dir, 'base_href')
 
 # TODO: improve error handling for local file setup.
+BASE_HREF = "/"
 if os.path.exists(BASE_HREF_FILE):
     with open (BASE_HREF_FILE, 'r') as FILE:
         BASE_HREF = FILE.readline().strip()
     if not BASE_HREF.endswith('/'):
         BASE_HREF += '/'
-else:
-    BASE_HREF = "/"
 
 OUTPUT_DIR = os.path.join(base_dir, "www")
 VERSION = "2.1.0"
@@ -48,8 +47,10 @@ opt={'website_name':"Planeteria",
 
 #opt.update(locals())
 
-if not os.path.exists(opt['log_dir']):
-    os.mkdir(opt['log_dir'])
+try:
+    os.makedirs(opt['log_dir'])
+except OSError:
+    pass
 
 import logging
 logger = logging.getLogger('planeteria')
