@@ -1,30 +1,52 @@
 import unittest, subprocess
-from galaxy import Galaxy
 from new_planet import *
 from nose.tools import raises
+from planet import Planet
 
 ## Remove console logger to avoid clutter (see planeteria log instead)
 for h in log.handlers:
     if h.get_name() == "planeteria console logger":
         log.removeHandler(h)
 
+
 def run_twill_script(script):
     with open('test/twill.tmp', 'w') as OUTF:
         OUTF.write(script)
+    #ret = subprocess.call("twill-sh -q -u http://planeteria.localhost test/twill.tmp", shell=True)
     ret = subprocess.call("twill-sh -q -u %s test/twill.tmp" % opt['base_href'], shell=True)
     os.unlink('test/twill.tmp')
     return ret
 
 def destroy_temp_planet(planet_name):
-    galaxy = Galaxy([planet_name])
-    galaxy.load()
-    p = galaxy.get_planet_by_subdir(planet_name)
-    if p:
+    try:
+        p = Planet(direc=planet_name)
+    except KeyError:
+        pass
+    else:
         p.delete()
 
-def make_temp_planet(planet_name):
+class base_href_test(unittest.TestCase):
+    def base_href_test(s):
+        s.assertNotEqual(opt['base_href'], "/", "Must set base href to run gui tests.")
+
+class PlanetCreationError(Exception):
+    pass
+
+def make_temp_planet(planet_name, get_planet=False, 
+                     name=None, user="Dr. Nose Test", email="noemail@example.com"):
     destroy_temp_planet(planet_name)
-    return make_planet(planet_name)
+    if not make_planet(planet_name, name=name, user=user, email=user):
+        if not get_planet:
+            return False
+        raise PlanetCreationError
+    if not get_planet:
+        return True
+    try:
+        p = Planet(direc=planet_name)
+    except KeyError:
+        raise PlanetCreationError
+    else:
+        return p
 
 class validate_input_test(unittest.TestCase):
     def usual_case_test(s):
@@ -98,9 +120,6 @@ code 200
 """
         run_twill_script(script)
 
-    def base_href_test(s):
-        s.assertNotEqual(opt['base_href'], "/", "Must set base href to run gui tests.")
-
     def make_planet_test(s):
         s.assertTrue(os.path.exists(os.path.join(opt['output_dir'],"twilltest")))
 
@@ -144,3 +163,4 @@ find "%s"
     def teardown_class(cls):
         destroy_temp_planet("twilltest")
         
+
