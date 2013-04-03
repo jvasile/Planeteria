@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	xmlns:georss="http://www.georss.org/georss" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:media="http://search.yahoo.com/mrss/"
+	>
+
+<channel>
+	<title>Whatever but Cool &#187; Parrot</title>
+	<atom:link href="http://ttjjss.wordpress.com/category/parrot/feed/" rel="self" type="application/rss+xml" />
+	<link>http://ttjjss.wordpress.com</link>
+	<description></description>
+	<lastBuildDate>Wed, 27 Mar 2013 11:56:42 +0000</lastBuildDate>
+	<language>en</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.com/</generator>
+<cloud domain='ttjjss.wordpress.com' port='80' path='/?rsscloud=notify' registerProcedure='' protocol='http-post' />
+<image>
+		<url>http://s2.wp.com/i/buttonw-com.png</url>
+		<title>Whatever but Cool &#187; Parrot</title>
+		<link>http://ttjjss.wordpress.com</link>
+	</image>
+	<atom:link rel="search" type="application/opensearchdescription+xml" href="http://ttjjss.wordpress.com/osd.xml" title="Whatever but Cool" />
+	<atom:link rel='hub' href='http://ttjjss.wordpress.com/?pushpress=hub'/>
+		<item>
+		<title>Presenting Parrot, not-Perl and Perl</title>
+		<link>http://ttjjss.wordpress.com/2010/12/18/presenting-parrot-not-perl-and-perl/</link>
+		<comments>http://ttjjss.wordpress.com/2010/12/18/presenting-parrot-not-perl-and-perl/#comments</comments>
+		<pubDate>Sat, 18 Dec 2010 15:15:12 +0000</pubDate>
+		<dc:creator>ttjjss</dc:creator>
+				<category><![CDATA[Parrot]]></category>
+		<category><![CDATA[Perl]]></category>
+
+		<guid isPermaLink="false">http://ttjjss.wordpress.com/?p=54</guid>
+		<description><![CDATA[I gave a talk about Parrot yesterday on a LUG meeting, probably the first one in Poland ever, as Parrot folks say. Slides are here (in Polish, and rather poor anyway – I was mainly speaking and showing the examples). It was a pretty interesting experience, and gives a few things to thinkabout. People are [...]<img alt="" border="0" src="http://stats.wordpress.com/b.gif?host=ttjjss.wordpress.com&#038;blog=15099040&#038;post=54&#038;subd=ttjjss&#038;ref=&#038;feed=1" width="1" height="1" />]]></description>
+				<content:encoded><![CDATA[<p>I gave a talk about Parrot yesterday on a <a href="http://lwb.elka.pw.edu.pl/trac/lwb/wiki/Spotkania/2010-12-17">LUG meeting</a>, probably the first one in Poland ever, as Parrot folks say. Slides are <a href="http://feather.perl6.nl/~tjs/static/#1">here</a> (in Polish, and rather poor anyway – I was mainly speaking and showing the examples). It was a pretty interesting experience, and gives a few things to thinkabout.</p>
+<p><strong>People are not aware what Parrot is, and what it has to do with Perl</strong></p>
+<p><strong></strong>In the minutes before the talk majority of the listeners was sure Parrot is something like a new Perl (“Parrot? So Perl is now readable or something? Ha-Ha!”). I had to spend a while explaining what Parrot is, what it has to do with Perl, saying that it&#8217;s not Perl 6 or Perl 6 pet project, etc. Surely there is a need for more explanatory talks in this region, or maybe not only?</p>
+<p><strong>People quickly became interested and somewhat excited</strong></p>
+<p><strong></strong>“Language interoperability” is something people would like to see in action. Parrot Compiler Toolkit was well received too (the fact that I chose a LOLCODE compiler might have an influence on the amount of positive emotions :)). The goals and ideas were generally liked. The only major thing that worried people is…</p>
+<p><strong>Will it be finished before PyPy and friends will take all the market?</strong></p>
+<p>“It&#8217;s nice and all, but when it will be there? How long does it take already?”. People don&#8217;t want “it&#8217;s usable”, they want „it&#8217;s complete, stable and fast”. They also didn&#8217;t really like the fact everything&#8217;s evolving so fast that the existing compilers are outdated and don&#8217;t work anymore. Telling that it&#8217;s still evolving raised even more worries about “when it will land then”. Well, the good thing is they wait for it :) But of course they have a good argument.</p>
+<p><strong>Conclusion, aka TL;DR</strong></p>
+<p>People don&#8217;t know much about Parrot, they like many things about it once explained, and they are afraid if they will ever see it around before the next ragnarök. They also wanted to hear my half-a-year-old Perl 6 talk, and liked it too.</p>
+<br />  <a rel="nofollow" href="http://feeds.wordpress.com/1.0/gocomments/ttjjss.wordpress.com/54/"><img alt="" border="0" src="http://feeds.wordpress.com/1.0/comments/ttjjss.wordpress.com/54/" /></a> <img alt="" border="0" src="http://stats.wordpress.com/b.gif?host=ttjjss.wordpress.com&#038;blog=15099040&#038;post=54&#038;subd=ttjjss&#038;ref=&#038;feed=1" width="1" height="1" />]]></content:encoded>
+			<wfw:commentRss>http://ttjjss.wordpress.com/2010/12/18/presenting-parrot-not-perl-and-perl/feed/</wfw:commentRss>
+		<slash:comments>3</slash:comments>
+	
+		<media:content url="http://0.gravatar.com/avatar/6e7eb27f1e2b787956f3fa8adaa154e1?s=96&#38;d=identicon&#38;r=G" medium="image">
+			<media:title type="html">ttjjss</media:title>
+		</media:content>
+	</item>
+	</channel>
+</rss>

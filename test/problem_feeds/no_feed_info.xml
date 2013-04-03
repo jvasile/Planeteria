@@ -1,0 +1,1412 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <entry>
+    <title>A Final TPF Parrot Embed/Extend Grant Update</title>
+    <link rel="alternate" type="text/html" href="http://leto.net/dukeleto.pl/2011/07/a-final-tpf-parrot-embedextend-grant-update.html"/>
+    <id>tag:leto.net,2011:/dukeleto.pl//9.252</id>
+
+    <published>2011-07-10T06:11:24Z</published>
+    <updated>2011-07-11T02:14:24Z</updated>
+
+    <summary>Really TLDR: The Parrot has landed. It brings me great joy to announce that I have completed all milestones for my TPF grant regarding the Parrot Embed/Extend subsystems! Not only that, but all of my grant work was included in...</summary>
+    <author>
+        <name>Jonathan Leto</name>
+        
+    </author>
+    
+        <category term="grant" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="parrot" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+    <category term="grant" label="grant" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="parrot" label="parrot" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="tpf" label="tpf" scheme="http://www.sixapart.com/ns/types#tag"/>
+    
+    <content type="html" xml:lang="en" xml:base="http://leto.net/dukeleto.pl/">
+        <![CDATA[<h2>Really TLDR: The Parrot has landed.</h2>
+
+<p>It brings me great joy to announce that I have completed all milestones for my
+<a href="http://perlfoundation.org">TPF</a> grant regarding the Parrot <a href="http://news.perlfoundation.org/2010/11/2010q4-grant-proposal-improve.html">Embed/Extend subsystems</a>!
+Not only that, but all of my grant work was included in the most recent release of
+Parrot, <a href="http://parrot.org/news/2011/Parrot-3.5.0">3.5.0 "Menelaus"</a>.</p>
+
+<p>The actual TLDR of this update is "many tests were written, code coverage is
+above <a href="http://tapir2.ro.vutbr.cz/cover/latest-c_cover/src-embed-api-c.html">95%</a>
+<a href="http://tapir2.ro.vutbr.cz/cover/latest-c_cover/src-extend-c.html">for all</a>
+<a href="http://tapir2.ro.vutbr.cz/cover/latest-c_cover/src-extend_vtable-c.html">systems described</a>
+in the grant, docs were improved, many
+Parrot Trac tickets were created and <a href="http://leto.net/dukeleto.pl/2010/12/parrot-embed-grant-update-1.html">many</a> <a href="http://leto.net/dukeleto.pl/2011/01/parrot-embed-grant-update-2.html">a</a> <a href="http://leto.net/dukeleto.pl/2011/02/parrot-embed-grant-update-3-now-with-dragons.html">blarg</a> <a href="http://leto.net/perl/2011/04/parrot-embed-grant-update-4-the-journey-continues.html">toast</a> <a href="http://leto.net/dukeleto.pl/2011/04/parrot-embed-grant-update-5-zen-pebbles.html">was</a> <a href="http://leto.net/dukeleto.pl/2011/05/parrot-embed-grant-update-6-still-hackin-less-slackin.html">cooked</a>.</p>
+
+<p>For those of you that have a thirst for knowledge unquenched (I know who you are),
+you are welcome to pondiferously peruse the Impending Technical Details.</p>
+
+<h2>The Deets</h2>
+
+<p>The last portion of this grant definitiely challenged me to think in new ways
+about testing and I am now only beginning to reap the benefits. I was charged
+with adding code coverage a few rarely-if-ever-used C functions in Parrot's
+embed/exted subsystem, which allows you embed Parrot into other applications
+and other funky stuff.</p>
+
+<p><a href="http://whiteknight.blogspot.com">Whiteknight++</a> greatly helped me write a test for <a href="https://github.com/parrot/parrot/blob/master/src/extend.c#L700">Parrot_sub_new_from_c_func</a> which
+takes a C function and a string that describes the function signature of the C
+function and returns a <a href="https://github.com/parrot/parrot/blob/master/src/pmc/nci.pmc">NCI PMC</a>, which can be invoked.</p>
+
+<p>I also learned many lessons about code coverage during the final stage of this
+grant, even though I thought I was at such a level of expertness that it would
+be hard to learn drastically new and important perspectives on testing. This
+pattern of thinking is always wrong.</p>
+
+<h3>Lesson 1</h3>
+
+<p>Sometimes you are the underdog and you have to interpret the rules in a new way
+in order to have a chance at winning. You need to be Ender Wiggins from <a href="https://secure.wikimedia.org/wikipedia/en/wiki/Ender's_Game">Ender's
+Game</a>: continually inventing new tactics to keep a winning edge over the
+competition.</p>
+
+<p>I noticed that a large portion (about 80%) of the uncovered code in one file
+was a macro that was copy-and-pasted into two places. I refactored this into a
+single macro called <a href="https://github.com/parrot/parrot/blob/master/src/extend.c#L331">POP_CONTEXT</a>, which reduced the total number of lines in the file by
+roughly 10, while simultaneously decreased the number of uncoverd lines in the
+file by ~20 lines, which had a combined effect of pushing the code coverage
+over the necessary 95% mark.</p>
+
+<p>This change definitely increases the maintainability and modularity of the
+code, but it feels a bit like gaming the system. Nonetheless, it saved the day.</p>
+
+<h3>Lesson 2</h3>
+
+<p>The simplest useful test that you are avoiding is the most valuable next test to
+write, because it has the best ROI (Return on Investment, where investment is the
+time it takes to write the test, and the return is having an automated way of
+verifying that the feature works.</p>
+
+<h3>Lesson 3</h3>
+
+<p>Software developers are very optimistic about time estimates. We forget about all
+the possible things that could go wrong and often quote estimates on something
+approaching "base case scenario". As a rule of thumb, I think all software developers
+should think long and hard about a time estimate for a given project, write down
+the estimate, then multiply that time estimate by pi for a REAL estimate.</p>
+
+<p>I theorize that pi is the factor of time it takes to debug and write tests for
+behavior of hard-to-recreate edge cases.</p>
+
+<p>I originally thought my grant would take about 3 months, but it ended up taking about
+9 or ten. QED.</p>
+
+<p>Finally, I would like to thank my grant manager Makoto Nozaki for providing
+lots of feedback, support and encouragement, as well as everyone else at the
+The Perl Foundation for funding this grant.</p>
+]]>
+        
+    </content>
+</entry>
+  <entry>
+    <title>What is M0 ?</title>
+    <link rel="alternate" type="text/html" href="http://leto.net/dukeleto.pl/2011/05/what-is-m0.html"/>
+    <id>tag:leto.net,2011:/dukeleto.pl//9.250</id>
+
+    <published>2011-05-31T05:09:06Z</published>
+    <updated>2011-06-02T17:10:54Z</updated>
+
+    <summary> I met with fellow Parrot hackers allison++, cotto++ and chromatic++ recently in Portland, OR (it was jokingly called YAPC::OR on IRC) to talk about what we call M0. M0 stands for "magic level 0" and it is a refactoring...</summary>
+    <author>
+        <name>Jonathan Leto</name>
+        
+    </author>
+    
+        <category term="parrot" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+    <category term="m0" label="m0" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="parrot" label="parrot" scheme="http://www.sixapart.com/ns/types#tag"/>
+    
+    <content type="html" xml:lang="en" xml:base="http://leto.net/dukeleto.pl/">
+        <![CDATA[
+<p>I met with fellow <a href="http://parrot.org">Parrot</a> hackers
+<a href="http://allisonrandal.com">allison++</a>, <a href="http://reparrot.blogspot.com">cotto++</a>
+and <a href="http://www.wgz.org/~chromatic/">chromatic++</a> recently in Portland, OR (it was jokingly called YAPC::OR on
+IRC) to talk about what we call
+<a href="https://github.com/parrot/parrot/blob/m0-spec/docs/pdds/draft/pdd32_m0.pod">M0</a>.
+M0 stands for "magic level 0" and it is a refactoring of Parrot internals in a
+fundamental way.</p>
+
+<p>cotto++ and I have been hacking on a detailed spec (over 35 pages now!) and a
+<a href="https://github.com/parrot/parrot/compare/master...m0-prototype">"final prototype"</a>
+in Perl 5 in the last few weeks. M0 is as "magic level 0",
+which means it consists of the most basic building blocks of a virtual machine,
+which the rest of the VM can be built with. The term "magic" means high-level
+constructs and conveniences, such as objects, lexical variables, classes and
+their associated syntax sugar. M0 is not meant to be written by humans, except
+during bootstrapping. In the future, M0 will be probably be generated from
+Parrot Intermediate Representation (PIR), Not Quite Perl 6 (NQP) or other High Level Languages (HLLs).</p>
+
+<p>The most important reason for M0 is to correct the fact that too much of Parrot
+internals are written in C. Parrot internals is constantly switching between
+code written in PIR, other HLL's such as NQP and C. Many types of optimizations
+go right out the window when you cross a language boundary. It is best for a
+virtual machine to minimize crossing language boundaries if an efficient 
+<a href="https://secure.wikimedia.org/wikipedia/en/wiki/Just-in-time_compilation">JIT compiler</a>
+is wanted, which we definitely desire. Since many hotpaths in Parrot
+internals cross between PIR and C, they can't be inlined or optimized as much
+as we would like.</p>
+
+<p>A few years back, Parrot had a JIT compiler, from which many lessons were
+learned.  I am sure some people were frustrated when we removed it in 1.7.0 but
+sometimes, it is best to start from a clean slate with many more lessons
+learned under your belt. Our old JIT did support multiple architectures but
+required maintaining a "JIT version" of every opcode on each architecture
+supported.  Clearly, this method was not going to scale or be maintainable.</p>
+
+<p>I will venture to say that M0 is the culmination of the lessons learned from
+our failed JIT. I should note that "failure" does not have a negative
+connotation in my mind. Indeed, only through failure are we truly learning. If
+you do something absolutely perfectly, you aren't learning.</p>
+
+<p>We are at an exciting time in Parrot's history, in that for a long time, we
+wanted an elegant JIT, using all the latest spiffy techniques, but it was
+always an abstract idea, "just over there", but not enough to grab a-hold of. A
+new JIT that meets these goals absolutely requires something like M0, and is
+the driving force for its design.  M0 will pave the way for an efficient JIT to
+be implemented on Parrot.</p>
+
+<p>M0 currently consists of under 40 opcodes from which (we wager) all the rest of
+Parrot can be built upon. This is radically different from how Parrot currently
+works, where all of the deepest internals of Parrot are written in heavily
+macroized ANSI 89 C.</p>
+
+<p>M0 has a source code, i.e. textual form and a bytecode form. chromatic++
+brought up a good point at the beginning of the meeting about the bytecode file
+containing a cryptographic hash of the bytecode. This will allow one to
+distribute bytecode which can then be cryptographically verified by whoever
+eventually runs the bytecode. This is a very "fun" application of cryptography
+that I will be looking into further.</p>
+
+<p>allison++ brought up some good questions about how merging bytecode files would
+be done. We hadn't really thought about that, so it lead to some fruitful
+conversation about how Parrot Bytecode (PBC) is currently merged, what it does
+wrong, and how M0 can do it less wronger.</p>
+
+<p>We then talked about what exactly a "Continuation" in M0 means, and tried to clear
+up some definitions between what is actually meant by Context, State and Continuation.</p>
+
+<p>chromatic++ also mentioned that an optional optimization for the garbage
+collector (GC) would be for it to create a memory pool solely to store
+Continuations, since they will be heavily used and many of them will be
+short-lived and reference each other, so having them in a small confined memory
+region will reduce cache misses. We are filing this under "good to know and we
+will do that when we get there."</p>
+
+<p>Next we turned to concurrency, including how we would emulate the various
+concurrency models of the languages we want to support, such as Python's <a href="https://secure.wikimedia.org/wikipedia/en/wiki/Global_Interpreter_Lock">Global
+Interpreter Lock (GIL)</a>.
+We decided that M0 will totally ignorant of
+concurrency concepts, since it is a "magical" concept that will be implemented
+at a higher level. We have started to refer to the level above M0 as M1 and
+everything above M0 as M1+.</p>
+
+<p>allison++ also mentioned that many innovations and optimizations are possible in
+storing isolated register sets for each Continuation (a.k.a call frame). This
+area of Parrot may yield some interesting surprises and perhaps some
+publishable findings.</p>
+
+<p>We all agreed that M0 should be as ignorant about the GC as possible, but the
+GC will most likely learn about M0 as optimizations are implemented. The
+pluggability of our GC's were also talked about. allison++ raised the question
+"Are pluggable GC's easier to maintain/implement if they are only pluggable at
+compile-time?" Indeed, they probably are, but then we run into the issue that
+our current "make fulltest" runs our test suite under different GC's, which
+would require multiple compiles for a single test suite run. chromatic++ made a
+suggestion that we could instead make GC's pluggable at link-time (which would
+require a decent amount of reorganization) which would still allow developers to
+easily test different GC's without recompiling all of Parrot.  chromatic++'s
+estimate is that removing runtime pluggability of GC's would result in an
+across the board speed improvement of 5%.</p>
+
+<p>This conversation then turned toward the fact that M0 bytecode might depend on
+what GC was used when it was generated, i.e. the same M0 source code run under
+two different GC's would generate two different bytecode representations. This
+would happen if the M0 alloc() opcode assumes C calling conventions. This was
+generally deemed distasteful, so our alloc() opcode will not "bake in C
+assumptions", which is a good general principle, as well. This will be a fun
+test to write.</p>
+
+<p>allison++ brought up the fact that we may need a way to tell the GC "this is
+allocated but uninitialized memory", a.k.a solve the "infant mortality"
+problem.  chromatic++ suggested that we could add some kind of lifespan flag to
+our alloc opcode (which currently has an arbitrary/unused argument, since all
+M0 opcodes take 3 arguments for symmetry and performance reasons). This could
+be as simple as hints that a variable is local or global, or a more detailed
+delineation using bit flags.</p>
+
+<p>It was also decided that we didn't need an invoke opcode and that invoke properly
+belongs as a VTABLE method on invokables.</p>
+
+<p>We also talked about the fact that register machines greatly benefit from
+concentrating VM operations on either the caller or the callee side. Looking
+for more references about this. It seems that the callee side seems to be
+what we will try for, but I am not quite sure why.</p>
+
+<p>We finally talked about calling conventions and decided that goto_chunk should
+roughly be equivalent to a jmp (assembly unconditional jump to address) and
+the invoke VTABLE would setup a return continuation (i.e. make a copy of the
+program counter), do a goto_chunk, and let the callee handle the rest, such
+as looking up a return continuation and invoking it.</p>
+
+<p>After the main M0 meeting, cotto++, allison++ and I sat down at a coffee shop
+and came up with a list of next actions for M0:</p>
+
+<ul>
+<li>Write a recursive version of 'calculate the n-th Fibonacci number' in M0</li>
+<li>Write a simple checksum algorithm in M0 (suggestions?)</li>
+<li>Create a working PMC in M0</li>
+<li>M0 disassembler</li>
+<li>Create a "glossary brochure for <a href="https://github.com">Github</a> cruisers"</li>
+<li>Implement function calls and returns</li>
+<li>Make sure each M0 opcode is tested via <a href="http://search.cpan.org/dist/Devel-Cover/">Devel::Cover</a></li>
+<li>Convert the <a href="https://github.com/parrot/parrot/blob/m0-prototype/src/m0/m0_assembler.pl">M0 assembler</a> to C</li>
+<li>Convert the <a href="https://github.com/parrot/parrot/blob/m0-prototype/src/m0/m0_interp.pl">M0 interpreter</a> to C</li>
+<li>Link M0 into libparrot (no-op integration)</li>
+</ul>
+
+<p>I have been talking to cotto++ on IRC while typing up these notes and we have
+come to the conclusion that a <a href="https://secure.wikimedia.org/wikipedia/en/wiki/Java_Virtual_Machine#Bytecode_verifier">"bytecode verifier"</a>
+should also be put on that
+list. A verifier is a utility that detects invalid bytecode and prevent attacks
+via malicious bytecode. This is something that happens at runtime, where as a
+bytecode checksum happens <em>before</em> runtime, or at the end of compile time.
+They provide different kinds of insurance. The bytecode checksum feature will
+be an instrinsic feature that is not optional, since it prevents Parrot from
+running known-bad bytecode. But a bytecode verifier adds a significant amount
+of overhead. This overhead is reasonable if you are running untrusted code, but
+it is unreasonable when your are running trusted bytecode (i.e. bytecode that
+you created), so the verifier will have an option to be turned off.</p>
+
+<p>We obviously have a lot of fun stuff to work on, so if any of it sounds fun,
+come ask cotto++ or me (dukeleto) on #parrot on irc://irc.parrot.org for some M0
+stuff to do. We especially need help with writing tests and documentation.</p>
+
+<p>There will be a Parrot hackathon at <a href="http://www.yapc2011.us/yn2011/">YAPC::NA</a>
+this year, where I am sure some M0-related hacking will be happening. If you
+have never been to a hackathon before, I highly recommend them as a way to join
+a project and/or community.  Meatspace is still the best medium for some things
+:)</p>
+
+<p>(UPDATE: Some factual errors about our old JIT were pointed out by rafl++ and
+corrected)</p>
+]]>
+        
+    </content>
+</entry>
+  <entry>
+    <title>Parrot Embed Grant Update #6 : Still Hackin', Less Slackin'</title>
+    <link rel="alternate" type="text/html" href="http://leto.net/dukeleto.pl/2011/05/parrot-embed-grant-update-6-still-hackin-less-slackin.html"/>
+    <id>tag:leto.net,2011:/dukeleto.pl//9.251</id>
+
+    <published>2011-06-01T06:51:45Z</published>
+    <updated>2011-06-01T06:58:49Z</updated>
+
+    <summary>I am excited to announce that I have completed my next grant milestone! I recently increased test coverage of extend_vtable.c to over 95% ( 95.5% to be exact), achieving the milestone with a half percent buffer. It definitely wasn't easy,...</summary>
+    <author>
+        <name>Jonathan Leto</name>
+        
+    </author>
+    
+        <category term="grant" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="parrot" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="testing" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+    <category term="embed" label="embed" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="extend" label="extend" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="parrot" label="parrot" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="tests" label="tests" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="vtable" label="vtable" scheme="http://www.sixapart.com/ns/types#tag"/>
+    
+    <content type="html" xml:lang="en" xml:base="http://leto.net/dukeleto.pl/">
+        <![CDATA[<p>I am excited to announce that I have completed my next grant milestone!  I
+recently increased test coverage of extend_vtable.c to over 95% (
+<a href="http://tapir2.ro.vutbr.cz/cover/latest-c_cover/src-extend_vtable-c.html">95.5%</a> to be
+exact), achieving the milestone with a half percent buffer. It definitely
+wasn't easy, but I changed the way I was approaching writing tests and it
+resulted in a <a href="https://github.com/parrot/parrot/compare/5dd8c543ab...8c04cc3e66">huge burst of
+productivity</a>.</p>
+
+<p>I went through a test coverage report and wrote down, on an actual piece of
+<em>paper</em>, every function that had no test coverage. This allowed me to circle
+the functions that I thought would be easiest to write tests for, and quickly
+got those out of the way. I then went for uncovered functions that were similar
+to already covered functions, and then finally I got to the hard functions.</p>
+
+<p>This was a fruitful exercise, because it was decided by Parrot developers that
+some VTABLE functions escaped accidentally and that they should be removed from the public API.
+Whiteknight++ <a href="https://github.com/parrot/parrot/commit/cbfc76e64acf9f0a526b5f7da0e4c6c4ec0d1189">removed Parrot_PMC_destroy (extra points for humor)</a>, which I was using incorrectly in the
+extend_vtable tests and which was actually coredumping Parrot, but only on certain
+platforms. I then removed <a href="https://github.com/parrot/parrot/commit/cd1edef38c9f7d4af8ec3229fa166e4fe92d21f6">Parrot_PMC_mark</a> and <a href="https://github.com/parrot/parrot/commit/44a9634f2764ccccfd7a5cbad1552159fc73bff8">Parrot_PMC_invoke</a>, the first being
+an implementation detail of the garbage collector, and Parrot_PMC_invoke because
+it was the only function that returned a '''Parrot_Opcode_t*''' and basically
+not fit for public consumption.</p>
+
+<p>I also <a href="http://trac.parrot.org/parrot/ticket/2126">created a ticket (TT#2126)</a>
+for a bug in the Parrot_PMC_morph function, which
+has some possibly buggy but definitely unspecified behavior.</p>
+
+<p>The remaining, untested functions in extend_vtable are clone_pmc, cmp_pmc,
+get_pointer_keyed_int, get_pointer_keyed_str, remove_vtable_override,
+set_pointer_keyed and set_pointer_keyed_str. I leave the testing of these
+functions as an exercise to the interested reader :)</p>
+
+<h2><strong><big>Grant Refactoring</big></strong></h2>
+
+<p>This reminds me of a saying, I can't remember it exactly, but it is something
+about the best laid plans of camels and butterflies often taste like onions.
+Anyway, since I wrote my grant, the Parrot Embed API was deprecated and replaced
+with a shinier and better documented system. After talking with cotto++ and
+whiteknight++ on IRC, it was decided that working on test coverage for the new
+embed API was a better use of resources than writing tests for the old embed
+API that my original grant referred to, which will most likely be removed from
+Parrot soon.</p>
+
+<p>The new embed API is called <a href="https://github.com/parrot/parrot/blob/master/src/embed/api.c">src/embed/api.c</a>
+and the plan is to replace my grant milestone of 95% coverage of embed.c with 95% coverage
+of embed/api.c, which is currently at <a href="http://tapir2.ro.vutbr.cz/cover/latest-c_cover/src-embed-api-c.html">72%</a> coverage.</p>
+
+<p>To summarize, I have two grant milestones left, increasing extend.c (currently
+at <a href="http://tapir2.ro.vutbr.cz/cover/latest-c_cover/src-extend-c.html">61%</a> )
+and embed/api.c to 95% coverage.</p>
+
+<p>Given the lessons learned from testing extend_vtable and based on the fact that
+I have already <a href="https://github.com/parrot/parrot/commit/b59b869c9dd6f51109aa41e495082e09844ba348">made some
+headway</a>,
+my new estimate for these milestones is three weeks each. To make this more
+definite, I plan to be done with this grant work by July 15th.</p>
+
+<p>This is the home stretch! I can feel it in my bones.</p>
+]]>
+        
+    </content>
+</entry>
+  <entry>
+    <title>Parrot Embed Grant Update #5 : Zen Pebbles</title>
+    <link rel="alternate" type="text/html" href="http://leto.net/dukeleto.pl/2011/04/parrot-embed-grant-update-5-zen-pebbles.html"/>
+    <id>tag:leto.net,2011:/dukeleto.pl//9.245</id>
+
+    <published>2011-04-28T05:46:31Z</published>
+    <updated>2011-04-28T05:51:04Z</updated>
+
+    <summary> I am still on the path of increasing test coverage in src/extend_vtable.c. It is much like a zen study, where you methodically concentrate on many tiny little pebbles, one at a time, moving them in the sand, to just...</summary>
+    <author>
+        <name>Jonathan Leto</name>
+        
+    </author>
+    
+        <category term="grant" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="parrot" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+    <category term="embed" label="embed" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="extend" label="extend" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="parrot" label="parrot" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="testing" label="testing" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="tpf" label="tpf" scheme="http://www.sixapart.com/ns/types#tag"/>
+    
+    <content type="html" xml:lang="en" xml:base="http://leto.net/dukeleto.pl/">
+        <![CDATA[<p>
+I am still on the path of increasing
+<a href="https://github.com/parrot/parrot/blob/master/t/src/extend_vtable.t">test coverage in
+src/extend_vtable.c</a>. It is much like a zen study, where you methodically concentrate on
+many tiny little pebbles, one at a time, moving them in the sand, to just the right place.
+According to the latest code coverage statistics, we are now at <a href="http://tapir2.ro.vutbr.cz/cover/latest-c_cover/src-extend_vtable-c.html">72% code coverage</a>, which is an increase of about 8% since my last report.
+</p>
+
+
+<p>
+Many, many more tests involving
+<a href="http://docs.parrot.org/parrot/devel/html/src/pmc/key.pmc.html">Key PMCs</a> were added. For an intro to what
+they are, take a look at my <a href="http://leto.net/dukeleto.pl/2011/04/parrot-embed-grant-update-4-the-journey-continues.html">previous grant update</a>. Many of the tests are clusters of related tests,
+because most VTABLEs have many similar forms which take integer, string or PMC-flavored keys. I ran into some platform-specific
+bugs which only manifest on Darwin machines, which were reported by <a href="http://trac.parrot.org/parrot/ticket/2098">Jim Keenan in TT# 2098</a>
+and which I then fixed by querying with a non-empty Key, which is more prudent.
+</p>
+
+<p>
+I also ran into some actual bugs which I reported as Trac Tickets. First is that the cmp_pmc VTABLE does
+not seem to be working correctly from extend_vtable, which was reported in <a href="http://trac.parrot.org/parrot/ticket/2103">TT #2103</a>.
+Then I fell into a "hole" in the VTABLE API, where ResizablePMCArray does not respond to defined_keyed(), which it should. This is described
+in <a href="http://trac.parrot.org/parrot/ticket/2094">TT #2094</a>.
+</p>
+
+<p>
+In retrospect, this was one of the most productive periods of my grant work. I estimate that I will be very close to the 95% milestone by my next grant
+update at this pace, which is very exciting.
+</p>
+
+]]>
+        
+    </content>
+</entry>
+  <entry>
+    <title>Parrot Embed Grant Update #4 : The Journey Continues</title>
+    <link rel="alternate" type="text/html" href="http://leto.net/dukeleto.pl/2011/04/parrot-embed-grant-update-4-the-journey-continues.html"/>
+    <id>tag:leto.net,2011:/dukeleto.pl//9.242</id>
+
+    <published>2011-04-05T05:47:28Z</published>
+    <updated>2011-04-06T05:49:34Z</updated>
+
+    <summary> This wayward son is still on his treacherous journey to increase test coverage in src/extend_vtable.c. When we last left off our traveler, he explained what the mythical VTABLE beast looked like, and we shall continue with the study of...</summary>
+    <author>
+        <name>Jonathan Leto</name>
+        
+    </author>
+    
+        <category term="grant" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="parrot" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+    <category term="tpfgrantparrot" label="tpf grant parrot" scheme="http://www.sixapart.com/ns/types#tag"/>
+    
+    <content type="html" xml:lang="en" xml:base="http://leto.net/dukeleto.pl/">
+        <![CDATA[<p>
+This wayward son is still on his treacherous journey to increase 
+<a href="https://github.com/parrot/parrot/blob/master/t/src/extend_vtable.t">test coverage in
+src/extend_vtable.c</a>. When we last left off our traveler, he explained what the mythical
+VTABLE beast looked like, and we shall continue with the study of this chimerical
+fauna.
+</p>
+<p>
+According to the latest code coverage statistics, we are now at <a href="http://tapir2.ro.vutbr.cz/cover/latest-c_cover/src-extend_vtable-c.html">64% code coverage</a>, which is an increase of about 10% since my last report.
+
+Most of this grant work concentrated on vtables that required 
+<a href="http://docs.parrot.org/parrot/devel/html/src/pmc/key.pmc.html">Key PMCs</a>. A Key PMC is
+an object that can be used to look something up in a <a href="http://docs.parrot.org/parrot/devel/html/src/pmc/hash.pmc.html">Hash PMC</a> or other aggregated object
+that supports "keyed access". It is very much similar to a "hash key" that can be used
+to look up the appropriate value.
+</p>
+<p>
+One of the lessons that I have learned in working on these tests is that it is very
+easy to write tests that pass on gcc, but which <a href="http://trac.parrot.org/parrot/ticket/2084">absolutely explode with g++</a>. This
+has to do with gcc not being as strict when some questionable type casting is done.
+I have learned my lesson and I promise not to break the test suite anymore. I will
+use g++ in my testing from now on, promise!
+</p>
+<p>
+My productivity was definitely hampered by moving to a new house and having a two week
+business trip in the last month, but my new home office is finally set up, so I expect
+productivity to approach previous levels of adding a few dozen tests per week.
+</p>]]>
+        
+    </content>
+</entry>
+  <entry>
+    <title>Parrot Embed Grant Update #3 : Now with Dragons</title>
+    <link rel="alternate" type="text/html" href="http://leto.net/dukeleto.pl/2011/02/parrot-embed-grant-update-3-now-with-dragons.html"/>
+    <id>tag:leto.net,2011:/dukeleto.pl//9.241</id>
+
+    <published>2011-02-28T06:44:25Z</published>
+    <updated>2011-03-01T21:37:16Z</updated>
+
+    <summary> The quest to improve test coverage for src/extend_vtable.c has continued. Some dragons were slayed, a few trolls were paid tolls to cross creaky bridges of abstraction and many siren calls to hack on other code were dutifully ignored (mostly)....</summary>
+    <author>
+        <name>Jonathan Leto</name>
+        
+    </author>
+    
+        <category term="parrot" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+    <category term="embed" label="embed" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="parrot" label="parrot" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="tpf" label="tpf" scheme="http://www.sixapart.com/ns/types#tag"/>
+    
+    <content type="html" xml:lang="en" xml:base="http://leto.net/dukeleto.pl/">
+        <![CDATA[<p>
+The quest to improve test coverage for src/extend_vtable.c has continued. Some dragons
+were slayed, a few trolls were paid tolls to cross creaky bridges of abstraction and
+many siren calls to hack on other code were dutifully ignored (mostly).
+
+</p>
+<p>
+This <a href="http://perlfoundation.org">TPF</a> grant has forced me to become very familiar with Parrot vtables (virtual tables),
+which is basically an API for talking to Parrot <a href="https://github.com/parrot/parrot/blob/master/docs/pdds/pdd17_pmc.pod">PMCs</a> 
+(really just objects with a funny
+name). PMC can stand for Parrot Magic Cookie or PolyMorphic Container. Take your pick.
+
+</p>
+<p>
+Firstly, vtable is already slang for "vtable function", which expands to "virtual table function."
+What the junk is a "virtual table function" ? I find that the simplest way to think about
+it is that every PMC has <i>slots</i> or <i>buckets</i> with standardized names such as
+<b>get_bool</b> (get Boolean value) or <b>elements</b> (how many elements does this PMC have?)
+
+</p>
+<p>
+All PMCs inherit sensible defaults for most vtables, but they are allowed to
+override them. Why would you want to override them? As a simple example, let us assume there is a vtable called <b>length</b> (there isn't actually, but it makes an easy example to explain these concepts). Our <b>length</b> vtable will act just like <b>elements</b> and tell us how many elements a PMC has.
+
+If we had a complex number PMC that was really just an <a href="https://github.com/parrot/parrot/blob/master/src/pmc/fixedfloatarray.pmc">FixedFloatArray PMC</a> 
+of two
+numbers underneath, the <b>length</b> would always return 2 for every complex
+number. Not very useful.
+
+</p>
+<p>
+A much more useful <b>length</b> vtable would use the coefficients <b>a</b> and
+<b>b</b> from <b>a + b*i</b> and compute the Euclidean distance (length from
+the origin) <b>sqrt(a^2 + b^2)</b>. Hopefully you now have a taste for what
+what vtables are about. Parrot PMCs have over 100 vtables that can be
+overridden to provide custom functionality.
+
+</p>
+<p>
+I recently ran across the <b>hashvalue</b> vtable and couldn't find any tests
+for it in Parrot core (outside of the test that I had written for it in
+extend_vtable.t) or any use of it in <a href="http://rakudo.org">Rakudo Perl 6</a>. Oh noes! It seemed like an
+unused/untested feature, so I created a <a href="http://trac.parrot.org/parrot/ticket/2027">Trac Ticket</a> to mark it as deprecated so it could
+be removed in a future release.
+
+</p>
+<p>
+The discussion about the ticket was fierce. <a href="https://github.com/NotFound">NotFound++</a> explained why the vtable
+was important and the mighty coding robot known as <a href="https://github.com/bacek">bacek++</a> manifested tests quickly.
+</p>
+
+<p>
+Yet another case of this grant work having a positive impact on the Parrot codebase,
+even outside the embed/extend interface. I also <a href="https://github.com/parrot/parrot/commit/612ec787dc975c4d570fb9b95d5f9fbd2993e92a">improved an error message in the PMCProxy PMC</a>,
+which arises when something goes bad during a partial re-compile. Yay for improved debuggability!
+</p>
+<p>
+According to the current <a href="http://tapir2.ro.vutbr.cz/cover/latest-c_cover/src-extend_vtable-c.html">code coverage statistics</a>,
+extend_vtable.c is up to 54% coverage from 43%,
+which is not quite where I predicted from my last update. No doubt this has something to
+do with me packing and preparing to move to a new house this month. My velocity didn't
+decrease so much as the amount of time that I had to work on this grant.
+</p>
+<p>
+I am greatly enjoying working on this grant and even if it is going a bit slower than I had planned, I am very confident that it will be completed in the next few months and hopefully sooner.
+</p>
+]]>
+        
+    </content>
+</entry>
+  <entry>
+    <title>Parrot Embed Grant Update #2</title>
+    <link rel="alternate" type="text/html" href="http://leto.net/dukeleto.pl/2011/01/parrot-embed-grant-update-2.html"/>
+    <id>tag:leto.net,2011:/dukeleto.pl//9.239</id>
+
+    <published>2011-01-24T08:53:30Z</published>
+    <updated>2011-01-24T20:28:34Z</updated>
+
+    <summary> I have slowly but surely been increasing test coverage of src/extend_vtable.c, which when I started my grant was at 5% and is now sitting at 43%. I estimated that it would take about two weeks to get it to...</summary>
+    <author>
+        <name>Jonathan Leto</name>
+        
+    </author>
+    
+        <category term="grant" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="parrot" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="testing" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+    <category term="testing" label="testing" scheme="http://www.sixapart.com/ns/types#tag"/>
+    
+    <content type="html" xml:lang="en" xml:base="http://leto.net/dukeleto.pl/">
+        <![CDATA[<p>
+I have slowly but surely been increasing test coverage of src/extend_vtable.c, which
+when I started my grant was at 5% and is now sitting at 43%. I estimated that it would
+take about two weeks to get it to 50% and then another two weeks to get to 95%, but
+this was a bit optimistic. When I look back, giving myself a month for each would
+have been appropriate.
+</p>
+
+<p>
+I do believe that my development velocity has increased recently, because I wrote
+a convenience funciton called extend_vtable_output_is(), which greatly reduces
+the number of lines of code that each extend_vtable test requires. The function
+is basically a wrapper around already existing functions that automates the process
+of compiling C source code use the Parrot C API, but it removes the need for roughly
+40 lines of boilerplate stuff, such as including the proper header files, defining
+convenience functions that do basic error checking and data structure creation.
+</p>
+
+<p>
+The whole reason this subsystem is undertested is because no function like
+extend_vtable_output_is() existed.  Now each of my extend_vtable tests is
+around 10 lines, instead of 50. I've only had the new function for about
+half the time of the grant, so tests are now getting written much faster.
+</p>
+
+<p>
+I have added about 700 lines of lines of tests since this grant started (using
+the spiffy new extend_vtable_output_is() function), and that has caused a 38%
+increase in test coverage. With the power of mathematics, we can figure out
+that (.38)*N = 700, which means N = 700/.38 = ~1842, where N is the number of
+lines of tests needed to cover 100% of the file (roughly).
+</p>
+
+<p>
+My new estimate for getting to 95% coverage of extend_vtable is one month
+from now, Feb 24th, and then another two months for the rest of the grant.
+</p>
+
+<p>
+The reason I say two months is that I am actually trying to hit a
+<a href="http://tapir2.ro.vutbr.cz/cover/latest-c_cover/">moving target</a>,
+and the code coverage of extend.c and embed.c have actually *gone down* since
+I started the grant. Currently extend.c is about 6% lower and embed.c is about 14%
+lower. This means my grant is actually getting harder to complete.
+</p>
+
+<p> I also learned about a very useful yet undocument environment variable
+called POSTMORTEM which makes Parrot test functions leave various intermediate
+files around for debugging purposes if it is set to true, which greatly helps
+in developing these tests. I plan to add documentation about this to the Parrot
+developer documentation.  </p>
+
+<p>
+Given the new test function and the new coverage numbers, I estimate that I will
+be able to complete this grant by late April 2011.
+</p>
+]]>
+        
+    </content>
+</entry>
+  <entry>
+    <title>Parrot Embed Grant Update #1</title>
+    <link rel="alternate" type="text/html" href="http://leto.net/dukeleto.pl/2010/12/parrot-embed-grant-update-1.html"/>
+    <id>tag:leto.net,2010:/dukeleto.pl//9.237</id>
+
+    <published>2010-12-24T20:48:43Z</published>
+    <updated>2010-12-24T21:15:38Z</updated>
+
+    <summary> My work on a TPF grant to improve documentation and test coverage of the Parrot Embedd API is going well. I have added extensive examples of Parrot function and type signatures, as well beginning to increase test coverage of...</summary>
+    <author>
+        <name>Jonathan Leto</name>
+        
+    </author>
+    
+        <category term="parrot" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="perl" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+    <category term="embed" label="embed" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="parrot" label="parrot" scheme="http://www.sixapart.com/ns/types#tag"/>
+    
+    <content type="html" xml:lang="en" xml:base="http://leto.net/dukeleto.pl/">
+        <![CDATA[
+<p>
+My work on a <a href="http://perlfoundation.org">TPF</a> grant to <a href="http://news.perlfoundation.org/2010/11/2010q4-grant-proposal-improve.html">improve documentation and test coverage of the Parrot Embedd API</a>
+is going well. I have added extensive examples of Parrot function and type signatures, as
+well beginning to increase test coverage of this subsystem.
+</p>
+
+<p>
+I am working in the <a href="https://github.com/parrot/parrot/commits/leto%2Fembed_grant">leto/embed_grant</a>
+ branch on <a href="http://github.com">Github</a>, which has already been merged to master
+just before the release of Parrot 2.11.0.
+</p>
+
+<p>
+My first merge of this topic branch included about 15 commits, which are about 2/3rds
+documentation and 1/3rd tests. I clarified some points about edge cases of Parrot function
+signatures, such as void input and void output, which is the emtpy string concatenated
+to both sides of an arrow <b>-></b>, and gave an expanded description of what <b>Pi</b> means (PMC, invocant).
+Many examples of diverse kinds of function signatures were also added.
+</p>
+
+<p>
+I gave the first user-visible documentation for many constants in the Embed subsystem,
+such as debug flags when creating interpreter objects and inline descriptions of different
+runcores that can be used with interpreter objects.
+</p>
+
+<p>
+The tests that I added include the first coverage of returning Float PMCs and numeric
+constants from our embedding subsytem, as well as additional coverage for returning a ResizablePMCArray
+consisting of Numeric PMCs. I also added tests for creating multiple interpreter objects and
+added a TODO test for <a href="http://trac.parrot.org/parrot/ticket/1880">Trac Ticket 1880</a>.
+</p>
+
+<p>
+I also fixed a bug in the Parrot test suite, where tests in t/src were not skipped properly if
+src/parrot_config.o did not exist.
+</p>
+
+<p>
+Most of this work was done between Thanksgiving and holiday travel, so I expect that development
+pace will pick up in the next few days. Currently, one of four inchstones has been achieved, and I will
+concentrate on raising the code coverage of extend_vtable.c in the next two weeks.
+</p>
+
+<p>
+I would like to thank The Perl Foundation, and Karen Pauley in particular, for funding this
+very important grant to the Parrot and Rakudo Perl 6 communities.
+</p>
+<p>
+]]>
+        
+    </content>
+</entry>
+  <entry>
+    <title>Google Code-In brings fresh blood to the Perl and Parrot communities</title>
+    <link rel="alternate" type="text/html" href="http://leto.net/dukeleto.pl/2010/11/parrot-foundation-the-perl-foundation-google-code-in.html"/>
+    <id>tag:leto.net,2010:/dukeleto.pl//9.234</id>
+
+    <published>2010-11-15T14:06:50Z</published>
+    <updated>2010-11-15T08:00:09Z</updated>
+
+    <summary>I'm excited to announce that Parrot Foundation and 
+The Perl Foundation
+have been accepted as organizations in Google Code-In 2010!</summary>
+    <author>
+        <name>Jonathan Leto</name>
+        
+    </author>
+    
+        <category term="gci" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="gsoc" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="parrot" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="perl" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+    <category term="gci" label="gci" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="gsoc" label="gsoc" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="parrot" label="parrot" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="perl" label="perl" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="tpf" label="tpf" scheme="http://www.sixapart.com/ns/types#tag"/>
+    
+    <content type="html" xml:lang="en" xml:base="http://leto.net/dukeleto.pl/">
+        <![CDATA[<!--
+<h1>Google Code-In brings fresh blood to the Perl and Parrot communities</h1>
+-->
+
+<p>
+I'm excited to announce that <a href="http://parrot.org">Parrot Foundation</a> and 
+<a href="http://perlfoundation.org">The Perl Foundation</a>
+have been accepted as <a href="http://socghop.appspot.com/gci/org/show/google/gci2010/parrot_perl_foundations">organizations in Google Code-In 2010</a>!
+</p>
+
+<p>
+<a href="http://socghop.appspot.com/gci/program/home/google/gci2010">Google Code-In</a> is a contest, similar to <a href="http://socghop.appspot.com/gsoc/program/home/google/gsoc2010">Google Summer of Code</a>, where Google
+pays students aged 13-18 to do tasks designed by open source
+communities, while learning about open source. Google pays for the
+work to be done, and we get new members to our communities, while students
+learn useful skills. It is a big win for everyone.
+</p>
+
+<p>
+In 2010, Google Summer of Code was a great success for Perl and Parrot.
+We got <a href="http://google-opensource.blogspot.com/2010/10/perl-and-parrot-spread-open-source-love.html">amazing new features in Parrot, Perl 5 and Perl 6 </a>.
+In 2009, we had <a href="http://google-opensource.blogspot.com/2009/10/perls-of-wisdom-perl-foundation-parrots.html">similarly spectacular results</a>.
+</p>
+
+<p>
+For the students, the benefits are huge. They get mentored by some
+of the best minds in open source and get "street cred" in the
+community. This contest also acts as a stepping stone for Google
+Summer of Code, so students that excel at Code-In will most likely be
+sought after for future Google Summer of Code involvement.
+It's also fantastic experience to put on a r&eacute;sum&eacute;.
+I see many Google Summer of Code students get snapped up by respected
+companies, or accepted to prestigious academic institutions.
+</p>
+
+<p>
+The more well-documented tasks we have before that, the more students we will
+have the potential to attract. I can attest that these kind of contests
+attract some of the smartest students in the world, so the Perl and Parrot communities
+have much to gain by being involved.
+</p>
+
+<p>
+I expect great results for Code-In as well, but we need your help. The Google
+Code-In contest opens up for students on:
+</p>
+
+<ul>
+<li>
+    <b>November 22, 2010 at 12:00 AM Pacific Time / 08:00 UTC</b>.
+</li>
+</ul>
+
+
+<h2>How Can You Get Involved?</h2>
+
+<ul>
+<li>
+<b>Add a task to our <a href="http://trac.parrot.org/parrot/wiki/GoogleCodeIn2010Tasks">task list</a></b> There is a template
+that you can copy and paste, as well as many examples. Any task related to Perl 5, Perl 6 or Parrot is fair game.
+</li>
+
+<li>
+<b>Improve the description of an existing task</b>. The more specific a task and
+the more documentation and links you provide, the easier it is for a student
+to choose and complete a task.
+</li>
+
+<li>
+<b>Volunteer to mentor a student on a task</b>. You apply to be a mentor
+<a href="http://socghop.appspot.com/gci/org/apply_mentor/google/gci2010">here</a>. Please join the
+<a href="https://groups.google.com/group/tpf-gsoc-students">tpf-gsoc-students</a>
+mailing list and introduce yourself. Provide a brief description of why you are interested when you sign up, so we know you aren't a bot :)
+Please also join the <b>#gci</b> channel on <a href="http://www.irc.perl.org/">irc.perl.org</a>.
+</li>
+
+<li>
+<b>Tell potential students about Google Code-In and how we are involved.</b> Here is a link
+to the <a href="http://socghop.appspot.com/document/show/gci_program/google/gci2010/faqs#actual_timeline">timeline</a>
+and <a href="http://socghop.appspot.com/document/show/gci_program/google/gci2010/faqs">FAQ</a> that you can send them, as well as 
+<a href="http://code.google.com/p/google-code-in/downloads/list">flyers</a> to post.
+</li>
+
+]]>
+        
+    </content>
+</entry>
+  <entry>
+    <title>GSoC 2010 Mentor Summit and Git Together Wrap Up</title>
+    <link rel="alternate" type="text/html" href="http://leto.net/dukeleto.pl/2010/10/gsoc-2010-mentor-summit-and-git-together-wrap-up.html"/>
+    <id>tag:leto.net,2010:/dukeleto.pl//9.233</id>
+
+    <published>2010-10-27T18:30:39Z</published>
+    <updated>2010-10-27T19:54:05Z</updated>
+
+    <summary> So many amazing things happened at the Google Summer of Code Mentor summit 2010! I will try to jot a few of them down, before they leave for warmer climates. For those that just want to read all the...</summary>
+    <author>
+        <name>Jonathan Leto</name>
+        
+    </author>
+    
+        <category term="git" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="gsoc" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="parrot" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="perl" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="rtems" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+    <category term="gsoc" label="gsoc" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="gsoc2010" label="gsoc2010" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="parrot" label="parrot" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="perl" label="perl" scheme="http://www.sixapart.com/ns/types#tag"/>
+    
+    <content type="html" xml:lang="en" xml:base="http://leto.net/dukeleto.pl/">
+        <![CDATA[<p>
+So many amazing things happened at the <a href="http://code.google.com/soc">Google Summer of Code</a> Mentor summit
+2010! I will try to jot a few of them down, before they leave for warmer
+climates. For those that just want to read all the session notes, you can
+find them <a href="http://gsoc-wiki.osuosl.org/index.php/Session_Notes_2010">here.</a>
+Also, if you haven't yet read about how <a href="http://perlfoundation.org">The Perl Foundation</a> and 
+<a href="http://parrot.org">Parrot Foundation</a>
+fared this summer, you can read about it on the 
+<a href="http://google-opensource.blogspot.com/2010/10/perl-and-parrot-spread-open-source-love.html">Google Open Source Blog</a>.
+</p>
+
+<p>
+It began by arriving a bit early to work with <a
+href="http://www.flickr.com/photos/selenamarie/5112086494/in/set-72157625233172162/">some
+awesome people</a> on improving the <a href="http://yfrog.com/m9h61rj">GSoC
+Mentor Manual</a> by adding a chapter for Organization Admins (there is
+actually documentation now!) and writing a GSoC Student Manual. This "book
+sprint" was facilitated by Adam Hyde of <a
+href="http://flossmanuals.net">FLOSSManuals</a>, and they were written with a
+completely open source software stack, as well as being released under a
+Creative Commons license. They are free for anyone to read online and are
+easily exportable to many formats. Read the 
+<a href="http://www.booki.cc/gsocstudentguide/">Student Manual</a> or the
+<a href="http://www.booki.cc/gsoc-mentoring/">Mentor+Org Admin Manual</a> online now!  We even <a
+href="http://blog.booki.cc/?p=588">bound 60 copies of the books</a> and handed
+them out to mentors attending the summit.
+</p>
+
+<p>
+<a href="http://parrot.org">Parrot</a> on <a href="http://rtems.com">RTEMS</a>
+hacking with Chris Johns and Ralf from RTEMS.  We used Centos 5 RPMS on Ubuntu
+10.04 with rpm2cpio piped to cpio, which was a trick to get around the fact
+that RTEMS does not have debian packages. It worked remarkably well.  I had a
+cross-compilation environment setup after a few minutes. I think they will be
+adding these intructions to their wiki. Now that I have the RTEMS toolchain on
+my netbook, I will be much more productive with regard to Parrot on RTEMS.
+</p>
+
+<p>
+Chromatic, Chris Johns and I sat in a room and talked shop about how Parrot and
+RTEMS can play nicely together. There are still some feature voids on the
+Parrot side to fill: Parrot calls exit() in various places, which reboots RTEMS
+    i.e. a syntax error reboots the OS. Not Fun. Parrot also needs a C probe to detect RTEMS, which already has a 
+   ticket in our bug tracker.
+A real-time garbage collector will be needed for long-running processes,
+but for short-lived applications, disabling the GC with the -G command
+line argument to Parrot will work.
+</p>
+
+<p>
+I gave <a href="http://twitpic.com/30j8k5">a</a>
+<a href="http://twitgoo.com/1pytme">session</a> with <a href="http://www.chesnok.com/daily/">Selena Deckelmann</a> 
+and <a href="http://bart-massey.com/">Bart Massey</a> introducing <a
+href="http://twitter.com/trolluni">Troll University</a>, which aims to educate
+organizations, corporations and open source communities about what motivations
+and principles trolls use and how to protect against them. We are working
+on some Trollcasts, so stay tuned!
+</p>
+
+<p>
+I also gave a session called <a
+href="http://openetherpad.org/dynlanginterop">Dynamic Language
+Interoperability</a>, which has been held for the last few years, to my
+knowledge. The consensus seemed to be that every dynamic language has the same
+interop problems, and Parrot VM seems to be the only project working hard to
+solve these complex issues in a general manner. This gives me a lot of hope
+that people will soon realize that Parrot is full of WIN.
+</p>
+
+<p>
+It also <a href="http://twitter.com/#!/dukeleto/status/28729519750">came to my attention during the conference</a> that 
+<a href="http://github.com">Github</a> hired the student
+that mentored under them this year to work on <a href="http://libgit2.github.com/">libgit2</a>. This is one example
+of the amazing opportunities that students have after completing a Google Summer of Code. The sky really is the limit.
+And just in case you think this is an isolated incident, <a href="http://bergie.iki.fi/blog/summer_of_code_works/">it isn't</a>.
+</p>
+
+<p>
+As if writing some books and going the Mentor Summit wasn't enough to totally
+drain me, I am currently attending the last day of the GIT Together 2010, which
+is the yearly Git developer and user meetup/unconferencey thing. I have learned
+so much that I can't even begin to describe it, but if you want to look at
+session notes, you can find them <a href="https://git.wiki.kernel.org/index.php/GitTogether10">here</a>.
+</p>
+]]>
+        
+    </content>
+</entry>
+  <entry>
+    <title>Google Summer of Code 2010 Final Summary</title>
+    <link rel="alternate" type="text/html" href="http://leto.net/dukeleto.pl/2010/09/google-summer-of-code-2010-final-summary.html"/>
+    <id>tag:leto.net,2010:/dukeleto.pl//9.228</id>
+
+    <published>2010-09-09T00:00:25Z</published>
+    <updated>2010-09-09T23:18:06Z</updated>
+
+    <summary> Google Summer of Code is a global program that offers student developers summer stipends to write code for various open source software projects. Google Summer of Code 2010 went by quickly, and much was accomplished. The Perl Foundation and...</summary>
+    <author>
+        <name>Jonathan Leto</name>
+        
+    </author>
+    
+        <category term="gsoc" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="parrot" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="perl" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="rakudo" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+    <category term="gsoc" label="gsoc" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="gsoc2010" label="gsoc2010" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="parrot" label="parrot" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="perl" label="perl" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="rakudo" label="rakudo" scheme="http://www.sixapart.com/ns/types#tag"/>
+    
+    <content type="html" xml:lang="en" xml:base="http://leto.net/dukeleto.pl/">
+        <![CDATA[<p>
+<a href="http://code.google.com/soc">Google Summer of Code</a> is a 
+<a href="http://2.bp.blogspot.com/_p15UnEJyA1c/S-n9fLTuNOI/AAAAAAAAAXs/UK7gBt5sxak/s1600/graph.png">global</a>
+program that offers student developers
+summer stipends to write code for various open source software projects.
+Google Summer of Code 2010 went by quickly, and much was accomplished.
+<a href="http://perlfoundation.org">The Perl Foundation</a> and
+<a href="http://parrot.org/foundation">Parrot Foundation</a> took part this year, and we
+were lucky to get proposals from very bright and capable students.
+We started the summer with 10 students and had 8 students pass their
+final evaluations. The passing projects include:
+</p>
+
+<pre>
+Ryan Jendoubi -- Ctypes for Perl
+Mentor: Reini Urban
+Blog: <a href="http://blogs.perl.org/users/doubi/">http://blogs.perl.org/users/doubi/</a>
+Repo: <a href="http://gitorious.org/perl-ctypes/perl-ctypes">http://gitorious.org/perl-ctypes/perl-ctypes
+</pre></a>
+
+<p>
+This project is <a href="http://twitter.com/kraih/status/23046432913">exciting</a>
+<a href="http://www.modernperlbooks.com/mt/2010/09/less-xsmore-ctypes.html">many</a>
+Perl developers, because it would minimize
+the need to use <a href="http://en.wikipedia.org/wiki/XS_%28Perl%29">XS</a>, which will make many more pure-Perl modules possible. This
+improves portability, becaue XS-based modules are notorious for being fragile
+across operating systems and compiler versions. This adds up to a whole lot of WIN.
+</p>
+
+<pre>
+Nat Tuck -- Hybrid Threads for Parrot
+Mentor: Andrew Whitworth
+Blog: <a href="http://parrot.org/blog/836">http://parrot.org/blog/836</a>
+Repo: <a href="http://github.com/parrot/parrot/tree/gsoc_threads">http://github.com/parrot/parrot/tree/gsoc_threads</a>
+</pre>
+
+<p>
+Threads allow a single program to use more than one CPU, which is becoming
+increasingly important these days. Even mobile phones are multicore! This work
+aimed at adding threading support to Parrot Virtual Machine. Much was
+accomplished, but this effort is still on-going. So-called "green threads" were
+implemented, which is a necessary step to get Hybrid threads working.
+</p>
+
+<pre>
+Tyler Curtis -- A PAST Optimization Framework for Parrot
+Mentor: chromatic
+Blog: <a href="http://parrot.org/blog/839">http://parrot.org/blog/839</a>
+Repo: <a href="http://github.com/ekiru/tree-optimization">http://github.com/ekiru/tree-optimization</a>
+</pre>
+
+<p>
+This project is about providing a framework for optimizing 
+<a href="http://docs.parrot.org/parrot/devel/html/docs/pdds/pdd26_ast.pod.html">PASTs (Parrot
+Abstract Syntax Trees)</a>.  This will be used by language implementors when
+optimizing their HLLs (High Level Languages).  This framework allows all
+languages on Parrot to benefit from optimizations that are written once,
+instead of each language implementor writing their own optimizations.
+</p>
+
+<pre>
+Daniel Arbelo Arrocha -- NFG and single-representation strings for Parrot
+Mentor: Allison Randal
+Blog: <a href="https://www.parrot.org/darbelo">https://www.parrot.org/darbelo</a>
+Repo: <a href="http://github.com/parrot/parrot/tree/gsoc_nfg">http://github.com/parrot/parrot/tree/gsoc_nfg</a>
+</pre>
+
+<p>
+NFG stands for Normal Form Grapheme, and basically means having a standard
+internal representation of Unicode strings, so that very expensive
+conversions do not have to repeatedly take place. This makes string-heavy
+computations much faster and unifies a lot of code.
+</p>
+
+<pre>
+Carl Masak -- Add support for binary data in Rakudo
+Mentor: Jonathan Worthington
+Blog: <a href="http://use.perl.org/~masak/journal/">http://use.perl.org/~masak/journal/</a>
+Repo: <a href="http://github.com/rakudo/rakudo">http://github.com/rakudo/rakudo</a>
+</pre>
+
+<p>
+<a href="http://rakudo.org">Rakudo Perl 6</a> now supports various binary data
+formats that were implemented as part of this project. Many relevant tests were
+also added to the <a href="http://github.com/perl6/roast">Perl 6 Spec Test
+Suite</a> as well as improvements and clarifications to the
+<a href="http://github.com/perl6/specs">Perl 6 Specification</a>.
+</p>
+
+<pre>
+Muhd Khairul Syamil Hashim -- Instrumentation Tool for Parrot
+Mentor: Christoph Otto
+Blog: <a href="http://www.parrot.org/blog/841">http://www.parrot.org/blog/841</a>
+Repo: <a href="http://github.com/khairulsyamil/parrot-instrument">http://github.com/khairulsyamil/parrot-instrument</a>
+</pre>
+
+<p>
+This instrumentation tool for Parrot allows one to dynamically peek into the
+execution of Parrot op-codes. This allows for writing profiling tools that
+can answer questions like "who calls functions X" and "how many Objects of type X
+were created."
+</p>
+
+<pre>
+John Harrison -- Improvements to NCI/LLVM Stack Frame Builder for Parrot
+Mentor: Peter Lobsinger
+Blog: <a href="http://www.parrot.org/ash">http://www.parrot.org/ash</a>
+Repo: <a href="http://github.com/ashgti/parrot">http://github.com/ashgti/parrot</a>
+</pre>
+
+<p>
+This project is a prerequisite for a 
+<a href="http://en.wikipedia.org/wiki/Just-in-time_compilation">JIT (Just In Time compilation)</a> framework, which
+is an important goal for the Parrot community, since Parrot decided that our
+old JIT subsystem was broken beyond repair and removed it. Parrot has
+decided to use the very popular <a href="http://llvm.org">LLVM</a> project in our rewrite of our JIT,
+and this project brings us a step closer on our journey.
+</p>
+
+<pre>
+Pawel Murias -- Mildew and SMOP on CPAN
+Mentor: Daniel Ruoso
+Repo: <a href="http://github.com/perl6/mu">http://github.com/perl6/mu</a>
+</pre>
+
+<p>
+This project involved working on Mildew and SMOP. Mildew is a <a href="http://perl6.org">Perl 6</a>
+implementation, and SMOP is the library Mildew uses for meta-object
+programming. You can think of Mildew as a sister to Rakudo Perl 6. Having many
+implemenations of Perl 6 helps to better define the Perl 6 specification.
+Updated versions of <a href="http://search.cpan.org/dist/SMOP/">SMOP</a> and
+<a href="http://search.cpan.org/dist/Mildew/">Mildew</a> are now available on 
+<a href="http://cpan.org">CPAN</a>.
+</p>
+
+<p>
+The failing projects were:
+</p>
+
+<pre>
+Justin Hunter -- Rework Catalyst framework instance initialization code
+Mentor: Florian Ragwitz
+
+Mirko Westermeier -- Bulletproofing the Mojolicious test suite
+Mentor: Marcus Ramberg 
+</pre>
+<p>
+Both of these projects passed their midterms, but due to circumstances
+outside of the program, these students were not able to complete their
+goals for their final evaluation. Sometimes Real Life throws you a curve
+ball, like starting a new job, moving to a new city, having a baby
+and similar things. We wish these students the best of luck, and hope
+that they complete their projects outside the structure of GSoC.
+</p>
+<p>
+I am very proud and humbled by all the students and mentors that I worked with
+this year. I am constantly reminded that there are very intelligent developers
+that are very young, and The Perl Foundation and Parrot Foundation is very
+lucky to attract them and have them in our communities. I firmly believe that
+the passing GSoC 2010 projects have made a large positive impact on our
+codebases and many people will benefit from them for years to come.
+</p>
+<p>
+Rock on and keep spreading the Open Source love!
+</p>]]>
+        
+    </content>
+</entry>
+  <entry>
+    <title>Rakudo Perl 6 in Your PostgreSQL Database!</title>
+    <link rel="alternate" type="text/html" href="http://leto.net/dukeleto.pl/2010/06/rakudo-perl-6-in-your-postgresql-database.html"/>
+    <id>tag:leto.net,2010:/dukeleto.pl//9.225</id>
+
+    <published>2010-06-30T20:42:39Z</published>
+    <updated>2010-07-01T01:27:34Z</updated>
+
+    <summary> It has been a very exciting few weeks in the Perl 6 world with regard to database access. mberends++ just wrote a nice blog post about how Perl 6 support for DBI is ramping up with work on MiniDBI...</summary>
+    <author>
+        <name>Jonathan Leto</name>
+        
+    </author>
+    
+        <category term="parrot" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="perl" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="postgres" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="rakudo" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+    <category term="parrot" label="parrot" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="perl" label="perl" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="postgresql" label="postgresql" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="rakudo" label="rakudo" scheme="http://www.sixapart.com/ns/types#tag"/>
+    
+    <content type="html" xml:lang="en" xml:base="http://leto.net/dukeleto.pl/">
+        <![CDATA[<p>
+It has been a very exciting few weeks in the <a href="http://perl6.org/">Perl 6</a> world with regard to database access. 
+<a href="http://blogs.perl.org/users/martin_berends/">mberends++</a> just wrote
+a nice <a href="http://blogs.perl.org/users/martin_berends/2010/06/rakudo-perl-6-gets-into-databases.html">blog post</a> about how Perl 6 
+support for DBI is ramping up with work on <a href="http://github.com/mberends/MiniDBI">MiniDBI</a> (formerly FakeDBI). Multiple developers recently made great progress
+on <a href="http://postgresql.org">PostgreSQL</a> drivers and have been improving the <a href="http://parrot.org">Parrot</a> interface to 
+<a href="http://www.postgresql.org/docs/8.4/static/libpq.html">libpq</a>, 
+<a href="http://trac.parrot.org/parrot/browser/trunk/runtime/parrot/library/Pg.pir">Pg.pir</a> .
+</p>
+
+<p>
+I have also been dutifully hacking on PL/Perl6, which embeds <a href="http://rakudo.org">Rakudo Perl 6</a> into
+your PostgreSQL datbase via <a href="http://pl.parrot.org">PL/Parrot</a>, and just recently merged the plperl6
+branch, which adds the first basic support for PL/Perl 6. Here is how it
+currently works:
+</p>
+
+<ul>
+<li>You must first install a recent version of Parrot and Rakudo Perl 6. I develop
+with Parrot trunk and Rakudo master because I often need very recent changes/bugfixes</li>
+<li>You will need a moderately recent version of PostgreSQL. PL/Parrot has been
+known to work with versions as old as 8.3.8, but I mostly develop on the master branch,
+so 9.x will probably work best</li>
+<li>When you type "make install" for Rakudo Perl 6, you will see that it installs a file
+called "perl6.pbc" into the lib/$version/languages/perl6 directory of the Parrot installation
+that Rakudo was configured with. </li>
+</ul>
+
+<p>
+To tell PL/Parrot that you would also like PL/Perl6, you
+set the environment variable PERL6PBC to the full path of perl6.pbc like so:
+</p>
+<p>
+<b>
+export PERL6PBC=/Users/leto/git/rakudo/parrot_install/lib/2.5.0-devel/languages/perl6/perl6.pbc
+</b>
+</p>
+
+<p>
+A PBC file is <a href="http://docs.parrot.org/parrot/devel/html/docs/parrotbyte.pod.html">Parrot bytecode</a>,
+and the perl6.pbc file basically bundles all of Rakudo Perl 6 into
+a single file. You can play around with the Rakudo Perl 6 REPL by running:
+</p>
+<p>
+<b>
+$ parrot $PERL6PBC
+</b>
+</p>
+
+<p>
+which is pretty much the exact same thing as running the perl6 binary in your $PATH.
+</p>
+
+<p>
+When you compile PL/Parrot with the $PERL6PBC environment variable set, it automatically creates
+a separate Parrot interpreter with the perl6.pbc bytecode loaded, so that Perl 6 code can be executed.
+</p>
+
+<p>
+To run PL/Parrot tests, you type "make test". You can also do this the
+PostgreSQL way with "make installcheck", which will run the tests and verify
+that the output matches a certain, known output. "make tests" just generates
+the TAP output.
+</p>
+
+<p>
+Currently PL/Perl 6 tests are not run by default, they have their own Makefile target:
+<b>test_plperl6</b>
+<a href="http://gist.github.com/459421">This</a> is what the output of "make test_plperl6" looks like currently, on
+<a href="http://github.com/leto/plparrot/commit/44a985f123309783b43304bc4268cde93aba1ef3">commit 44a985f123</a> of the perl6_args
+branch.
+</p>
+
+<p>
+We run a total of 9 tests, 6 of which correctly run Perl 6 code and pass. You will notice that all the
+failing tests are relating to passing arguments into Rakudo from PostgreSQL, which is what I am 
+currently trying to get to work. Currently I am passing a 
+<a href="http://docs.parrot.org/parrot/devel/html/src/pmc/resizablepmcarray.pmc.html">Parrot ResizablePMCArray</a> of the arguments
+to a Rakudo function and executing it, but the function can't seem to see it. My guess is that 
+Rakudo wants native datatypes and not Parrot datatypes. If you know how to create Rakudo datatypes
+from <a href="http://en.wikipedia.org/wiki/Parrot_intermediate_representation">PIR</a>, please let me know :) I promise you will <a href="http://perlgeek.de/blog-en/perl-6/optimized-for-fun.html">-Ofun</a>.
+</p>
+
+<p>
+What does PL/Perl 6 look like? Here is a nice example of a PL/Perl6 function which calculates the sum
+of all <a href="http://en.wikipedia.org/wiki/Fibonacci_number">Fibonacci numbers</a> <= 100:
+<p>
+CREATE FUNCTION test_fibonacci_plperl6(integer) RETURNS int LANGUAGE plperl6 AS $$<br/>
+[+] (1, 1, *+* ... 100)<br/>
+$$;
+</p>
+
+You will notice three spiffy new Perl 6 operators in there, the summation
+operator <b>[+]</b>, the new range operator <b>...</b> (which used to be <b>..</b> in Perl 5), and the <b>*+*</b> operator. What
+exactly is the <b>*+*</b> operator? pmichaud++ jokingly referred to it as the
+"cheerleading plus", but it is actually just a plain old infix "+" operator,
+sandwiched by two "*" (a.k.a Whatever) operands. It basically takes the
+previous two elements in a list, sums them together and returns the sum,
+which is exactly how the Fibonacci sequence is defined.
+</p>
+
+<p>
+If you are interested in hacking on PL/Perl 6, PL/Parrot or anything related, come
+join us in #plparrot on freenode, join the
+<a href="http://groups.google.com/group/plparrot/">mailing list</a> and fork us on 
+<a href="http://github.com/leto/plparrot">github</a> !
+</p>
+]]>
+        
+    </content>
+</entry>
+  <entry>
+    <title>PL/Parrot Flies</title>
+    <link rel="alternate" type="text/html" href="http://leto.net/dukeleto.pl/2010/04/plparrot-flies.html"/>
+    <id>tag:leto.net,2010:/dukeleto.pl//9.218</id>
+
+    <published>2010-04-20T01:32:40Z</published>
+    <updated>2010-04-20T02:55:57Z</updated>
+
+    <summary>PL/Parrot recently started passing all tests and marshalling three basic data types of integers, floats and strings, between PostgreSQL and Parrot Virtual Machine. One of the important next steps for PL/Parrot is to improve the security subsystem, which will require...</summary>
+    <author>
+        <name>Jonathan Leto</name>
+        
+    </author>
+    
+        <category term="parrot" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="postgres" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="rakudo" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+    <category term="nqp" label="nqp" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="parrot" label="parrot" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="pgcon" label="pgcon" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="pir" label="pir" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="postgresql" label="postgresql" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="rakudo" label="rakudo" scheme="http://www.sixapart.com/ns/types#tag"/>
+    
+    <content type="html" xml:lang="en" xml:base="http://leto.net/dukeleto.pl/">
+        <![CDATA[<a href="http://github.com/leto/plparrot">PL/Parrot</a> recently started passing all tests and marshalling three basic data types of integers, floats and strings, between<a href="http://www.postgresql.org/"> PostgreSQL</a> and <a href="http://parrot.org/">Parrot Virtual Machine</a>. <br /><br />One of the important next steps for PL/Parrot is to improve the security subsystem, which will require changes to Parrot core. Parrot has only a high-level <a href="http://docs.parrot.org/parrot/latest/html/docs/pdds/pdd18_security.pod.html">Parrot Developer Doc (PDD) that describes how security should work</a>, but still lacks an implementation. Thus, PL/Parrot finds itself in the situation of being able to drive the development of security features in Parrot. This is very exciting and I am researching various hardening solutions. Various ideas have been thrown around, but removing or replacing certain opcodes at the lowest level is the most secure solution. How to do this, properly at run-time, is the fun part.<br /><br />I will be talking about PL/Parrot at <a href="http://www.pgcon.org/2010/">PGCon 2010</a>, which will be very exciting. I am hoping to meet many people in the PostgreSQL community and show some PostgreSQL internals hackers why hacking on PL/Parrot is so fun and so important.<br /><br />PL/Parrot is so important because PL's are hard to write and maintain. My vision is that most of the hard work goes into PL/Parrot, and then languages built on top of Parrot (HLL's), will have a very simple time piggy-backing on top of that infrastructure. Currently, only PL/PIR exists. Stored procedures can be written in <a href="http://en.wikipedia.org/wiki/Parrot_intermediate_representation">PIR</a>. The next steps will be getting a HLL working on PL/Parrot, such as <a href="http://en.wikibooks.org/wiki/Parrot_Virtual_Machine/Not_Quite_Perl">NotQuitePerl (NQP)</a> or <a href="http://rakudo.org/">Rakudo Perl 6</a>. If you want to get your favorite HLL working on PL/Parrot, I surely won't stop you.<br /><br />There are also many benefits to writing stored procedures in PIR. PIR will have the closest possible speed to C than any HLL run on Parrot, so if speed is your main concern, you will want PL/PIR. Parrot has a garbage collector, so you don't have to do memory management in PL/PIR. This prevents crashing the server instance due to double-free errors and fun stuff like that. PIR is also platform-independent: no more need to figure out how to get your stored procedures written in C compiling on a new platform. <br /><br />If you have tuits or ideas for implementing PL/NQP or PL/Rakudo or any other comments about PL/Parrot, I would love to hear them. Feel free to<a href="http://github.com/leto/plparrot"> fork the github repo</a>, join us in #plparrot on irc.freenode.net or <a href="http://groups.google.com/group/plparrot">on our mailing list</a>. We also need a website and mascot. There are many ways to help, but patches are always welcome :)<br /> ]]>
+        
+    </content>
+</entry>
+  <entry>
+    <title>Google Summer of Code 2010</title>
+    <link rel="alternate" type="text/html" href="http://leto.net/dukeleto.pl/2010/03/google-summer-of-code-2010.html"/>
+    <id>tag:leto.net,2010:/dukeleto.pl//9.207</id>
+
+    <published>2010-03-09T06:47:41Z</published>
+    <updated>2010-03-09T07:24:05Z</updated>
+
+    <summary><![CDATA[I&nbsp;am working on the application for The Perl Foundation and ParrotFoundation to participate in Google Summer of Code 2010. GSoC is aprogram where Google funds eligible students to hack on open sourceprojects for a summer. It is a great opportunity...]]></summary>
+    <author>
+        <name>Jonathan Leto</name>
+        
+    </author>
+    
+        <category term="gsoc" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="parrot" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="perl" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+    <category term="gsoc" label="gsoc" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="gsoc2010" label="gsoc2010" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="parrot" label="parrot" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="perl" label="perl" scheme="http://www.sixapart.com/ns/types#tag"/>
+    
+    <content type="html" xml:lang="en" xml:base="http://leto.net/dukeleto.pl/">
+        <![CDATA[<meta charset="utf-8"><span class="Apple-style-span" style="color: rgb(0, 0, 0); font-family: arial,sans-serif; font-size: 15px; border-collapse: collapse;">I&nbsp;am working on the application for <a href="http://perlfoundation.org/">The Perl Foundation</a> and <a href="http://parrot.org/">Parrot<br />Foundation</a> to participate in <a href="http://socghop.appspot.com/">Google Summer of Code 2010</a>. GSoC is a<br />program where Google funds eligible students to hack on open source<br />projects for a summer. It is a great opportunity for the students and<br />the communities that mentor them. You also may be interested in this<br />summary of our involvement<a href="http://google-opensource.blogspot.com/2009/10/perls-of-wisdom-perl-foundation-parrots.html"> last year</a> . Our application will be<br />submitted by the end of this week.<br /><br />Please join us in getting prepared for this year. There is a page for<br /><a href="http://www.perlfoundation.org/perl5/index.cgi?gsoc_mentors">possible mentors to volunteer</a> as well as a page for&nbsp;</span><div><span class="Apple-style-span" style="color: rgb(0, 0, 0); font-family: arial,sans-serif; font-size: 15px; border-collapse: collapse;"><a href="http://www.perlfoundation.org/perl5/index.cgi?gsoc_2010_projects">project ideas</a> . If you would like to help with the wiki, our&nbsp;</span></div><div><span class="Apple-style-span" style="color: rgb(0, 0, 0); font-family: arial,sans-serif; font-size: 15px; border-collapse: collapse;"><a href="http://www.perlfoundation.org/perl5/index.cgi?gsoc">main GSoC page</a> is the best place to start. You are also invited to join&nbsp;</span></div><div><span class="Apple-style-span" style="color: rgb(0, 0, 0); font-family: arial,sans-serif; font-size: 15px; border-collapse: collapse;"><a href="http://groups.google.com/group/tpf-gsoc">our mailing&nbsp;list</a>&nbsp; and come ask questions in #soc-help on&nbsp;<a href="http://irc.perl.org/" target="_blank" style="color: rgb(0, 84, 136);">irc.perl.org</a>&nbsp;.</span><br /><br /> </div>]]>
+        
+    </content>
+</entry>
+  <entry>
+    <title>Parrot In Your Database</title>
+    <link rel="alternate" type="text/html" href="http://leto.net/dukeleto.pl/2009/11/parrot-in-your-database.html"/>
+    <id>tag:leto.net,2009:/dukeleto.pl//9.204</id>
+
+    <published>2009-11-14T07:38:52Z</published>
+    <updated>2009-11-14T22:44:10Z</updated>
+
+    <summary>Wouldn't it be awesome to write performance-critical stored procedures in a fast platform-independent language? That is the vision for PL/Parrot, a Postgres Language that will allow you to write stored procedures in PIR or NQP. Our current plan is to...</summary>
+    <author>
+        <name>Jonathan Leto</name>
+        
+    </author>
+    
+        <category term="parrot" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+        <category term="postgres" scheme="http://www.sixapart.com/ns/types#category"/>
+    
+    <category term="parrot" label="parrot" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="plparrot" label="plparrot" scheme="http://www.sixapart.com/ns/types#tag"/>
+    <category term="postgres" label="postgres" scheme="http://www.sixapart.com/ns/types#tag"/>
+    
+    <content type="html" xml:lang="en" xml:base="http://leto.net/dukeleto.pl/">
+        <![CDATA[Wouldn't it be awesome to write performance-critical stored procedures in a fast platform-independent language? That is the vision for PL/Parrot, a <a href="http://www.postgresql.org/">Postgres</a> Language that will allow you to write stored procedures in <a href="http://en.wikipedia.org/wiki/Parrot_Intermediate_Representation">PIR</a> or <a href="http://en.wikibooks.org/wiki/Parrot_Virtual_Machine/Not_Quite_Perl">NQP</a>. Our current plan is to embed the <a href="http://parrot.org/">Parrot VM</a> inside each postgres backend. If you have a better idea, let us know!<br /><br />Come hang out on #plparrot on irc.freenode.net or checkout the <a href="http://github.com/leto/plparrot">github repo</a> if you want to help! You may also want to visit #parrot on irc.perl.org for Parrot-specific help. It is very much in a prototype stage right now, but we have lots of smart people interested in making this work, so I am confident that we will have something working very soon.<br /><br />If you are a Postgres internals hacker or you want to learn more about Parrot Virtual Machine, we would greatly appreciate your help! <br /><br /> ]]>
+        
+    </content>
+</entry>
+</feed>
