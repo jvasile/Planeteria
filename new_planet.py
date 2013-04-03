@@ -50,7 +50,13 @@ def validate_input(subdir):
 
    return valid
 
-def make_planet(subdir, output_dir=None):
+def make_planet(subdir, output_dir=None,
+                name="", user="", email=""):
+   """
+   Makes a planet on disk and in the db, copying the skeleton
+   directory on disk.  Does not seed the planet with default values
+   for owner or email.
+   """
    if not validate_input(subdir):
       raise BadSubdirNameError, subdir
 
@@ -61,7 +67,7 @@ def make_planet(subdir, output_dir=None):
    
    with our_db('planets') as db:
       if os.path.exists(path) and not subdir in db:
-         log.debug("Exists on disk but not in db, recreating from scratch")
+         log.debug("Exists on disk but not in db, attempting to delete")
          shutil.rmtree(path)
 
    try:
@@ -76,10 +82,11 @@ def make_planet(subdir, output_dir=None):
       return False
 
    from planet import Planet
+   if not name: name = 'Planet %s' % subdir
    p = Planet({'direc':subdir,
-               'name':'Planet %s' % subdir,
-               'user':'',
-               'email':'',
+               'name':name,
+               'user':user,
+               'email':email,
                'password':'passme',
                'feeds':{'http://hackervisions.org/?feed=rss2':{'image':'http://www.softwarefreedom.org/img/staff/vasile.jpg','name':'James Vasile', 'feedurl':'http://hackervisions.org/?feed=rss2'}}
                })

@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import os, sys, time, shutil, datetime
 import config as cfg
 from config import opt
@@ -327,11 +329,14 @@ class Planet():
             else:
                shutil.copy(src, dst)
 
-   def add_feed(self, url, name, image):
+   def add_feed(self, url, name, image="", save=False):
+      if not name: name = url
       t = {'feedurl':url, 
            'name':name,
            'image':image}
       self.feeds[url] = t
+      if save:
+         self.save()
 
    def del_feed(self, url):
       try:
