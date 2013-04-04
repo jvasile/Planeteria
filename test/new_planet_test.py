@@ -1,21 +1,13 @@
-import unittest, subprocess
+import unittest
 from new_planet import *
 from nose.tools import raises
 from planet import Planet
+from util_test import twill
 
 ## Remove console logger to avoid clutter (see planeteria log instead)
 for h in log.handlers:
     if h.get_name() == "planeteria console logger":
         log.removeHandler(h)
-
-
-def run_twill_script(script):
-    with open('test/twill.tmp', 'w') as OUTF:
-        OUTF.write(script)
-    #ret = subprocess.call("twill-sh -q -u http://planeteria.localhost test/twill.tmp", shell=True)
-    ret = subprocess.call("twill-sh -q -u %s test/twill.tmp" % opt['base_href'], shell=True)
-    os.unlink('test/twill.tmp')
-    return ret
 
 def destroy_temp_planet(planet_name):
     try:
@@ -118,7 +110,7 @@ fv 1 subdirectory twilltest
 submit 3
 code 200
 """
-        run_twill_script(script)
+        twill(script)
 
     def make_planet_test(s):
         s.assertTrue(os.path.exists(os.path.join(opt['output_dir'],"twilltest")))
@@ -141,7 +133,7 @@ submit 3
 code 200
 find "%s"
 """ % ("yes" if turing else "no", subdir, msg)
-        return run_twill_script(script)
+        return twill(script)
 
     def badchars_test(s):
         name = "http://planeteria.org/ICannotFollowDirections"

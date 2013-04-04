@@ -1,6 +1,16 @@
 # -*- coding: utf-8 -*-
-import unittest
+import unittest, subprocess, os
 import util as u
+from config import opt
+
+def twill(script, url=None):
+    if not url:
+        url = opt['base_href']
+    with open('test/twill.tmp', 'w') as OUTF:
+        OUTF.write(script)
+    ret = subprocess.call("twill-sh -q -u %s test/twill.tmp" % url, shell=True)
+    os.unlink('test/twill.tmp')
+    return ret
 
 bad_input = []
 bad_input.extend([
