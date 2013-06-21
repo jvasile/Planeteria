@@ -276,7 +276,7 @@ class Planet():
                               key=parse_updated_time)
 
       for e in sorted_entries[:50]:
-         if not 'content' in e:
+         if 'summary' in e and not 'content' in e:
             e['content_encoded'] = u.strip_body_tags(html2xml(u.tidy2html(e['summary'])).strip())
          elif e['content'][0]['value']:
             e['content_encoded'] = u.strip_body_tags(html2xml(u.tidy2html(e['content'][0]['value'])).strip())
