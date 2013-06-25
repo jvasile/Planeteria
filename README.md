@@ -17,6 +17,26 @@ Planeteria was created by James Vasile (james at hackervisions dot
 net) in 2010 and has been maintained in his copious spare time since
 its creation.
 
+## Command Line Options to planeteria.py
+
+Planeteria is run as a command line tool (planeteria.py) and two CGI
+scripts (admin.py and new_planet.py).  The command line tool is used
+as follows:
+
+Usage: planeteria.py [options]
+
+Options:
+
+ * -h, --help        show this help message and exit
+ * --force           force downloading of cached upstream feeds
+ * --no-update       prevent downloading of upstream feeds
+ * --delete-missing  delete planets from db if they are not in file system
+ * --clean           remove missing planets, unused feeds
+
+The `--clean` flag doesn't remove old posts from the cache (just
+unused feeds), and it doesn't delete unused planets, but in a future
+version, it will.
+
 ## About Planeteria's code
 
 This is a free open source project licensed under the
@@ -41,6 +61,27 @@ or submit a patch!
 
 We have a roadmap in ROADMAP.md, please feel ping us if you want to
 tackle any of those!
+
+### Unit Tests
+
+There are some tests in the `test` directory.  Run them from the main
+directory with `test/nose.sh .` and you will see the start of some unit
+testing.  Please don't use the tests on a live, deployed install.
+They create and destroy test planets.
+
+The tests include tests of the web functionality.  To run those tests,
+you'll want to do be logged in as the same user that your apache
+instance runs under (try `sudo su www-data; bash`).  Otherwise, there
+is a permissions mismatch when the user running the tests tries to
+delete a file created by the web server and the 644 permissions
+prevent it.  If you get permission denied errors when running
+nosetests, this might be the problem.
+
+If you want to see the debug output while running nosetest, do `tail
+-f log/planeteria.log` in another screen or console.
+
+Once you have complete coverage of everything except util.py, any
+uncovered functions in util.py can be moved to util_unused.
 
 ## Installation
 
@@ -203,7 +244,7 @@ want to deploy the site on a server to run on its own, you will need
 to set up a cron job to run planeteria.py automatically every so
 often.  Planeteria.org runs it every 15 minutes.
 
-To set this up, add a line to your crontab:
+To set this up, add a line like this to your crontab:
 
     15 * * * * cd /path/to/Planeteria; ./planeteria.py
 

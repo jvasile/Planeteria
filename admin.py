@@ -157,10 +157,9 @@ def update_config(planet):
          del planet.feeds[url]
       else:
          if not url in planet.feeds:
-            t = {'feedurl':url, 
-                 'name':good_field(Form.getvalue('name%d' % feed_count, '').strip()),
-                 'image':Form.getvalue('image%d' % feed_count, '').strip()}
-            planet.feeds[url] = t
+            planet.add_feed(url, 
+                            good_field(Form.getvalue('name%d' % feed_count, '').strip()), 
+                            Form.getvalue('image%d' % feed_count, '').strip())
          else:
             # Copy the values from the form into planet
             for field in form_field:

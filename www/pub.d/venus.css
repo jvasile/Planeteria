@@ -34,7 +34,7 @@
 
 .entrytitleauthor {
     background-color: #f8f8f8;
-    border: 1px solid #5555f8;
+    /*border: 1px solid #5555f8;*/
    font-weight:bold;
    font-size: 16px;
    padding-left: 5px;
@@ -74,7 +74,7 @@ blockquote {
 }
 
 img.face {
-        float: left;
+        /*float: left;*/
 	padding-right: 1em;
 	padding-bottom: 1em;
 	max-height: 9em;
@@ -102,3 +102,6 @@ tr.face1 td {
     border: 0px;
     padding: 0px;
 }
+
+strong, b, strong *, b * { font-weight: bold !important; }
+em, i, em *, i * { font-style: italic !important; }

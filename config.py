@@ -9,13 +9,12 @@ data_dir = os.path.join(base_dir, "data")
 BASE_HREF_FILE = os.path.join(data_dir, 'base_href')
 
 # TODO: improve error handling for local file setup.
+BASE_HREF = "/"
 if os.path.exists(BASE_HREF_FILE):
     with open (BASE_HREF_FILE, 'r') as FILE:
         BASE_HREF = FILE.readline().strip()
     if not BASE_HREF.endswith('/'):
         BASE_HREF += '/'
-else:
-    BASE_HREF = "/"
 
 OUTPUT_DIR = os.path.join(base_dir, "www")
 VERSION = "2.1.0"
@@ -48,13 +47,16 @@ opt={'website_name':"Planeteria",
 
 #opt.update(locals())
 
-if not os.path.exists(opt['log_dir']):
-    os.mkdir(opt['log_dir'])
+try:
+    os.makedirs(opt['log_dir'])
+except OSError:
+    pass
 
 import logging
 logger = logging.getLogger('planeteria')
 logger.setLevel(logging.DEBUG)
 fh = logging.FileHandler(os.path.join(opt['log_dir'], 'planeteria.log'), encoding = "UTF-8")
+fh.set_name("planeteria file logger")
 fh.setLevel(logging.DEBUG)
 fh_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 fh.setFormatter(fh_formatter)
@@ -63,6 +65,7 @@ logger.addHandler(fh)
 
 # create console handler with a higher log level
 ch = logging.StreamHandler()
+ch.set_name("planeteria console logger")
 ch.setLevel(logging.DEBUG)
 ch_formatter = logging.Formatter('%(levelname)s - %(message)s')
 ch.setFormatter(ch_formatter)

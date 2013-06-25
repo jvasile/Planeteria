@@ -10,17 +10,23 @@ __authors__ = [ "James Vasile <james@hackervisions.org>"]
 __license__ = "AGPLv3"
 
 
-import os,sys,re
-import cgi, shutil
+import os,sys,re, shutil
+from util import our_db
+import cgi
 import cgitb
 cgitb.enable()
 
-from config import *
-log = logging.getLogger('planeteria')
+#from config import *
+import config as cfg
+from config import opt
+log = cfg.logging.getLogger('planeteria')
 from util import Msg
 err=Msg(web=True)
 
 import templates
+
+class BadSubdirNameError(Exception):
+   pass
 
 def template_vars(subdir="", form_vals={}):
    "Returns a dict with the template vars in it"
@@ -44,24 +50,43 @@ def validate_input(subdir):
 
    return valid
 
-def make_planet(subdir):
+def make_planet(subdir, output_dir=None,
+                name="", user="", email=""):
+   """
+   Makes a planet on disk and in the db, copying the skeleton
+   directory on disk.  Does not seed the planet with default values
+   for owner or email.
+   """
+   if not validate_input(subdir):
+      raise BadSubdirNameError, subdir
 
-   path = os.path.join(opt['output_dir'], subdir)
+   if not output_dir:
+      output_dir = opt['output_dir']
+
+   path = os.path.join(output_dir, subdir)
+   
+   with our_db('planets') as db:
+      if os.path.exists(path) and not subdir in db:
+         log.debug("Exists on disk but not in db, attempting to delete")
+         shutil.rmtree(path)
 
    try:
       shutil.copytree(opt['new_planet_dir'], path, symlinks=True)
    except(OSError), errstr:
       if os.path.exists(path):
-         err.add("%s already exists. Please choose another subdirectory name." % subdir)
+         msg = "%s planet already exists. Please choose another subdirectory name." % subdir
+         err.add(msg)
+         log.info(msg)
          return False
       err.add("Couldn't create planet: %s" % errstr)
       return False
 
    from planet import Planet
+   if not name: name = 'Planet %s' % subdir
    p = Planet({'direc':subdir,
-               'name':'Planet %s' % subdir,
-               'user':'',
-               'email':'',
+               'name':name,
+               'user':user,
+               'email':email,
                'password':'passme',
                'feeds':{'http://hackervisions.org/?feed=rss2':{'image':'http://www.softwarefreedom.org/img/staff/vasile.jpg','name':'James Vasile', 'feedurl':'http://hackervisions.org/?feed=rss2'}}
                })
@@ -70,12 +95,11 @@ def make_planet(subdir):
    mopt = dict(opt.items()+p.__dict__.items())
 
    templates.Welcome(mopt).write(path, 'index.html')
+
+   log.info("Made planet: %s" % path)
    return True
 
     
-## Setup and globals
-VERSION = "0.1";
-
 def main():
    global Form
    Form = cgi.FieldStorage()

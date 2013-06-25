@@ -1,4 +1,6 @@
-import os, sys, time
+#!/usr/bin/python
+
+import os, sys, time, shutil, datetime
 import config as cfg
 from config import opt
 import logging
@@ -9,17 +11,11 @@ try:
 except ImportError:
    import json
 from urllib import urlopen
-from util import smart_str, parse_updated_time, our_db, write_file, html2xml, just_body, tidy2xhtml
+from util import smart_str, parse_updated_time, our_db, write_file, html2xml
+import util as u
 import templates
 import dateutil.parser
 
-
-def strip_body_tags(text):
-   if text.startswith('<body>'):
-      text =  text[6:]
-   if text.endswith('</body>'):
-      text = text[:-7]
-   return text
 
 def to_json(python_object):
    if isinstance(python_object, time.struct_time):
@@ -118,7 +114,6 @@ class Planet():
       force_check = opt['force_check']
       with our_db('cache') as db:
          try:
-            #cache = db[url.encode("utf-8")]
             cache = db[url]
          except KeyError:
             log.info("Can't find %s in cache.  Making default." % url)
@@ -141,7 +136,9 @@ class Planet():
          self.save_cache(cache, url)
          return
 
-      if parsed and parsed.entries: cache['data'] = parsed
+      if parsed and parsed.entries:
+         cache['data'] = parsed
+
       cache['last_downloaded'] = time.time()
       with our_db('cache') as db:
          try:
@@ -190,7 +187,6 @@ class Planet():
             if not url in db:
                continue
             try:
-               #cache = db[url.encode("utf-8")]
                cache = db[url]
             except json.decoder.JSONDecodeError, e:
                log.debug("Json error on generating url %s: %s" % (url, e))
@@ -203,8 +199,14 @@ class Planet():
          
          for e in parsed['entries']:
             e['name'] = f['name']
-            e['links'] = parsed['feed']['links']
-            e['feed_name'] = smart_str(parsed['feed']['title'], encoding='ascii', errors='ignore')
+            if 'links' in parsed['feed']:
+               e['links'] = parsed['feed']['links']
+            else:
+               e['links'] = []
+            if 'title' in parsed['feed']:
+               e['feed_name'] = smart_str(parsed['feed']['title'], encoding='ascii', errors='ignore')
+            else:
+               e['feed_name'] = f['name']
             e['channel_title_plain'] = e['feed_name']
             e['channel_image'] = f['image']
             e['channel_name'] = e['feed_name']
@@ -212,17 +214,23 @@ class Planet():
                e['subtitle'] = parsed['feed']['subtitle']
             else:
                e['subtitle']=''
-            if parsed['feed']['link'].endswith('/'):
-               e['channel_link'] = e['feed_id'] = parsed['feed']['link']
+            if 'link' in parsed['feed']:
+               if parsed['feed']['link'].endswith('/'):
+                  e['channel_link'] = e['feed_id'] = parsed['feed']['link']
+               else:
+                  e['channel_link'] = e['feed_id'] = parsed['feed']['link']+'/'
             else:
-               e['channel_link'] = e['feed_id'] = parsed['feed']['link']+'/'
-
+               e['channel_link'] = e['feed_id'] = f['feedurl']
             if 'updated' in e:
                e['date'] = dateutil.parser.parse(e['updated']).strftime("%Y-%m-%d %H:%M:%S")
                e['updated'] = dateutil.parser.parse(e['updated']).isoformat()
             elif 'published_parsed' in e:
-               e['date'] = dateutil.parser.parse(e['published_parsed']['__value__']).strftime("%Y-%m-%d %H:%M:%S")
-               e['updated'] = dateutil.parser.parse(e['published_parsed']['__value__']).isoformat()
+               if len(e['published_parsed']) == 9:
+                  e['date'] = time.strftime("%Y-%m-%d %H:%M:%S", e['published_parsed'])
+                  e['updated'] = datetime.date.fromtimestamp(time.mktime(e['published_parsed'])).isoformat()
+               else:
+                  e['date'] = dateutil.parser.parse(e['published_parsed']['__value__']).strftime("%Y-%m-%d %H:%M:%S")
+                  e['updated'] = dateutil.parser.parse(e['published_parsed']['__value__']).isoformat()
             else:
                e['date'] = e['updated'] = '1970-01-01T00:00:00Z'
                # We really should assume the blog post is from when it is first seen for lack of a better option
@@ -237,7 +245,13 @@ class Planet():
 
          ## OPML template stuff and sidebar stuff
          feed_data = {}
-         for l in parsed['feed']['links']:
+
+         # Default these to the feed itself
+         if 'feedurl' in f:
+            feed_data['url'] = f['feedurl']
+            feed_data['link'] = f['feedurl']
+
+         for l in e['links']:
             if not 'type' in l:
                l['type']='text/html'
             if l['rel']=="self":
@@ -246,7 +260,10 @@ class Planet():
                if 'href' in l:
                   feed_data['link'] = l['href']
          feed_data['author'] = f['name']
-         feed_data['title'] = smart_str(parsed['feed']['title'], encoding='ascii', errors='ignore')
+         if 'title' in parsed['feed']:
+            feed_data['title'] = smart_str(parsed['feed']['title'], encoding='ascii', errors='ignore')
+         else:
+            feed_data['title'] = f['name']
          feed_data['image'] = f['image']
          if 'feedurl' in f:
             feed_data['url'] = f['feedurl']
@@ -259,10 +276,10 @@ class Planet():
                               key=parse_updated_time)
 
       for e in sorted_entries[:50]:
-         if not 'content' in e:
-            e['content_encoded'] = strip_body_tags(html2xml(tidy2xhtml(e['summary'])).strip())
-         elif e['content'][0]['value']:
-            e['content_encoded'] = strip_body_tags(html2xml(tidy2xhtml(e['content'][0]['value'])).strip())
+         if 'summary' in e and not 'content' in e:
+            e['content_encoded'] = u.strip_body_tags(html2xml(u.tidy2html(e['summary'])).strip())
+         elif 'content' in e and e['content'][0]['value']:
+            e['content_encoded'] = u.strip_body_tags(html2xml(u.tidy2html(e['content'][0]['value'])).strip())
          else:
             e['summary_encoded'] = 'N/A'
             e['content_encoded'] = 'N/A'
@@ -270,10 +287,28 @@ class Planet():
 
          if not 'summary' in e:
             e['summary'] = e['content'][0]['value']
-         e['summary_encoded'] = strip_body_tags(html2xml(tidy2xhtml(e['summary'])).strip())
+         e['summary_encoded'] = u.strip_body_tags(html2xml(u.tidy2html(e['summary'])).strip())
 
          
       lopt['Items'] = sorted_entries[:50]
+
+      # now do it again for xml
+      for e in sorted_entries[:50]:
+         if 'summary' in e and not 'content' in e:
+            e['content_encoded'] = u.strip_body_tags(html2xml(u.tidy2html(e['summary'], xml=True)).strip())
+         elif 'content' in e and e['content'][0]['value']:
+            e['content_encoded'] = u.strip_body_tags(html2xml(u.tidy2html(e['content'][0]['value'], xml=True)).strip())
+         else:
+            e['summary_encoded'] = 'N/A'
+            e['content_encoded'] = 'N/A'
+            continue
+
+         if not 'summary' in e:
+            e['summary'] = e['content'][0]['value']
+         e['summary_encoded'] = u.strip_body_tags(html2xml(u.tidy2html(e['summary'], xml=True)).strip())
+
+      lopt['ItemsXML'] = sorted_entries[:50]
+
       mopt = dict(opt.items()+lopt.items() + self.__dict__.items()) 
 
       # generate pages
@@ -281,6 +316,27 @@ class Planet():
       templates.Atom(mopt).write(output_dir, "atom.xml")
       templates.Planet_Page(mopt).write(output_dir, "index.html")
       templates.Snippet(mopt).write(output_dir, "snippet.html")
+
+      for f in os.listdir(opt['new_planet_dir']):
+         if f == "index.html":
+            continue
+         src = os.path.join(opt['new_planet_dir'], f)
+         dst = os.path.join(output_dir, f)
+         if not os.path.exists(dst):
+            if os.path.islink(src):
+               linkto = os.readlink(src)
+               os.symlink(linkto, dst)
+            else:
+               shutil.copy(src, dst)
+
+   def add_feed(self, url, name, image="", save=False):
+      if not name: name = url
+      t = {'feedurl':url, 
+           'name':name,
+           'image':image}
+      self.feeds[url] = t
+      if save:
+         self.save()
 
    def del_feed(self, url):
       try:
@@ -306,12 +362,19 @@ class Planet():
             else:
                self.feeds[url]={'feedurl':url, 'name':name, 'image':''}
 
+   def delete(self):
+      with our_db('planets') as db:
+         del db[self.direc]
+      try:
+         shutil.rmtree(os.path.join(cfg.OUTPUT_DIR, self.direc))
+      except OSError:
+         pass
+      log.info("Deleted planet: %s" % self.direc)
+
    def delete_if_missing(self):
       output_dir = os.path.join(cfg.OUTPUT_DIR, self.direc)
       if not os.path.exists(output_dir):
-         with our_db('planets') as db:
-            del db[self.direc]
-         log.info("Deleted missing planet: %s" % self.direc)
+         self.delete()
 
    def dump(self):
       print self.json()
