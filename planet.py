@@ -154,8 +154,9 @@ class Planet():
    def update(self):
       output_dir = os.path.join(cfg.OUTPUT_DIR, self.direc)
       if not os.path.exists(output_dir):
-         log.info("Can't find %s directory.  Skipping update." % output_dir)
-         return
+         log.info("Can't find %s directory.  Creating." % output_dir)
+         os.mkdir(output_dir)
+
       print "Updating %s." % self.direc
       for f in self.feeds:
          self.update_feed(f)
