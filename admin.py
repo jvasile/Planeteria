@@ -67,8 +67,9 @@ def render_push_feed(planet):
    ret = ''
 
    for url, feed in planet.feeds.items():
+      escaped_feedname = feed['name'].replace("'","\\'").replace('"','\\"') 
       ret = (ret + "      new_feed('%s', '%s', '%s', '%s', '%s', '%s', '%s');\n" 
-             % (url, url, feed['name'].replace("'","\\'"), '', feed['image'], '', ''))
+             % (url, url, escaped_feedname, '', feed['image'], '', ''))  
    return ret
          
 def template_vars(planet, config):
