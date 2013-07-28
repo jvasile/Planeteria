@@ -59,7 +59,7 @@ Please let us know about bugs on the
 [Github issue tracker](https://github.com/jvasile/Planeteria/issues),
 or submit a patch!
 
-We have a roadmap in ROADMAP.md, please feel ping us if you want to
+We have a roadmap in ROADMAP.md, please ping us if you want to
 tackle any of those!
 
 ### Unit Tests
