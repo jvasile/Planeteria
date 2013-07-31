@@ -11,6 +11,7 @@ Version 0.2
 __authors__ = [ "James Vasile <james@hackervisions.org>"]
 __license__ = "AGPLv3"
 
+import simplejson as json
 from util import merge_dict
 import os, sys
 sys.path.insert(0,"..")
@@ -67,9 +68,8 @@ def render_push_feed(planet):
    ret = ''
 
    for url, feed in planet.feeds.items():
-      escaped_feedname = feed['name'].replace("'","\\'").replace('"','\\"') 
-      ret = (ret + "      new_feed('%s', '%s', '%s', '%s', '%s', '%s', '%s');\n" 
-             % (url, url, escaped_feedname, '', feed['image'], '', ''))  
+      ret = (ret + "      new_feed('%s', '%s', %s, '%s', '%s', '%s', '%s');\n"
+             % (url, url, json.dumps(feed['name']), '', feed['image'], '', ''))$
    return ret
          
 def template_vars(planet, config):
