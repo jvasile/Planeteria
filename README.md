@@ -248,4 +248,15 @@ To set this up, add a line like this to your crontab:
 
     15 * * * * cd /path/to/Planeteria; ./planeteria.py
 
-Happy hacking!
+## Coders
+
+     git log --pretty='format:%an'|sort|uniq -c|sort --reverse
+
+     457 James Vasile
+       3 jvasile
+      39 dtiburon
+       1 Wraithan (Chris McDonald)
+       1 Wacky Hacky
+       1 Sumana Harihareswara
+
+
