@@ -1,0 +1,191 @@
+body {
+	background: url('pub.d/images/bg.gif');
+	background-repeat: repeat-x;
+}
+
+#header-wrapper {
+	padding-top:40px;
+}
+
+#header-wrapper h3 {
+	line-height: 1.3em;
+}
+
+#page-title h1 {
+	font-weight: bold;
+	padding: 25px 0px 0px 0px;
+	line-height: .8em;
+}
+#header-slogan {
+	padding: 15px 0px 0px 0px;
+}
+
+#header-slogan h4, h5 {
+	color: #999;
+	font-style: italic;
+	font-family: Georgia, 'Times New Roman', Times, serif;
+	font-weight: bold; 
+	letter-spacing: 0.1em;
+	font-size: 1.1em;
+}
+
+#header-image {
+	margin: 5px 5px 5px 0px;
+}
+
+footer {
+	font-size: 0.9em;
+
+}
+/*-----------------------------*/
+/*  Style for boxes site-wide  */
+/*-----------------------------*/
+.box {
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	padding:3px 10px 10px 10px;
+	border: 1px solid #F0F0F0;
+	background: #f8f8f8;
+	margin-bottom: 5px;
+}
+
+.box h1,h2,h3,h4,h5{color: #336699;}
+
+.sidebar {
+	margin-bottom: 15px;
+	font-size: .9em;
+	color: #444;
+}
+
+.donate {
+	background: #CCFFCC;
+	font-size: 0.9em;
+	word-wrap: break-word;
+}
+
+/*-----------------*/
+/*      Forms      */
+/*-----------------*/
+.help-block {
+	margin-top: -10px;
+	color: #777;
+	font-size: 12px;
+}
+
+/*---------------------------*/
+/*  Planet Feed Page Styles  */
+/*---------------------------*/
+/* #feed {}
+ .dateheader {} */
+
+.entrytitle {
+	font-weight: bold;
+	font-size: 1.1em;
+	color: #555;
+	padding:5px;
+	margin-bottom: 20px;
+}
+
+.entrytitle a {
+	color:;
+}
+
+.author-image {
+	float: left;
+	margin: 0px 15px 15px 0px;
+	max-width: 8em;
+	max-height: 9em;
+}
+
+.entry {
+	padding-bottom: 20px;
+}
+
+.entrycontent{
+	font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva;
+	font-size: 13px;
+}
+
+.entryfooter {
+	text-align: right;
+	font-size: .9em;
+	line-height: .9em;
+}
+/*-----------------------*/
+/*   Admin Page Styles   */
+/*-----------------------*/
+
+/* .feed-form {} */
+
+#all-feeds{
+	overflow: auto;
+}
+
+#all-feeds div:nth-child(odd) {
+     background: #CCEEBB;
+}
+
+.single-feed{
+	margin-top: 10px;
+	background: white;
+	border: 1px solid #F0F0F0;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	padding: 5px;
+}
+
+.feedbtn-rm{
+	float:right;
+}
+
+.image-holder {
+	float: left;
+	margin-right: 10px;
+	background-color: transparent;
+}
+
+.template-single-feed {
+	display: none;
+	visibility: hidden;
+
+}
+/*-------------------*/
+/* Responsive Layout */
+/*-------------------*/
+
+/* Large desktop */
+@media (min-width: 1200px) { 
+	#header-wrapper {
+		 padding-top:40px;
+	}
+}
+ 
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+	#header-wrapper {
+		 padding-top:0px;
+	}
+	#main {
+		margin-top:-20px;
+	}
+	#planet-title h1 {
+		padding: 20px 0px 0px 5px;
+	}
+}
+ 
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+	#header-wrapper {
+		 padding-top:0px;
+	}
+	.span2 {min-height:0px;}	
+}
+ 
+/* Landscape phones and down */
+@media (max-width: 480px) {
+	#header-wrapper {
+		 padding-top:0px;
+	}	
+}
