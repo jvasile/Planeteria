@@ -144,8 +144,6 @@ def lxml_tidy(instr, xml=False):
    if instr == "":
       return ''
    tree  = etree.HTML(instr.replace('\r', ''))
-   if tree is None:
-      return ''
    output_text = '\n'.join([ etree.tostring(stree, pretty_print=True, method= "xml" if xml else "html") 
                              for stree in tree ])
    return str(output_text)
