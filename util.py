@@ -26,6 +26,25 @@ except (OSError, ImportError):
 
 generated=[]
 
+def get_source_path():
+   """Returns the path to the source file of the calling module.
+
+   See http://stackoverflow.com/questions/1095543/get-name-of-calling-functions-module-in-python
+   for some notes and caveats"""
+
+   import inspect
+   frm = inspect.stack()[1]
+   mod = inspect.getmodule(frm[0])
+   modpath = mod.__file__
+
+   # Turn pyc files into py files if we can
+   if modpath.endswith('.pyc') and os.path.exists(modpath[:-1]):
+      modpath = modpath[:-1]
+
+   # Sort out symlinks
+   return os.path.realpath(modpath)
+
+
 def pretty_print_dict (d, indent=0):
    for key, value in d.iteritems():
       print '\t' * indent + str(key)
