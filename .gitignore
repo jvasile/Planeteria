@@ -4,7 +4,6 @@
 *.tmplc
 *~
 data
-templates/*.html
 *.log
 .DS_Store
 env
