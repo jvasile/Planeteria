@@ -1,1 +1,1 @@
-templates/2.1_classic.py
+templates/2.2_update/2.2_update.py

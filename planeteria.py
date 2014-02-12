@@ -63,9 +63,7 @@ def parse_options():
 
 def main():
    import templates
-   for p,t in {'copyright':templates.Copyright,
-               'thanks':templates.Thanks,
-               'tos':templates.TOS,
+   for p,t in {'about':templates.About,
                'index':templates.Main_Page,
                }.items():
       t(opt).write(cfg.OUTPUT_DIR, "%s.html" % p)
@@ -80,5 +78,3 @@ if __name__ == "__main__":
    if parse_options():
       print "Options parsed."
       main()
-
-
