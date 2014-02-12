@@ -1,6 +1,10 @@
 body {
 	background: url('pub.d/images/bg.gif');
 	background-repeat: repeat-x;
+	margin-left: 5em;
+	margin-right: 5em;
+	font-size: 0.8em;
+	line-height: 1.1em;
 }
 
 #header-wrapper {
@@ -17,16 +21,10 @@ body {
 	line-height: .8em;
 }
 #header-slogan {
-	padding: 15px 0px 0px 0px;
-}
-
-#header-slogan h4, h5 {
-	color: #999;
 	font-style: italic;
-	font-family: Georgia, 'Times New Roman', Times, serif;
 	font-weight: bold; 
+	color: #999;
 	letter-spacing: 0.1em;
-	font-size: 1.1em;
 }
 
 #header-image {
@@ -35,7 +33,7 @@ body {
 
 footer {
 	font-size: 0.9em;
-
+	text-align: center
 }
 /*-----------------------------*/
 /*  Style for boxes site-wide  */
@@ -50,9 +48,14 @@ footer {
 	margin-bottom: 5px;
 }
 
+.span9 h3 {
+        padding-top: 2em;
+}
+
 .box h1,h2,h3,h4,h5{color: #336699;}
 
 .sidebar {
+        margin-left: 2em;
 	margin-bottom: 15px;
 	font-size: .9em;
 	color: #444;
