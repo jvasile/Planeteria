@@ -1,8 +1,6 @@
 body {
 	background: url('pub.d/images/bg.gif');
 	background-repeat: repeat-x;
-	margin-left: 5em;
-	margin-right: 5em;
 	font-size: 0.8em;
 	line-height: 1.1em;
 }
@@ -163,6 +161,11 @@ footer {
 	#header-wrapper {
 		 padding-top:40px;
 	}
+
+        body {
+	         margin-left: 5em;
+          	 margin-right: 5em;
+        }
 }
  
 /* Portrait tablet to landscape and desktop */
