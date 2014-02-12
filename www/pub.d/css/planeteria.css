@@ -2,7 +2,12 @@ body {
 	background: url('pub.d/images/bg.gif');
 	background-repeat: repeat-x;
 	font-size: 0.8em;
-	line-height: 1.1em;
+	line-height: 1.2em;
+	font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;
+}
+
+li {
+    line-height: 1.2em;
 }
 
 #header-wrapper {
@@ -48,6 +53,8 @@ footer {
 
 .span9 {
 	max-width:45em;
+	font-weight: normal;
+
 }
 .span9 h3 {
         padding-top: 2em;
@@ -108,7 +115,7 @@ footer {
 }
 
 .entrycontent{
-	font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva;
+	font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;
 	font-size: 13px;
 }
 
