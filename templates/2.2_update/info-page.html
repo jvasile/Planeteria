@@ -1,0 +1,15 @@
+{% extends 'layout-site.html' %}
+{% block body %}
+<!-- START info-page -->
+      <div class="span9"><!-- Body Text -->
+
+{% block content %}{% endblock content %}
+
+      </div><!-- / .span9 -->
+      <div class="span3">
+{% include 'about_box.html' %}
+{% include 'donate.html' %}
+{% include 'contact.html' %}
+      </div><!-- / .span3 -->
+<!-- END info-page -->
+{% endblock body %}
