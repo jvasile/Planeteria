@@ -1,0 +1,58 @@
+{% extends 'layout-site.html' %}
+{% block body %}
+    <div class="row-fluid" id="top-row-fluid">
+      <div class="span6">
+        <p>A planet is a collection of posts from many different blogs, all somewhat related to one topic. It's a great way to keep tabs on a subject, a community, a technology, a team, a project or anything else that attracts a diverse range of bloggers.</p>
+	<p><b>Community</b>. Planets are a great way to focus and foster community. It's easy to get everybody in the community talking with each other when you're all reading each other's blogs!</p>
+	<p><b>Curation</b>. One-stop curation allows a planet to become the definitive collection of news about a topic. Each planet is a feed that can be imported into an RSS reader. Planets allow you to pull together the best blogs about a topic so others don't have to do the leg work. And you can get your entire audience reading the newest blogs simply by updating the planet.</p>
+
+	<p><b>Early News</b>. Many planets collect the personal blogs of the people who work on a project. Often the interesting developments that will eventually become front-page news on a project start as small personal milestones. If you want to know where a project is going, watch its planet. That's where all the early action is.</p>
+
+      </div><!-- / top left column -->
+      <div class="span6 box">
+        <h2>Make a Planet</h2>
+        <form method="post" action="new_planet.py" class="cmxform"> 
+          <fieldset>
+            
+            <label for="subdirectory">Subdirectory:</label>
+            <input type="text" id="subdirectory" name="subdirectory" value="" />
+            <span class="help-block">Your planet URL will be http://planeteria.org/subdirectory.<br />
+            The subdirectory may only consist of letters and numbers.</span>
+            <label for="turing">Turing Test:</label>
+            <input type="text" name="turing" value=""/>
+            <span class="help-block">Please prove you are human by answering this question: Do you love?</span>
+          </fieldset>
+          <!--<input type="submit" name="submit" value="Create Planet" />-->
+          <button type="submit" class="btn btn-success">Create Planet</button>
+        </form>
+      </div><!-- / .span6 .box  for Planet creation form -->
+    </div><!-- / row for planeteria description & planet creation box-->  
+    <div class="row-fluid">
+      <div class="span12">
+        <h2>How others are using Planeteria:</h2>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span4">
+        <h3>Women in Free Software</h3>
+        <p><a href="wfs">Women in Free Software (WFS)</a> includes a wide sampling of blogs by women involved in FOSS, including developers at all experience levels, community managers, commentators, and organizations supporting women in tech. WFS highlights the breadth of accomplishments and experience women bring to free software.</p>
+        <p><a class="btn btn-info" href="wfs">Read the planet &raquo;</a></p>
+      </div>
+      <div class="span4">
+        <h3>OpenITP</h3>
+        <p>A planet for blogs by people making free software anti-censorship and anti-surveillance technology.</p>
+        <p><a class="btn btn-info" href="openitp">Read the planet &raquo;</a></p>
+     </div>
+      <div class="span4">
+        <h3>All Around DC</h3>
+        <p>A metablog of blogs following news and events in Washington, DC for DC residents.</p>
+        <p><a class="btn btn-info" href="allarounddc">Read the planet &raquo;</a></p>
+      </div>
+    </div>
+
+    <div class="row-fluid">
+      <div class="span4">
+{# {% include 'donate.html' %} #}
+      </div> <!-- /.span4-->
+    </div><!-- /.row-fluid for example planet descriptions -->
+{% endblock %}
