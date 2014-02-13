@@ -119,7 +119,7 @@ def main():
    sys.stdout.write("Content-type: text/html\n\n")
    doc = template_vars(subdir, dict([(k,Form.getvalue(k,'')) for k in Form.keys()]))
    log.debug("doc: %s" % doc)
-   print templates.index(doc).render().encode('utf-8', 'ignore')
+   print templates.Index(doc).render().encode('utf-8', 'ignore')
 
 if __name__ == "__main__":
    main()
