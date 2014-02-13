@@ -96,6 +96,11 @@ footer {
 	font-size: 12px;
 }
 
+#error {
+    color: red;
+    padding-bottom: 1em;
+}
+
 /*---------------------------*/
 /*  Planet Feed Page Styles  */
 /*---------------------------*/
