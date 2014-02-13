@@ -69,7 +69,7 @@ def render_push_feed(planet):
 
    for url, feed in planet.feeds.items():
       ret = (ret + "      new_feed('%s', '%s', %s, '%s', '%s', '%s', '%s');\n"
-             % (url, url, json.dumps(feed['name']), '', feed['image'], '', ''))$
+             % (url, url, json.dumps(feed['name']), '', feed['image'], '', ''))
    return ret
          
 def template_vars(planet, config):
