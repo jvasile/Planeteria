@@ -64,7 +64,7 @@ def parse_options():
 def main():
    import templates
    for p,t in {'about':templates.About,
-               'index':templates.Main_Page,
+               'index':templates.Index,
                }.items():
       t(opt).write(cfg.OUTPUT_DIR, "%s.html" % p)
    galaxy = Galaxy(planets)

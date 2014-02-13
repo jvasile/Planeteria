@@ -51,13 +51,24 @@ footer {
 	margin-bottom: 5px;
 }
 
+#top-row-fluid {
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
+.span6.box {
+    max-width:30em;
+}
+
+.span6 {
+	max-width:45em;
+}
 .span9 {
 	max-width:45em;
-	font-weight: normal;
-
 }
-.span9 h3 {
-        padding-top: 2em;
+
+.bodyblock{
+        padding-bottom: 2em;
 }
 
 .box h1,h2,h3,h4,h5{color: #336699;}

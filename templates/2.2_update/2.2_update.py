@@ -29,9 +29,6 @@ class Template(object):
          a = a.encode('utf-8')
       return a
 
-class Jinja_Template(Template):
-   pass
-
 class XML_Template(Template):
    errors = 'xmlcharrefreplace'
 
@@ -470,95 +467,20 @@ class About(HTML_Jinja_Template):
       HTML_Jinja_Template.__init__(self, interpolate, "about.html")
       self.interpolate['title'] = 'About'
 
-class Main_Page(HTML_Template):
+class Index(HTML_Jinja_Template):
    def __init__(self, interpolate):
-      HTML_Template.__init__(self, interpolate)
-      self.interpolate['title'] = 'Welcome to Planeteria'
-
+      HTML_Jinja_Template.__init__(self, interpolate, "index.html")
    def _render(self):
       o = self.interpolate
       for field in ['error', 'direc', 'subdirectory', 'turing']:
          if not field in self.interpolate:
             self.interpolate[field] = ''
-      o['rendered_donations'] = self.render_donations()
+      template = JinjaEnv.get_template(self.template_fname)
       if o['base_href'] == '/':
          o['domain'] = "Your planet URL will be on this website in the subdirectory you specify,"
       else:
          o['domain'] = "Your planet URL will be %(base_href)ssubdirectory," % o
-
-      return self.header() + """
-
-<div id="left">
-
-  <div id="error">%(error)s</div>
-
-  <div class = "entry">
-    <div class="entrytitle">Get Your Own Planet</div>
-    <p>You can have a planet of your very own!  Pull together all the
-      blogs around your project or community.  Just fill out this form:</p>
-
-    <form method="post" action="new_planet.py" class="cmxform"> 
-
-      <label for="subdirectory">Subdirectory:</label>
-      <input type="text" size=40 id="subdirectory" name="subdirectory" value="%(subdirectory)s" /><br />
-      %(domain)s
-      and the subdirectory may only consist of letters and numbers.<br/>
-
-      <br /><br />
-
-      <label for="turing">Turing Test:</label>
-      <input type="test" size="40" name="turing" value="%(turing)s"/><br />
-      Please prove you are human by answering this question: Do you love?<br />
-
-      <div align="center"><input type="submit" name="submit" value="Create Planet" /></div>
-
-    </form>
-
-  </div> <!-- end entry -->
-
-  <div class = "entry">
-    <div class="entrytitle">Planets for Everybody!</div>
-    <p>A planet is a collection of posts from many different blogs,
-      all somewhat related to one topic.  It's a great way to keep
-      tabs on a subject, a community, a technology, a team, a project
-      or anything else that attracts a diverse range of bloggers.</p>
-
-    <p><b>Community.</b> Planets are a great way to focus and foster
-      community.  It's easy to get everybody in the community talking
-      with each other when you're all reading each other's blogs!</p>
-
-    <p><b>Curation.</b> One stop curation allows a planet to become
-      the definitive collection of news about a topic.  Each planet is
-      a feed that can be imported into an RSS reader.  Planets allow
-      you to pull together the best blogs about a topic so others
-      don't have to do the leg work.  And you can get your entire
-      audience reading the newest blogs simply by updating the
-      planet.</p>
-
-    <p><b>Early News.</b> Many planets collect the personal blogs of
-      the people who work on a project.  Often the interesting
-      developments that will eventually become front-page news on a
-      project start as small personal milestones.  If you want to know
-      where a project is going, watch its planet.  That's where all
-      the early action is.</p>
-
-  </div> <!-- end entry -->
-
-</div> <!-- end left -->
-
-<div id="right">
-  <div class = "entry">
-    <div class="entrytitle">Some Awesome Planets</div>
-    <ul>
-      <li><a href="freedombox">FreedomBox</a></li>
-      <li><a href="planetnyc">Freedom To Share in NYC</a></li>
-      <li><a href="wfs">Women in Free Software</a></li>
-    </ul>
-  </div> <!-- end entry -->
-
-   %(rendered_donations)s
-</div>	<!-- end right -->
-""" % self.interpolate + self.footer()
+      return template.render(**o)
 
 class Welcome(HTML_Template):
    def _render(self):
