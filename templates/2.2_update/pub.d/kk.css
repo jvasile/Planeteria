@@ -1,0 +1,11 @@
+.front_link_over {
+  background: #a8daff;
+  cursor: pointer;
+  cursor: hand;  
+}
+
+.front_link_out {
+  background: none;
+  cursor: pointer;
+  cursor: hand;  
+}
