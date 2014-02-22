@@ -18,7 +18,7 @@ body {
 	padding: 0; 
 	padding-left: 20px;
 	padding-right: 20px;
-	background: #FFF url(images/bg.gif) repeat-x;
+	background: #FFF url(/pub.d/img/bg.gif) repeat-x;
 	text-align: center;
 }
 
@@ -100,7 +100,7 @@ blockquote {
 	margin: 10px 20px;
  	padding: 10px 10px 10px 32px;  
    border: 1px solid #F0F0F0;
-	background: #f8f8f8 url(/pub.d/images/quote.gif) no-repeat 12px 12px;
+	background: #f8f8f8 url(/pub.d/img/quote.gif) no-repeat 12px 12px;
 	font-weight: normal;
 	font-size: 17px;
 	line-height: 1.5em;
@@ -267,7 +267,7 @@ input.button {
 	border-right: 1px solid #EEE;
 }
 #header #nav ul li#current a {	
-	background: transparent url(/pub.d/images/current.gif) repeat-x left bottom;	
+	background: transparent url(/pub.d/img/current.gif) repeat-x left bottom;	
 	color: #222;	
 }
 
@@ -400,7 +400,7 @@ input.button {
 #right form#quick-search {
 	padding: 0; margin: 10px 0 0 10px;
 	width: 270px; height: 33px;
-	background: #fff url(/pub.d/images/header-search.gif) no-repeat;
+	background: #fff url(/pub.d/img/header-search.gif) no-repeat;
 	border: none;	
 }
 #right form#quick-search p {

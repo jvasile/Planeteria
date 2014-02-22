@@ -194,15 +194,15 @@ class HTML_Template(Template):
    <meta name="robots" content="index, follow, noarchive" />
    <meta name="googlebot" content="noarchive" />
    <title>%(title)s</title>
-   <link rel="stylesheet" href="pub.d/form.css" type="text/css" />
-   <link rel="stylesheet" href="pub.d/screen.css" type="text/css" />
-   <link rel="stylesheet" href="pub.d/venus.css" type="text/css" />
+   <link rel="stylesheet" href="/pub.d/css/form.css" type="text/css" />
+   <link rel="stylesheet" href="/pub.d/css/screen.css" type="text/css" />
+   <link rel="stylesheet" href="/pub.d/css/venus.css" type="text/css" />
 """ % i
 
       if 'feed_url' in self.interpolate:
          s += '   <link rel="alternate" type="application/rss+xml" href="%(feed_url)s" title="All these posts as one feed" />\n'  % i
       if 'admin' in i:
-         s += '     <script src="pub.d/admin.js" type="text/javascript"></script>\n     <script type="text/javascript">\n        %(push_feeds)s\n     </script>\n' % i
+         s += '     <script src="/pub.d/admin.js" type="text/javascript"></script>\n     <script type="text/javascript">\n        %(push_feeds)s\n     </script>\n' % i
       s += '</head>\n<body>\n<div id="wrap">\n   <div id="header">\n'  % i
 
       if i['base_href'].startswith('file://'):
@@ -216,7 +216,7 @@ class HTML_Template(Template):
          s += '         <h1 id="logo-text"><a href="%(index)s" accesskey="1" title="site:%(website_name)s">%(website_name)s</a></h1>\n'  % i
 
       s += """      <p id="slogan">Blog aggregation.  By your community, for your community.</p>
-      <a href="%(base_href)s%(index)s"><div id="header-image"><img src="pub.d/images/planeteria_200.png" /></div></a>
+      <a href="%(base_href)s%(index)s"><div id="header-image"><img src="/pub.d/img/planeteria_200.png" /></div></a>
    </div>
 
    <!-- content -->
@@ -325,7 +325,7 @@ class Planet_Page(HTML_Template):
                                              default='title="%(escaped_title_plain)s"' % o)
          #if e['bozo']:
          #   o['rendered_bozo'] = '[B]'
-         s += '            <li><a href="%(escaped_url)s" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"></a> <a %(rendered_link)s%(rendered_message)s>%(author)s</a></li>\n' % o
+         s += '            <li><a href="%(escaped_url)s" title="subscribe"><img src="/pub.d/img/feed-icon-10x10.png" alt="(feed)"></a> <a %(rendered_link)s%(rendered_message)s>%(author)s</a></li>\n' % o
       return s
 
    def _render(self):
@@ -347,8 +347,8 @@ class Planet_Page(HTML_Template):
       <div class="entrytitle">Subscriptions</div>
       <ul>
 %(rendered_feeds)s
-            <li> <a href="%(feed_url)s" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"> All feeds in one</a></li>
-            <li> <a href="%(opml_url)s" title="subscribe"><img src="pub.d/images/feed-icon-10x10.png" alt="(feed)"> All feeds as OPML</a></li>
+            <li> <a href="%(feed_url)s" title="subscribe"><img src="/pub.d/img/feed-icon-10x10.png" alt="(feed)"> All feeds in one</a></li>
+            <li> <a href="%(opml_url)s" title="subscribe"><img src="/pub.d/img/feed-icon-10x10.png" alt="(feed)"> All feeds as OPML</a></li>
       </ul>
    </div>
 
@@ -507,7 +507,7 @@ class Admin(HTML_Template):
          if 'image' in o and o['image']:
             o['rendered_image'] = '<img class="face" src="%(image)s" width="%(facewidth)s" height="%(faceheight)s" alt="" />\n' % o
          else:
-            o['rendered_image'] = '<img class="face" src="/pub.d/images/silhouette2.png" />\n'
+            o['rendered_image'] = '<img class="face" src="/pub.d/img/silhouette2.png" />\n'
          s += """
 		<tr class="%(row_class)s" id="feed_row%(idx)s">
                   <td style="vertical-align:middle" class="entrytitleauthor">
@@ -516,7 +516,7 @@ class Admin(HTML_Template):
 		  <td style="text-align:left">
 		    <input type="hidden" name="section%(idx)s" id="section%(idx)s" value="%(section)s" />
 		    <input type="hidden" name="delete%(idx)s" id="delete%(idx)s" value="0" />
-		    <a href="javascript:rm_feed(%(idx)s)"><img class="feedbtn" src="/pub.d/images/rm-feed.png"></a> <label for="name%(idx)s">Feed Name:</label><br />
+		    <a href="javascript:rm_feed(%(idx)s)"><img class="feedbtn" src="/pub.d/img/rm-feed.png"></a> <label for="name%(idx)s">Feed Name:</label><br />
 		       <input type="text" size=40 name="name%(idx)s" id="name%(idx)s" value="%(name)s"><br />
 		       <label for="feedurl%(idx)s">Feed URL:</label><br />
 		       <input type="text" size=40 name="feedurl%(idx)s" id="feedurl%(idx)s" value="%(feedurl)s"><br />
@@ -557,8 +557,8 @@ class Admin(HTML_Template):
       </div> <!-- end entry -->
 
       <div class = "entry" id="FeedsBody">
-        <div class="entrytitle">Feeds <a href="javascript:add_feed()"><img src="pub.d/images/add-feed.png" width="14" height="14" border="0" alt="Add new feed button" name="AddFeedBtn" class="feedbtn"></a></div>
-	<p>Use the <a href="javascript:add_feed()"><img src="pub.d/images/add-feed.png" width="14" height="14" border="0" alt="Add new feed button" name="AddFeedBtn" class="feedbtn"></a> and <img src="pub.d/images/rm-feed.png" width="14" height="14" border="0" alt="Remove feed sample" class="feedbtn"> buttons to add and remove feeds.</p>
+        <div class="entrytitle">Feeds <a href="javascript:add_feed()"><img src="pub.d/img/add-feed.png" width="14" height="14" border="0" alt="Add new feed button" name="AddFeedBtn" class="feedbtn"></a></div>
+	<p>Use the <a href="javascript:add_feed()"><img src="pub.d/img/add-feed.png" width="14" height="14" border="0" alt="Add new feed button" name="AddFeedBtn" class="feedbtn"></a> and <img src="pub.d/img/rm-feed.png" width="14" height="14" border="0" alt="Remove feed sample" class="feedbtn"> buttons to add and remove feeds.</p>
         <div id="feeds">
 	  <table id="feed_table"><tbody id="feeds_tbody">
           %(rendered_feeds)s

@@ -55,7 +55,7 @@ function render_face_cell(idx){
 	if (Feed[idx]['facewidth']) {Feed[idx]['feedimg'].width = Feed[idx]['facewidth'];}
 	if (Feed[idx]['faceheight']) {Feed[idx]['feedimg'].height = Feed[idx]['faceheight'];}
     } else {
-	Feed[idx]['feedimg'].src = "/pub.d/images/silhouette2.png"; // silhouette2.png from http://www.flickr.com/photos/n-o-n-o/3502226571
+	Feed[idx]['feedimg'].src = "/pub.d/img/silhouette2.png"; // silhouette2.png from http://www.flickr.com/photos/n-o-n-o/3502226571
     }
 
     facecell.appendChild(Feed[idx]['feedimg']);
@@ -82,7 +82,7 @@ function feed_cell_label_input(idx, key, label_text) {
 	anchor.href="javascript:rm_feed(" + idx + ")";
 
 	var rm = document.createElement('img');
-	rm.src = "/pub.d/images/rm-feed.png";
+	rm.src = "/pub.d/img/rm-feed.png";
 	rm.setAttribute('class', "feedbtn");
 
 	anchor.appendChild(rm)
